@@ -11,7 +11,7 @@
 
     {% set token = identity.token %}
 
-    {% if token.token %}
+    {% if token.token is defined and token.token %}
         <h2>Token</h2>
 
         <p>

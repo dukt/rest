@@ -1,0 +1,31 @@
+<h1>Twitter</h1>
+
+{% set response = craft.rest.get('https://api.twitter.com/1.1/statuses/user_timeline.json?count=2', {
+    identity: 8
+}) %}
+
+
+{% if response.success %}
+
+    {% set data = response.data %}
+
+    <pre>{{ dump(data) }}</pre>
+{#     {% if data %}
+
+        {% for row in data %}
+            <h2>Row {{ loop.index }}</h2>
+            <pre>{{ dump(row) }}</pre>
+        {% endfor %}
+
+    {% else %}
+        <p>No response</p>
+    {% endif %} #}
+
+{% else %}
+
+    <p>
+        <strong>An error occured:</strong>
+        {{ response.error }}
+    </p>
+
+{% endif %}

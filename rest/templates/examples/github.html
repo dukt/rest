@@ -1,0 +1,20 @@
+<h1>YouTube</h1>
+
+{% set response = craft.rest.get('https://api.github.com/user/repos', {
+    identity: 9
+}) %}
+
+{% if response.success %}
+
+    {% set data = response.data %}
+
+    <pre>{{ dump(data) }}</pre>
+
+{% else %}
+
+    <p>
+        <strong>An error occured:</strong>
+        {{ response.error }}
+    </p>
+
+{% endif %}

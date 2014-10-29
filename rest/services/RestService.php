@@ -338,8 +338,9 @@ class RestService extends BaseApplicationComponent
 
             if($provider && $token)
             {
+                $classname = get_class($provider->source->service);
 
-                switch ($provider->source->getOAuthVersion())
+                switch($classname::OAUTH_VERSION)
                 {
                     case 1:
                         $oauth = new \Guzzle\Plugin\Oauth\OauthPlugin(array(

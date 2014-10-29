@@ -1,6 +1,6 @@
 <h1>Github</h1>
 
-{% set response = craft.rest.get('https://api.github.com/user/repos', {
+{% set response = craft.rest.api('https://api.github.com/user/repos', {
     identity: 9
 }) %}
 

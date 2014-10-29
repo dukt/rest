@@ -1,6 +1,6 @@
 <h1>YouTube</h1>
 
-{% set response = craft.rest.get('https://www.googleapis.com/youtube/v3/search?part=snippet&q=doherty', {
+{% set response = craft.rest.api('https://www.googleapis.com/youtube/v3/search?part=snippet&q=doherty', {
     identity: 7
 }) %}
 

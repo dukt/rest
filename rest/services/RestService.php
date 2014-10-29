@@ -7,6 +7,36 @@ use Guzzle\Http\Client;
 
 class RestService extends BaseApplicationComponent
 {
+    public function get($requestHandle, $queryParams = null)
+    {
+        $request = $this->getRequestByHandle($requestHandle);
+
+        $url = $request->url;
+
+        $options = array();
+
+        if(!empty($queryParams))
+        {
+            $options['queryParams'] = $queryParams;
+        }
+
+        if(!empty($request->identityId))
+        {
+            $options['identity'] = $request->identityId;
+        }
+
+        if(!empty($request->verb))
+        {
+            $options['verb'] = $request->verb;
+        }
+
+        if(!empty($request->format))
+        {
+            $options['format'] = $request->format;
+        }
+
+        return $this->api($url, $options);
+    }
 
     /**
      * Save OAuth Token
@@ -46,6 +76,11 @@ class RestService extends BaseApplicationComponent
         return Rest_IdentityRecord::model()->deleteByPk($id);
     }
 
+    public function deleteRequestById($id)
+    {
+        return Rest_RequestRecord::model()->deleteByPk($id);
+    }
+
     public function getIdentityById($id)
     {
         $record = Rest_IdentityRecord::model()->findByPk($id);
@@ -56,10 +91,41 @@ class RestService extends BaseApplicationComponent
         }
     }
 
+    public function getRequestById($id)
+    {
+        $record = Rest_RequestRecord::model()->findByPk($id);
+
+        if($record)
+        {
+            return Rest_RequestModel::populateModel($record);
+        }
+    }
+
+    public function getRequestByHandle($handle)
+    {
+        $record = Rest_RequestRecord::model()->find(
+            array(
+                'condition' => 'handle=:handle',
+                'params' => array(':handle' => $handle)
+            )
+        );
+
+        if($record)
+        {
+            return Rest_RequestModel::populateModel($record);
+        }
+    }
+
     public function getIdentities()
     {
         $records = Rest_IdentityRecord::model()->findAll(array('order' => 't.id'));
         return Rest_IdentityModel::populateModels($records, 'id');
+    }
+
+    public function getRequests()
+    {
+        $records = Rest_RequestRecord::model()->findAll(array('order' => 't.id'));
+        return Rest_RequestModel::populateModels($records, 'id');
     }
 
     public function saveIdentity(Rest_IdentityModel $model)
@@ -79,19 +145,65 @@ class RestService extends BaseApplicationComponent
         return $record->save();
     }
 
-    public function get($url, $options = array())
+    public function saveRequest(Rest_RequestModel $model)
     {
-        return $this->api($url, $options);
+        $record = Rest_RequestRecord::model()->findByPk($model->id);
+
+        if(!$record)
+        {
+            $record = new Rest_RequestRecord;
+        }
+
+        $record->identityId = $model->identityId;
+        $record->name = $model->name;
+        $record->handle = $model->handle;
+        $record->verb = $model->verb;
+        $record->format = $model->format;
+        $record->url = $model->url;
+        $record->params = $model->params;
+
+        if($record->save())
+        {
+            $model->setAttribute('id', $record->getAttribute('id'));
+            return true;
+        }
+        else
+        {
+            $model->addErrors($record->getErrors());
+            return false;
+        }
     }
 
-
-    // todo: do we need to keep post fields
-
-    public function api($url, $options = null)
+    public function api($url, $options = array())
     {
         $queryParams = array();
         $providerHandle = false;
         $tokenModel = false;
+        $verb = 'get';
+        $format = 'json';
+
+        // verb
+
+        if(!empty($options['verb']))
+        {
+            $verb = $options['verb'];
+        }
+
+        // format
+
+        if(!empty($options['format']))
+        {
+            $format = $options['format'];
+        }
+
+
+
+        // queryParams
+
+        if(!empty($options['queryParams']))
+        {
+            $queryParams = $options['queryParams'];
+        }
 
         // headers
 
@@ -184,20 +296,20 @@ class RestService extends BaseApplicationComponent
         // send request
 
         try {
-            $response = $client->get($url, $headers, $postFields)->send();
+            $response = $client->{$verb}($url, $headers, $postFields)->send();
 
             // return json response as objects
 
             return array(
                 'success' => true,
-                'data' => $response->json()
+                'data' => $response->{$format}()
             );
         }
         catch(\Exception $e)
         {
             return array(
                 'success' => false,
-                'error' => $e->getResponse()->getBody(true)
+                'data' => $e->getResponse()->{$format}(true)
             );
         }
     }

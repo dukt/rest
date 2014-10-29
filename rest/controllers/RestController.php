@@ -16,6 +16,68 @@ class RestController extends BaseController
        $this->returnJson(array('success' => true));
     }
 
+    public function actionDeleteRequest()
+    {
+       $this->requirePostRequest();
+       $this->requireAjaxRequest();
+
+       $id = craft()->request->getRequiredPost('id');
+
+       craft()->rest->deleteRequestById($id);
+
+       $this->returnJson(array('success' => true));
+    }
+
+    public function actionSaveRequest()
+    {
+        $id = craft()->request->getParam('id');
+        $identityId = craft()->request->getParam('identityId');
+        $name = craft()->request->getParam('name');
+        $handle = craft()->request->getParam('handle');
+        $url = craft()->request->getParam('url');
+        $verb = craft()->request->getParam('verb');
+        $format = craft()->request->getParam('format');
+        $params = craft()->request->getParam('params');
+
+        if($params)
+        {
+            $newParams = array();
+
+            foreach($params as $param)
+            {
+                $newParams[$param['key']] = $param['value'];
+            }
+
+            $params = $newParams;
+        }
+        else
+        {
+            $params = array();
+        }
+
+        if($id)
+        {
+            $request = craft()->rest->getRequestById($id);
+        }
+
+        if(!isset($request))
+        {
+            $request = new Rest_RequestModel;
+        }
+
+        $request->identityId = $identityId;
+        $request->name = $name;
+        $request->handle = $handle;
+        $request->verb = $verb;
+        $request->format = $format;
+        $request->url = $url;
+        $request->params = $params;
+
+        craft()->rest->saveRequest($request);
+
+        $this->redirectToPostedUrl();
+    }
+
     public function actionSaveIdentity()
     {
         $id = craft()->request->getParam('id');
@@ -147,8 +209,23 @@ class RestController extends BaseController
 
         $this->renderTemplate('rest/identities/_edit', $variables);
     }
-    public function actionEditRequest()
+    public function actionEditRequest(array $variables = array())
     {
-        $this->renderTemplate('rest/requests/_edit');
+        if (!empty($variables['id']))
+        {
+            $variables['isNew'] = false;
+            $variables['request'] = craft()->rest->getRequestById($variables['id']);
+            $variables['title'] = $variables['request']->name;
+        }
+        else
+        {
+            $variables['isNew'] = true;
+            $variables['request'] = new Rest_RequestModel;
+            $variables['title'] = Craft::t("New Request");
+        }
+
+        $variables['identities'] = craft()->rest->getIdentities();
+
+        $this->renderTemplate('rest/requests/_edit', $variables);
     }
 }

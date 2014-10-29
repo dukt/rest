@@ -1,0 +1,8 @@
+{% extends "_layouts/cp" %}
+
+{% set tabs = {
+    requests: { label: "Requests"|t, url: url('rest/requests') },
+    identities: { label: "Identities"|t, url: url('rest/identities') },
+} %}
+
+{% set title = 'REST'|t %}

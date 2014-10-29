@@ -1,6 +1,6 @@
 <h1>Dribbble</h1>
 
-{% set response = craft.rest.get('http://api.dribbble.com/shots/everyone') %}
+{% set response = craft.rest.api('http://api.dribbble.com/shots/everyone') %}
 
 {% if response.success %}
 

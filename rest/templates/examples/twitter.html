@@ -1,6 +1,6 @@
 <h1>Twitter</h1>
 
-{% set response = craft.rest.get('https://api.twitter.com/1.1/statuses/user_timeline.json?count=2', {
+{% set response = craft.rest.api('https://api.twitter.com/1.1/statuses/user_timeline.json?count=2', {
     identity: 8
 }) %}
 

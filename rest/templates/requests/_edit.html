@@ -1,34 +1,112 @@
 {% extends "_layouts/cp" %}
 {% import "_includes/forms" as forms %}
-{% set title = "New Request"|t %}
+
+{% set crumbs = [
+{ label: "REST"|t, url: url('rest') },
+{ label: "Requests"|t, url: url('rest/requests') },
+] %}
+
 {% set content %}
-    <h2>{{ "Authentication"|t }}</h2>
 
-    {{ forms.selectField({
-    label: "Method" | t,
-    name: 'Method',
-    options: ['None', 'OAuth'],
-    }) }}
+    <form method="post" accept-charset="UTF-8" data-saveshortcut>
 
-    <h2>{{ "Request"|t }}</h2>
+        <input type="hidden" name="action" value="rest/saveRequest">
+        <input type="hidden" name="redirect" value="rest/requests">
 
-    {{ forms.textField({
-      label: 'Name'|t,
-      name: 'name',
-    }) }}
+        {% if request.id %}
+          <input type="hidden" name="id" value="{{ request.id }}">
+        {% endif %}
 
-    {{ forms.textField({
-      label: 'Handle'|t,
-      name: 'handle',
-    }) }}
+        {{ forms.textField({
+            label: 'Name'|t,
+            name: 'name',
+            required: true,
+            first: true,
+            value : request ? request.name : null,
+        }) }}
 
-    {{ forms.textField({
-      label: 'URL'|t,
-      name: 'url',
-    }) }}
+        {{ forms.textField({
+            label: 'Handle'|t,
+            name: 'handle',
+            required: true,
+            value : request ? request.handle : null,
+        }) }}
 
-    <div class="buttons">
-      <input type="submit" class="btn submit" value="{{ 'Save'|t }}">
-    </div>
+        {{ forms.textField({
+            label: 'URL'|t,
+            name: 'url',
+            required: true,
+            value : request ? request.url : null,
+        }) }}
+
+        {% set paramsRows = [] %}
+        {% for key, value in request.params %}
+          {% set paramsRows = paramsRows|merge([{ key: key, value: value }]) %}
+        {% endfor %}
+
+        {{ forms.editableTableField({
+          label: 'Parameters',
+          id: 'params',
+          rows: 4,
+          textual: false,
+          name: 'params',
+          addRowLabel : 'Add parameter',
+          cols : {
+            'key' : {
+                'heading' : 'Key',
+                'type'   : 'singleline'
+            },
+            'value' : {
+                'heading' : 'Value',
+                'type'   : 'singleline'
+            }
+          },
+          rows : paramsRows
+        }) }}
+
+
+        {% set verbOptions = [
+            { label: 'GET', value: 'get' },
+            { label: 'POST', value: 'post' },
+            { label: 'PUT', value: 'put' },
+            { label: 'DELETE', value: 'delete' },
+        ] %}
+
+        {{ forms.selectField({
+            label: "Verb" | t,
+            name: 'verb',
+            options: verbOptions,
+            value: request ? request.verb : null,
+        }) }}
+
+        {% set responseFormatOptions = [
+            { label: 'JSON', value: 'json' },
+            { label: 'XML', value: 'xml' }
+        ] %}
+        {{ forms.selectField({
+            label: "Response Format" | t,
+            name: 'format',
+            options: responseFormatOptions,
+            value: request ? request.format : null,
+        }) }}
+
+
+        {% set identityOptions = [{label:"None", value:""}] %}
+        {% for identity in identities %}
+            {% set identityOptions = identityOptions|merge([{ label: identity.provider|t, value: identity.id }]) %}
+        {% endfor %}
+
+        {{ forms.selectField({
+            label: "Identity" | t,
+            name: 'identityId',
+            options: identityOptions,
+            value : request ? request.identityId : null,
+        }) }}
+
+
+        <div class="buttons">
+            <input type="submit" class="btn submit" value="{{ 'Save'|t }}">
+        </div>
+    </form>
 
 {% endset %}

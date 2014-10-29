@@ -60,6 +60,7 @@ class RestPlugin extends BasePlugin
 
             "rest/identities/(?P<id>\d+)" => array('action' => "rest/editIdentity"),
             "rest/identities/new" => array('action' => "rest/editIdentity"),
+            "rest/requests/(?P<id>\d+)" => array('action' => "rest/editRequest"),
             "rest/requests/new" => array('action' => "rest/editRequest"),
         );
     }

@@ -1,6 +1,6 @@
-<h1>Weather</h1>
+<h1>Request</h1>
 
-{% set response = craft.rest.api('http://api.openweathermap.org/data/2.5/weather?q=grenoble,france') %}
+{% set response = craft.rest.get('recentTweets', {count:2}) %}
 
 {% if response.success %}
 
@@ -12,7 +12,9 @@
 
     <p>
         <strong>An error occured:</strong>
-        {{ response.error }}
+
+        {% set data = response.data %}
+        <pre>{{ dump(data) }}</pre>
     </p>
 
 {% endif %}

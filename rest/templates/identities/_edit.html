@@ -7,6 +7,11 @@
   {% set title = "Edit Identity"|t %}
 {% endif %}
 
+{% set crumbs = [
+    { label: "REST"|t, url: url('rest') },
+    { label: "Identities"|t, url: url('rest/identities') },
+] %}
+
 {% set content %}
 
     {% set token = identity.token %}
@@ -26,7 +31,7 @@
     <form method="post" accept-charset="UTF-8" data-saveshortcut>
 
         <input type="hidden" name="action" value="rest/saveIdentity">
-        <input type="hidden" name="redirect" value="rest">
+        <input type="hidden" name="redirect" value="rest/identities">
 
         {% if identity.id %}
           <input type="hidden" name="id" value="{{ identity.id }}">
@@ -75,12 +80,12 @@
         {% endfor %}
 
         {{ forms.editableTableField({
-          label: 'Params',
+          label: 'Parameters',
           id: 'params',
           rows: 4,
           textual: false,
           name: 'params',
-          addRowLabel : 'Add param',
+          addRowLabel : 'Add parameter',
           cols : {
             'key' : {
                 'heading' : 'Key',

@@ -1,15 +1,12 @@
-{% extends "_layouts/cp" %}
+{% extends "rest/_layout" %}
 
 {% import "_includes/forms" as forms %}
 
 {% set title = "REST"|t %}
 {% set identities = craft.rest.getIdentities %}
-
+{% set selectedTab = 'identities' %}
 {% set content %}
 
-    <div class="buttons">
-        <a href="{{ url('rest/identities/new') }}" class="btn submit add icon">New identity</a>
-    </div>
 
     {% if identities|length > 0 %}
         <table id="identities" class="data fullwidth collapsible">
@@ -30,7 +27,7 @@
                         <td><a href="{{ url('rest/identities/'~identity.id) }}">{{ identity.provider }}</a></td>
 
                         <td>
-                            {% if identity.token.token %}
+                            {% if identity.token and identity.token.token %}
                                 <span class="status enabled"></span>
                                 Enabled
                             {% else %}
@@ -59,4 +56,9 @@
         {% endset %}
         {% includeJs js %}
     {% endif %}
+
+
+    <div class="buttons">
+        <a href="{{ url('rest/identities/new') }}" class="btn submit add icon">New identity</a>
+    </div>
 {% endset %}

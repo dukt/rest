@@ -13,10 +13,10 @@
             <thead>
                 <tr>
                     <th scope="col">{{ "ID"|t }}</th>
+                    <th scope="col">{{ "Name"|t }}</th>
+                    <th scope="col">{{ "Handle"|t }}</th>
                     <th scope="col">{{ "Provider"|t }}</th>
                     <th scope="col">{{ "Enabled"|t }}</th>
-                    <th scope="col">{{ "Scopes"|t }}</th>
-                    <th scope="col">{{ "Params"|t }}</th>
                     <th></th>
                 </tr>
             </thead>
@@ -24,7 +24,9 @@
                 {% for identity in identities %}
                     <tr data-id="{{ identity.id }}" data-name="{{ identity.provider }}">
                         <td>{{ identity.id }}</td>
-                        <td><a href="{{ url('rest/identities/'~identity.id) }}">{{ identity.provider }}</a></td>
+                        <td><a href="{{ url('rest/identities/'~identity.id) }}">{{ identity.name }}</a></td>
+                        <td>{{ identity.handle }}</td>
+                        <td>{{ identity.provider }}</td>
 
                         <td>
                             {% if identity.token and identity.token.token %}
@@ -35,12 +37,7 @@
                                 Disabled
                             {% endif %}
                         </td>
-                        <td>
-                            {{ identity.scopes|length }} scopes
-                        </td>
-                        <td>
-                            {{ identity.params|length }} params
-                        </td>
+
                         <td class="thin"><a class="delete icon" title="{{ 'Delete'|t }}"></a></td>
                     </tr>
                 {% endfor %}

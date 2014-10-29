@@ -15,20 +15,39 @@ class RestService extends BaseApplicationComponent
 
         $options = array();
 
+
+        // params
+
+        $options['params'] = array();
+
+        if(!empty($request->params))
+        {
+            $options['params'] = $request->params;
+        }
+
         if(!empty($queryParams))
         {
-            $options['queryParams'] = $queryParams;
+            $options['params'] = array_merge($options['params'], $queryParams);
         }
+
+
+        // identity
 
         if(!empty($request->identityId))
         {
             $options['identity'] = $request->identityId;
         }
 
+
+        // verb
+
         if(!empty($request->verb))
         {
             $options['verb'] = $request->verb;
         }
+
+
+        // format
 
         if(!empty($request->format))
         {
@@ -101,6 +120,21 @@ class RestService extends BaseApplicationComponent
         }
     }
 
+    public function getIdentityByHandle($handle)
+    {
+        $record = Rest_IdentityRecord::model()->find(
+            array(
+                'condition' => 'handle=:handle',
+                'params' => array(':handle' => $handle)
+            )
+        );
+
+        if($record)
+        {
+            return Rest_IdentityModel::populateModel($record);
+        }
+    }
+
     public function getRequestByHandle($handle)
     {
         $record = Rest_RequestRecord::model()->find(
@@ -138,11 +172,64 @@ class RestService extends BaseApplicationComponent
         }
 
         $record->tokenId = $model->tokenId;
+        $record->name = $model->name;
+        $record->handle = $model->handle;
         $record->provider = $model->provider;
         $record->scopes = $model->scopes;
         $record->params = $model->params;
 
         return $record->save();
+    }
+
+    public function request(array $options)
+    {
+        if(!empty($options['identity']))
+        {
+            $identity = $this->getIdentityByHandle($options['identity']);
+
+            if($identity)
+            {
+                $options['identityId'] = $identity->id;
+            }
+
+            $options['identity'] = null;
+        }
+
+        $request = new Rest_RequestModel;
+
+        $request->setAttributes($options);
+
+        return $this->sendRequest($request);
+    }
+
+    public function sendRequest(Rest_RequestModel $request)
+    {
+        $url = $request->url;
+
+
+        $options = array();
+
+        if(!empty($request->params))
+        {
+            $options['params'] = $request->params;
+        }
+
+        if(!empty($request->identityId))
+        {
+            $options['identity'] = $request->identityId;
+        }
+
+        if(!empty($request->verb))
+        {
+            $options['verb'] = $request->verb;
+        }
+
+        if(!empty($request->format))
+        {
+            $options['format'] = $request->format;
+        }
+
+        return $this->api($url, $options);
     }
 
     public function saveRequest(Rest_RequestModel $model)
@@ -200,9 +287,9 @@ class RestService extends BaseApplicationComponent
 
         // queryParams
 
-        if(!empty($options['queryParams']))
+        if(!empty($options['params']))
         {
-            $queryParams = $options['queryParams'];
+            $params = $options['params'];
         }
 
         // headers
@@ -271,7 +358,7 @@ class RestService extends BaseApplicationComponent
                             'token'           => $token->getAccessToken(),
                         ));
 
-                        $queryParams['access_token'] = $token->getAccessToken();
+                        $params['access_token'] = $token->getAccessToken();
                         break;
                 }
                 $client->addSubscriber($oauth);
@@ -280,15 +367,15 @@ class RestService extends BaseApplicationComponent
 
         // build url
 
-        if(count($queryParams) > 0)
+        if(isset($params) && count($params) > 0)
         {
             if(strpos($url, "?") !== false)
             {
-               $url = $url.'&'.http_build_query($queryParams);
+               $url = $url.'&'.http_build_query($params);
             }
             else
             {
-                $url = $url.'?'.http_build_query($queryParams);
+                $url = $url.'?'.http_build_query($params);
             }
         }
 

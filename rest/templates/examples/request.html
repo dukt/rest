@@ -1,6 +1,7 @@
 <h1>Request</h1>
 
-{% set response = craft.rest.get('recentTweets', {count:2}) %}
+
+{% set response = craft.rest.get('searchVideos', {q:'doherty'}) %}
 
 {% if response.success %}
 

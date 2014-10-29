@@ -19,6 +19,11 @@ class RestVariable {
         return craft()->rest->get($requestHandle, $queryParams);
     }
 
+    public function request($options)
+    {
+        return craft()->rest->request($options);
+    }
+
     public function api($url, $headers = array(), $enableCache = false, $cacheDuration = 0)
     {
         return craft()->rest->api($url, $headers, $enableCache, $cacheDuration);

@@ -37,6 +37,24 @@
           <input type="hidden" name="id" value="{{ identity.id }}">
         {% endif %}
 
+        {{ forms.textField({
+            label: 'Name'|t,
+            name: 'name',
+            required: true,
+            first: true,
+            value : identity ? identity.name : null,
+        }) }}
+
+        {{ forms.textField({
+            label: 'Handle'|t,
+            name: 'handle',
+            required: true,
+            value : identity ? identity.handle : null,
+        }) }}
+
+
+        {# providers #}
+
         {% set providers = craft.oauth.providers %}
 
         {% set providerOptions = [] %}

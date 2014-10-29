@@ -1,18 +1,22 @@
 <h1>Weather</h1>
 
-{% set response = craft.rest.api('http://api.openweathermap.org/data/2.5/weather?q=grenoble,france') %}
+
+{% set response = craft.rest.request({
+    url: 'http://api.openweathermap.org/data/2.5/weather',
+    verb: 'get',
+    format: 'json',
+    params: { q: "grenoble,france" }
+}) %}
 
 {% if response.success %}
 
-    {% set data = response.data %}
-
-    <pre>{{ dump(data) }}</pre>
+    <pre>{{ dump(response.data) }}</pre>
 
 {% else %}
 
     <p>
         <strong>An error occured:</strong>
-        {{ response.error }}
+        <pre>{{ dump(response.data) }}</pre>
     </p>
 
 {% endif %}

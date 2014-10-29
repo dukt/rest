@@ -81,6 +81,8 @@ class RestController extends BaseController
     public function actionSaveIdentity()
     {
         $id = craft()->request->getParam('id');
+        $name = craft()->request->getParam('name');
+        $handle = craft()->request->getParam('handle');
         $provider = craft()->request->getParam('provider');
         $scopes = craft()->request->getParam('scopes');
         $params = craft()->request->getParam('params');
@@ -129,6 +131,8 @@ class RestController extends BaseController
         }
 
         $identity->id = $id;
+        $identity->name = $name;
+        $identity->handle = $handle;
         $identity->provider = $provider;
         $identity->scopes = $scopes;
         $identity->params = $params;

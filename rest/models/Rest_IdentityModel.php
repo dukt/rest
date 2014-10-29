@@ -8,6 +8,8 @@ class Rest_IdentityModel extends BaseModel
         return array(
             'id'    => AttributeType::Number,
             'tokenId' => AttributeType::Number,
+            'name' => AttributeType::String,
+            'handle' => AttributeType::String,
             'provider' => AttributeType::String,
             'scopes' => AttributeType::Mixed,
             'params' => AttributeType::Mixed,

@@ -1,7 +1,11 @@
 <h1>YouTube</h1>
 
-{% set response = craft.rest.api('https://www.googleapis.com/youtube/v3/search?part=snippet&q=doherty', {
-    identity: 7
+{% set response = craft.rest.request({
+    url: 'https://www.googleapis.com/youtube/v3/search',
+    verb: 'get',
+    format: 'json',
+    params: { part:'snippet', q:'doherty' },
+    identity: 'youtube'
 }) %}
 
 {% if response.success %}

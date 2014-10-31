@@ -140,7 +140,7 @@ class RestController extends BaseController
         craft()->rest->saveIdentity($identity);
 
         $this->redirect(UrlHelper::getActionUrl('rest/connect', array(
-                'identityId' => $id,
+                'identityId' => $identity->id,
                 'redirect' => $redirect
         )));
     }
@@ -148,6 +148,7 @@ class RestController extends BaseController
     public function actionConnect()
     {
         $identityId = craft()->request->getParam('identityId');
+
         $redirect = craft()->request->getParam('redirect');
 
         $identity = craft()->rest->getIdentityById($identityId);

@@ -178,6 +178,25 @@ class RestService extends BaseApplicationComponent
         $record->scopes = $model->scopes;
         $record->params = $model->params;
 
+        $recordValidates = $record->validate();
+
+        if ($recordValidates)
+        {
+            $record->save(false);
+
+            if (!$model->id)
+            {
+                $model->id = $record->id;
+            }
+
+            return true;
+        }
+        else
+        {
+            $model->addErrors($record->getErrors());
+            return false;
+        }
+
         return $record->save();
     }
 

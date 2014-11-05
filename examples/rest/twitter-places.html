@@ -1,0 +1,49 @@
+<h1>Twitter Places</h1>
+
+{% set placesResponse = craft.rest.request({
+    url: 'https://api.twitter.com/1.1/geo/search.json',
+    verb: 'get',
+    format: 'json',
+    params: {
+        accuracy: 0,
+        query: "Grenoble",
+        granularity: "neighborhood"
+    },
+    identity: 'twitter'
+}) %}
+
+{% if placesResponse.success %}
+
+    {% set place = placesResponse.data.result.places|first %}
+
+    <h2>Tweeted from {{ place.full_name }} — {{ place.id }}</h2>
+
+    {% set tweetsResponse = craft.rest.request({
+        url: 'https://api.twitter.com/1.1/search/tweets.json',
+        verb: 'get',
+        format: 'json',
+        params: {
+            q: 'place:'~place.id
+        },
+        identity: 'twitter'
+    }) %}
+
+    {% set tweets = tweetsResponse.data.statuses %}
+
+    {% for tweet in tweets %}
+
+        {{ tweet.text }}
+
+        <hr />
+
+    {% endfor %}
+
+
+{% else %}
+
+    <p>
+        <strong>An error occured:</strong>
+        <pre>{{ dump(placesResponse.data) }}</pre>
+    </p>
+
+{% endif %}

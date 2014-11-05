@@ -83,7 +83,7 @@ class RestController extends BaseController
         $id = craft()->request->getParam('id');
         $name = craft()->request->getParam('name');
         $handle = craft()->request->getParam('handle');
-        $provider = craft()->request->getParam('provider');
+        $providerHandle = craft()->request->getParam('providerHandle');
         $scopes = craft()->request->getParam('scopes');
         $params = craft()->request->getParam('params');
         $redirect = craft()->request->getParam('redirect');
@@ -133,7 +133,7 @@ class RestController extends BaseController
         $identity->id = $id;
         $identity->name = $name;
         $identity->handle = $handle;
-        $identity->provider = $provider;
+        $identity->providerHandle = $providerHandle;
         $identity->scopes = $scopes;
         $identity->params = $params;
 
@@ -157,7 +157,7 @@ class RestController extends BaseController
         {
             if($response = craft()->oauth->connect(array(
                 'plugin' => 'rest',
-                'provider' => $identity->provider,
+                'provider' => $identity->providerHandle,
                 'scopes' => $identity->scopes,
                 'params' => $identity->params,
             )))

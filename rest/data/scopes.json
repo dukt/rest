@@ -26,5 +26,11 @@
         "read:public_key",
         "write:public_key",
         "admin:public_key",
+    ],
+    "dribbble":[
+        "public",
+        "write",
+        "comment",
+        "upload"
     ]
 }]

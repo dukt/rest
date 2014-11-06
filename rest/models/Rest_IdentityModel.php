@@ -10,7 +10,7 @@ class Rest_IdentityModel extends BaseModel
             'tokenId' => AttributeType::Number,
             'name' => AttributeType::String,
             'handle' => AttributeType::String,
-            'provider' => AttributeType::String,
+            'providerHandle' => AttributeType::String,
             'scopes' => AttributeType::Mixed,
             'params' => AttributeType::Mixed,
         );

@@ -64,9 +64,9 @@
 
         {{ forms.selectField({
             label: "Provider" | t,
-            name: 'provider',
+            name: 'providerHandle',
             options: providerOptions,
-            value : identity ? identity.provider : null,
+            value : identity ? identity.providerHandle : null,
             first: true
         }) }}
 

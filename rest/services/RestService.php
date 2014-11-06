@@ -76,7 +76,7 @@ class RestService extends BaseApplicationComponent
             $model = new Oauth_TokenModel;
         }
 
-        $model->providerHandle = $identity->provider;
+        $model->providerHandle = $identity->providerHandle;
         $model->pluginHandle = 'rest';
         $model->encodedToken = craft()->oauth->encodeToken($token);
 
@@ -174,9 +174,28 @@ class RestService extends BaseApplicationComponent
         $record->tokenId = $model->tokenId;
         $record->name = $model->name;
         $record->handle = $model->handle;
-        $record->provider = $model->provider;
+        $record->providerHandle = $model->providerHandle;
         $record->scopes = $model->scopes;
         $record->params = $model->params;
+
+        $recordValidates = $record->validate();
+
+        if ($recordValidates)
+        {
+            $record->save(false);
+
+            if (!$model->id)
+            {
+                $model->id = $record->id;
+            }
+
+            return true;
+        }
+        else
+        {
+            $model->addErrors($record->getErrors());
+            return false;
+        }
 
         return $record->save();
     }
@@ -319,7 +338,7 @@ class RestService extends BaseApplicationComponent
             $identityId = $options['identity'];
             $identity = craft()->rest->getIdentityById($identityId);
 
-            $providerHandle = $identity->provider;
+            $providerHandle = $identity->providerHandle;
             $tokenModel = $identity->getToken();
         }
 
@@ -380,6 +399,7 @@ class RestService extends BaseApplicationComponent
             }
         }
 
+        var_dump($url);
 
         // send request
 

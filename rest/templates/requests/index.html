@@ -29,7 +29,7 @@
                         <td>
                             {% set identity = request.identity %}
                             {% if identity %}
-                                {{ identity.provider }}
+                                {{ identity.providerHandle }}
                             {% else %}
                                 —
                             {% endif %}

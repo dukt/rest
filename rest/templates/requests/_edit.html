@@ -93,7 +93,7 @@
 
         {% set identityOptions = [{label:"None", value:""}] %}
         {% for identity in identities %}
-            {% set identityOptions = identityOptions|merge([{ label: identity.provider|t, value: identity.id }]) %}
+            {% set identityOptions = identityOptions|merge([{ label: identity.providerHandle|t, value: identity.id }]) %}
         {% endfor %}
 
         {{ forms.selectField({

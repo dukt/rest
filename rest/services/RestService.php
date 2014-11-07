@@ -399,8 +399,6 @@ class RestService extends BaseApplicationComponent
             }
         }
 
-        var_dump($url);
-
         // send request
 
         try {

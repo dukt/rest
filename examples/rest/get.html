@@ -1,0 +1,21 @@
+<h1>Request</h1>
+
+
+{% set response = craft.rest.get('searchVideos', {q:'doherty'}) %}
+
+{% if response.success %}
+
+    {% set data = response.data %}
+
+    <pre>{{ dump(data) }}</pre>
+
+{% else %}
+
+    <p>
+        <strong>An error occured:</strong>
+
+        {% set data = response.data %}
+        <pre>{{ dump(data) }}</pre>
+    </p>
+
+{% endif %}

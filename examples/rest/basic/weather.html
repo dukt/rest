@@ -1,0 +1,125 @@
+{% extends "rest/_layout" %}
+
+{% set icons = {
+    '01d': 'B',
+    '02d': 'H',
+    '03d': 'N',
+    '04d': 'Y',
+    '09d': 'R',
+    '10d': 'Q',
+    '11d': 'P',
+    '13d': 'W',
+    '50d': 'M',
+
+    '01n': 'C',
+    '02n': 'I',
+    '03n': 'N',
+    '04n': 'Y',
+    '09n': 'R',
+    '10n': 'Q',
+    '11n': 'P',
+    '13n': 'W',
+    '50n': 'M',
+} %}
+
+{% block main %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6 col-md-offset-3">
+
+                <h1>Weather</h1>
+
+                {% set q = craft.request.param('q') %}
+
+                {% if not q %}
+                    {% set q = "Grenoble, France" %}
+                {% endif %}
+
+                <form action="" method="get">
+
+                    <p>
+                        <input type="search" name="q" value="{{ q }}" placeholder="Enter the name of the city" class="form-control" />
+                    </p>
+
+                </form>
+
+                {% set response = craft.rest.request({
+                    url: 'http://api.openweathermap.org/data/2.5/weather',
+                    verb: 'get',
+                    format: 'json',
+                    query: { q: q }
+                }) %}
+
+
+                {% if response.success %}
+
+                    {% set data = response.data %}
+
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+
+                            <div class="row">
+                                <div class="col-md-6 text-center">
+
+                                    <span data-icon="{{ icons[data.weather|first.icon] }}"></span>
+
+
+                                    <ul class="list-unstyled">
+                                        {% for item in data.weather %}
+                                            <li>{{ item.main }}</li>
+                                        {% endfor %}
+                                    </ul>
+
+                                </div>
+                                <div class="col-md-6">
+
+                                    <ul class="list-group">
+                                        <li class="list-group-item"><strong>Temp:</strong> {{ (data.main.temp - 273.15) }}°c</li>
+                                        <li class="list-group-item"><strong>Pressure:</strong> {{ data.main.pressure }} (hPa)</li>
+                                        <li class="list-group-item"><strong>Humidity:</strong> {{ data.main.humidity }} %</li>
+                                        <li class="list-group-item"><strong>Wind:</strong> {{ data.wind.speed }} m/s — {{ data.wind.deg }}°</li>
+
+                                        {% if data.rain is defined %}
+                                            {% for itemK, item in data.rain %}
+                                                <li class="list-group-item"><strong>Rain:</strong> {{ item }} (mm) in the last {{ itemK }}</li>
+                                            {% endfor %}
+                                        {% endif %}
+
+                                        {% if data.snow is defined %}
+                                            {% for itemK, item in data.snow %}
+                                                <li class="list-group-item"><strong>Snow:</strong> {{ item }} (mm) in the last {{ itemK }}</li>
+                                            {% endfor %}
+                                        {% endif %}
+
+                                        {% for itemK, item in data.clouds %}
+                                            <li class="list-group-item"><strong>Clouds:</strong> {{ item }}%</li>
+                                        {% endfor %}
+
+                                    </ul>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+{#
+                    {% for rowTitle, row in data %}
+
+                        <h4>{{ rowTitle }}</h4>
+                        <pre>{{ dump(row) }}</pre>
+                    {% endfor %}
+ #}
+                {% else %}
+
+                    <p>
+                        <strong>An error occured:</strong>
+                        <pre>{{ dump(response.data) }}</pre>
+                    </p>
+
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

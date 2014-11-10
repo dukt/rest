@@ -1,11 +1,15 @@
-<h1>Weather</h1>
-
+<h1>RunKeeper</h1>
 
 {% set response = craft.rest.request({
-    url: 'http://api.openweathermap.org/data/2.5/weather',
+    url: 'https://www.googleapis.com/youtube/v3/search',
     verb: 'get',
     format: 'json',
-    params: { q: "grenoble,france" }
+    identity: 'youtube',
+    query: {
+        q: 'doherty',
+        part: 'snippet',
+        maxResults: 20
+    }
 }) %}
 
 {% if response.success %}

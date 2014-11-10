@@ -1,10 +1,37 @@
-<h1>REST</h1>
+{% extends "rest/_layout" %}
 
-<ul>
-    <li><a href="{{ url('rest/dribbble') }}">Dribbble</a></li>
-    <li><a href="{{ url('rest/github') }}">Github</a></li>
-    <li><a href="{{ url('rest/twitter') }}">Twitter</a></li>
-    <li><a href="{{ url('rest/weather') }}">Weather</a></li>
-    <li><a href="{{ url('rest/youtube') }}">YouTube</a></li>
-    <li><a href="{{ url('rest/request') }}">Request</a></li>
-</ul>
+{% block main %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="page-header">
+                  <h1>REST <small>For Craft CMS</small></h1>
+                </div>
+
+                <h4>Usage</h4>
+                <ul>
+                    <li><a href="{{ url('rest/get') }}">Get</a></li>
+                    <li><a href="{{ url('rest/request') }}">Request</a></li>
+                </ul>
+
+                <h4>Requests</h4>
+                <ul>
+                    <li><a href="{{ url('rest/basic/dribbble') }}">Dribbble</a></li>
+                    <li><a href="{{ url('rest/basic/weather') }}">Weather</a></li>
+                    <li><a href="{{ url('rest/basic/youtube') }}">YouTube</a></li>
+                </ul>
+
+                <h4>Authenticated Requests</h4>
+                <ul>
+                    <li><a href="{{ url('rest/authenticated/github') }}">Github</a></li>
+                    <li><a href="{{ url('rest/authenticated/twitter') }}">Twitter</a></li>
+                    <li><a href="{{ url('rest/authenticated/youtube') }}">YouTube</a></li>
+                    <li><a href="{{ url('rest/authenticated/runkeeper') }}">RunKeeper</a></li>
+                </ul>
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

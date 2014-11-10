@@ -37,22 +37,22 @@ class RestController extends BaseController
         $url = craft()->request->getParam('url');
         $verb = craft()->request->getParam('verb');
         $format = craft()->request->getParam('format');
-        $params = craft()->request->getParam('params');
+        $query = craft()->request->getParam('query');
 
-        if($params)
+        if($query)
         {
             $newParams = array();
 
-            foreach($params as $param)
+            foreach($query as $param)
             {
                 $newParams[$param['key']] = $param['value'];
             }
 
-            $params = $newParams;
+            $query = $newParams;
         }
         else
         {
-            $params = array();
+            $query = array();
         }
 
         if($id)
@@ -71,7 +71,7 @@ class RestController extends BaseController
         $request->verb = $verb;
         $request->format = $format;
         $request->url = $url;
-        $request->params = $params;
+        $request->query = $query;
 
         craft()->rest->saveRequest($request);
 

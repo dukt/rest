@@ -39,17 +39,17 @@
             value : request ? request.url : null,
         }) }}
 
-        {% set paramsRows = [] %}
-        {% for key, value in request.params %}
-          {% set paramsRows = paramsRows|merge([{ key: key, value: value }]) %}
+        {% set queryRows = [] %}
+        {% for key, value in request.query %}
+          {% set queryRows = queryRows|merge([{ key: key, value: value }]) %}
         {% endfor %}
 
         {{ forms.editableTableField({
-          label: 'Parameters',
-          id: 'params',
+          label: 'Query Parameters',
+          id: 'query',
           rows: 4,
           textual: false,
-          name: 'params',
+          name: 'query',
           addRowLabel : 'Add parameter',
           cols : {
             'key' : {
@@ -61,7 +61,7 @@
                 'type'   : 'singleline'
             }
           },
-          rows : paramsRows
+          rows : queryRows
         }) }}
 
 

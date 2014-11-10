@@ -17,7 +17,8 @@ class Rest_RequestRecord extends BaseRecord
             'verb' => array(AttributeType::String, 'required' => true),
             'format' => array(AttributeType::String, 'required' => true),
             'url' => array(AttributeType::String, 'required' => true),
-            'params' => array(AttributeType::Mixed),
+            'headers' => AttributeType::Mixed,
+            'query' => AttributeType::Mixed,
         );
     }
 

@@ -13,7 +13,8 @@ class Rest_RequestModel extends BaseModel
             'verb' => AttributeType::String,
             'format' => AttributeType::String,
             'url' => AttributeType::String,
-            'params' => AttributeType::Mixed,
+            'headers' => AttributeType::Mixed,
+            'query' => AttributeType::Mixed,
         );
     }
 

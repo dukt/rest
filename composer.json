@@ -1,0 +1,10 @@
+{
+    "autoload": {
+        "psr-4": {
+            "Dukt\\Rest\\": "rest/src/"
+        }
+    },
+    "config": {
+        "vendor-dir": "rest/vendor/"
+    }
+}

@@ -12,9 +12,7 @@ class RestService extends BaseApplicationComponent
      */
     public function request($attributes)
     {
-        $criteria = new Rest_RequestCriteriaModel($attributes);
-
-        return $criteria;
+        return new Rest_RequestCriteriaModel($attributes);
     }
 
     /**

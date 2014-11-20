@@ -66,7 +66,7 @@ class RestPlugin extends BasePlugin
             "rest/requests" => array('action' => "rest/requestsIndex"),
             "rest/requests/(?P<requestId>\d+)" => array('action' => "rest/editRequest"),
             "rest/requests/new" => array('action' => "rest/editRequest"),
-            "rest/authentications" => array('action' => "rest/authenticationsIndex"),
+            "rest/apis" => array('action' => "rest/apisIndex"),
         );
     }
 }

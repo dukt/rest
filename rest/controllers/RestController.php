@@ -65,11 +65,11 @@ class RestController extends BaseController
         $this->redirect($redirect);
     }
 
-    public function actionAuthenticationsIndex()
+    public function actionApisIndex()
     {
         $variables['apis'] = craft()->rest->getApis();
 
-        $this->renderTemplate('rest/authentications', $variables);
+        $this->renderTemplate('rest/apis', $variables);
     }
 
     public function actionRequestsIndex()

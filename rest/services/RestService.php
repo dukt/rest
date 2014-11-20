@@ -43,9 +43,9 @@ class RestService extends BaseApplicationComponent
                 $criteria->verb = $request->verb;
                 $criteria->format = $request->format;
 
-                if($request->api)
+                if($request->apiHandle)
                 {
-                    $criteria->api = $request->api;
+                    $criteria->api = $request->apiHandle;
                 }
             }
             else
@@ -123,36 +123,45 @@ class RestService extends BaseApplicationComponent
             }
         }
 
-
         // send request
 
         try
         {
             $guzzleRequest = $client->{$criteria->verb}($criteria->uri, array(), $options);
-
             $response = $guzzleRequest->send();
+            $data = $response->{$criteria->format}();
 
             return array(
                 'success' => true,
-                'data' => $response->{$criteria->format}()
+                'data' => $data
+            );
+        }
+        catch(\Guzzle\Http\Exception\ClientErrorResponseException $e)
+        {
+            $errorMsg = $e->getMessage();
+            $data = null;
+
+            try
+            {
+                $data = $e->getResponse()->{$criteria->format}(true);
+            }
+            catch(\Exception $e2)
+            {
+                // couldn't get error data
+            }
+
+            return array(
+                'success' => false,
+                'data' => $data,
+                'errorMsg' => $errorMsg
             );
         }
         catch(\Exception $e)
         {
             $errorMsg = $e->getMessage();
 
-
-            try {
-                $data = @$e->getResponse()->{$criteria->format}(true);
-            }
-            catch(\Exception $e2)
-            {
-                $data = null;
-            }
-
             return array(
                 'success' => false,
-                'data' => $data,
                 'errorMsg' => $errorMsg
             );
         }
@@ -214,12 +223,12 @@ class RestService extends BaseApplicationComponent
     /**
      * Get Authentication By Handle
      */
-    public function getAuthenticationByHandle($handle)
+    public function getAuthenticationByHandle($apiHandle)
     {
         $record = Rest_AuthenticationRecord::model()->find(
             array(
-                'condition' => 'handle=:handle',
-                'params' => array(':handle' => $handle)
+                'condition' => 'apiHandle=:apiHandle',
+                'params' => array(':apiHandle' => $apiHandle)
             )
         );
 
@@ -245,11 +254,11 @@ class RestService extends BaseApplicationComponent
     /**
      * Save Authentication Token
      */
-    public function saveAuthenticationToken($handle, $token)
+    public function saveAuthenticationToken($apiHandle, $token)
     {
         // get authentication
 
-        $authentication = $this->getAuthenticationByHandle($handle);
+        $authentication = $this->getAuthenticationByHandle($apiHandle);
 
         if(!$authentication)
         {
@@ -259,7 +268,7 @@ class RestService extends BaseApplicationComponent
 
         // get api
 
-        $api = $this->getApiByHandle($handle);
+        $api = $this->getApiByHandle($apiHandle);
 
 
         // save token
@@ -281,7 +290,7 @@ class RestService extends BaseApplicationComponent
 
         // save authentication
 
-        $authentication->handle = $handle;
+        $authentication->apiHandle = $apiHandle;
         $authentication->tokenId = $tokenModel->id;
 
         $this->saveAuthentication($authentication);
@@ -331,7 +340,7 @@ class RestService extends BaseApplicationComponent
             $record = new Rest_AuthenticationRecord;
         }
 
-        $record->handle = $model->handle;
+        $record->apiHandle = $model->apiHandle;
         $record->tokenId = $model->tokenId;
 
         if($record->save())
@@ -398,7 +407,7 @@ class RestService extends BaseApplicationComponent
             $record = new Rest_RequestRecord;
         }
 
-        $record->api = $model->api;
+        $record->apiHandle = $model->apiHandle;
         $record->name = $model->name;
         $record->handle = $model->handle;
         $record->verb = $model->verb;

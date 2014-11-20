@@ -23,14 +23,14 @@ class Rest_AuthenticationRecord extends BaseRecord
     {
         return array(
             'tokenId' => AttributeType::Number,
-            'handle' => array(AttributeType::String, 'required' => true),
+            'apiHandle' => array(AttributeType::String, 'required' => true),
         );
     }
 
     public function defineIndexes()
     {
         return array(
-            array('columns' => array('handle'), 'unique' => true),
+            array('columns' => array('apiHandle'), 'unique' => true),
         );
     }
 }

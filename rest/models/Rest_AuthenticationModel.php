@@ -19,7 +19,7 @@ class Rest_AuthenticationModel extends BaseModel
         return array(
             'id'    => AttributeType::Number,
             'tokenId' => AttributeType::Number,
-            'handle' => AttributeType::String,
+            'apiHandle' => AttributeType::String,
         );
     }
 

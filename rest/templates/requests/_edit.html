@@ -35,16 +35,16 @@
         }) }}
 
 
-        {% set apiOptions = [{label:"None", value:""}] %}
+        {% set apiHandleOptions = [{label:"None", value:""}] %}
         {% for api in apis %}
-            {% set apiOptions = apiOptions|merge([{ label: api.name|t, value: api.handle }]) %}
+            {% set apiHandleOptions = apiHandleOptions|merge([{ label: api.name|t, value: api.handle }]) %}
         {% endfor %}
 
         {{ forms.selectField({
             label: "API" | t,
-            name: 'api',
-            options: apiOptions,
-            value : request ? request.api : null
+            name: 'apiHandle',
+            options: apiHandleOptions,
+            value : request ? request.apiHandle : null
         }) }}
 
         {{ forms.textField({

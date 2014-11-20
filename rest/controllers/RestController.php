@@ -104,7 +104,7 @@ class RestController extends BaseController
     public function actionSaveRequest()
     {
         $requestId = craft()->request->getParam('requestId');
-        $api = craft()->request->getParam('api');
+        $apiHandle = craft()->request->getParam('apiHandle');
         $name = craft()->request->getParam('name');
         $handle = craft()->request->getParam('handle');
         $url = craft()->request->getParam('url');
@@ -138,7 +138,7 @@ class RestController extends BaseController
             $request = new Rest_RequestModel;
         }
 
-        $request->api = $api;
+        $request->apiHandle = $apiHandle;
         $request->name = $name;
         $request->handle = $handle;
         $request->verb = $verb;

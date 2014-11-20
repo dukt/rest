@@ -32,7 +32,6 @@
                     <td>
                         {% set authentication = craft.rest.getAuthenticationByHandle(api.handle) %}
 
-
                         {% if authentication %}
 
                             <span class="status enabled"></span>
@@ -41,7 +40,6 @@
                             <a class="btn small" href="{{ actionUrl('rest/disconnect', { handle: api.handle }) }}">Disconnect</a>
 
                         {% else %}
-
 
                             <span class="status"></span>
                             Not Connected &nbsp;

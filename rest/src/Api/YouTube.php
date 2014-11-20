@@ -30,4 +30,12 @@ class YouTube extends AbstractApi {
             "https://www.googleapis.com/auth/youtubepartner"
         );
     }
+
+    public function getParams()
+    {
+        return array(
+            'approval_prompt' => 'force',
+            'access_type' => 'offline',
+        );
+    }
 }

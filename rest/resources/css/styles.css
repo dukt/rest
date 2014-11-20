@@ -1,34 +1,12 @@
-.authentication {
-    padding: 10px;
-    margin-bottom: 24px;
-    position: relative;
-}
-
-.authentication-infos {
-    margin-left: 74px;
-    float: left;
-}
-
-.authentication-infos h2 {
-    margin: 0;
-    line-height: 1.8em;
-}
-
-.authentication-infos p {
-    margin: 0;
-    line-height: 1.8em;
-}
-
-.authentication-infos img {
-   float: left;
-   margin-left: -74px;
-}
-
-.authentication-actions {
-    position: absolute;
-    right: 10px;
-    top: 18px;
-}
+/**
+* Craft REST by Dukt
+ *
+ * @package   Craft REST
+ * @author    Benjamin David
+ * @copyright Copyright (c) 2014, Dukt
+ * @link      https://dukt.net/craft/rest/
+ * @license   https://dukt.net/craft/rest/docs#license
+ */
 
 #apis img {
     vertical-align: middle;

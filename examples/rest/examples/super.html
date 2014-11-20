@@ -1,0 +1,42 @@
+{#
+
+
+{% set response = craft.rest.super.url('http://api.dribbble.com/shots/popular') %}
+
+{% set response = craft.rest.super({
+    url: 'http://api.dribbble.com/shots/popular',
+    verb: 'get',
+    format: 'json'
+}).send() %}
+
+
+{% set response = craft.rest.super({
+    authentication: 'youtube',
+    verb: 'get',
+    format: 'json',
+    url: 'https://www.googleapis.com/youtube/v3/search',
+    query: {
+        q: 'slow motion',
+        part: 'snippet',
+        maxResults: 24
+    },
+}).send() %}
+
+
+{% set response = craft.rest.super({
+    api: 'youtube',
+    uri: 'search',
+    query: {
+        q: 'slow motion',
+        part: 'snippet',
+        maxResults: 24
+    },
+}).send() %}
+
+
+#}
+
+{% set response = craft.rest.super.handle('dribbblePopularShots').send() %}
+
+
+<pre>{{ dump(response) }}</pre>

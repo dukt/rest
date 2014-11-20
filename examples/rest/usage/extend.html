@@ -1,0 +1,51 @@
+{% extends "rest/_layout" %}
+
+{% block main %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+
+                <h1>Extending a saved request</h1>
+
+                <hr>
+
+                <h3>Setup</h3>
+
+                <p>For this example to work you need to create a REST request in the control panel with the following options:</p>
+
+                <ul>
+                    <li><strong>Name:</strong> YouTube Search</li>
+                    <li><strong>Handle:</strong> youtubeSearch</li>
+                    <li><strong>URL:</strong> https://www.googleapis.com/youtube/v3/search</li>
+                    <li>
+                        <strong>Query Parameters:</strong>
+
+                        <ul>
+                            <li><strong>part:</strong> snippet</li>
+                            <li><strong>maxResults:</strong> 24</li>
+                        </ul>
+                    </li>
+                    <li><strong>Authentication:</strong> YouTube</li>
+                </ul>
+
+                <h3>Template</h3>
+
+                <pre>{{ "{% set response = craft.rest.request.handle('youtubeSearch').query({
+    q: 'slow motion'
+}) %}" }}</pre>
+
+                <h3>Response</h3>
+                {% set options = {
+                    q: 'slow motion'
+                } %}
+
+                {% set response = craft.rest.request.handle('youtubeSearch').uri('search').query( options ).send() %}
+
+                <pre>{{ dump(response) }}</pre>
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

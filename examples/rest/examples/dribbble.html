@@ -1,0 +1,45 @@
+{% extends "rest/_layout" %}
+
+{% block main %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+
+                <h1>Dribbble Popular Shots</h1>
+
+                <hr>
+
+                {% set response = craft.rest.request({
+                    url: 'http://api.dribbble.com/shots/popular'
+                }).send() %}
+
+                {% if response.success %}
+
+                    {% set shots = response.data.shots %}
+
+                    <div class="row">
+                        {% for shot in shots %}
+                            <div class="col-xs-6 col-sm-4">
+                                <div class="thumbnail">
+                                    <img src="{{ shot.image_url }}" width="100%" />
+                                </div>
+                            </div>
+                        {% endfor %}
+
+                    </div>
+
+                {% else %}
+
+                    <p>
+                        <strong>An error occured:</strong>
+                        <pre>{{ dump(response.data) }}</pre>
+                    </p>
+
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

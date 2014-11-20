@@ -1,0 +1,68 @@
+{% extends "rest/_layout" %}
+
+{% set selectedTab = 'apps' %}
+{% set q = craft.request.param('q') %}
+
+{% block main %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+
+                <h1>YouTube</h1>
+
+                <form action="" method="post">
+
+                    <p>
+                        <input type="search" name="q" value="{{ q }}" placeholder="Search videos, tweets, repositories" class="form-control" />
+                    </p>
+
+                </form>
+
+                {% if q %}
+
+                    {% set response = craft.rest.request({
+                        url: 'https://www.googleapis.com/youtube/v3/search',
+                        verb: 'get',
+                        format: 'json',
+                        query: {
+                            q: q,
+                            part: 'snippet',
+                            maxResults: 24
+                        },
+                        api: 'youtube'
+                    }).send() %}
+
+                    {% if response.success %}
+
+                        {% set data = response.data %}
+                        {% set videos = data.items %}
+
+                        <div class="row">
+
+                            {% for video in videos %}
+                                <div class="col-md-3 video">
+                                    <a href="http://www.youtube.com/watch?v={{ video.id.videoId }}" target="_blank" class="thumbnail">
+                                        <img class="img-rounded img-responsive" src="{{ video.snippet.thumbnails.medium.url }}" />
+                                    </a>
+                                </div>
+                            {% endfor %}
+
+                        </div>
+
+                    {% else %}
+
+                        <p>
+                            <strong>An error occured:</strong>
+
+                            {% set data = response.data %}
+                            <pre>{{ dump(data) }}</pre>
+                        </p>
+
+                    {% endif %}
+
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -17,6 +17,17 @@
 </head>
 <body>
 
+    {% if craft.request.segment(2) %}
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <br />
+                    <p><a href="{{ url('rest') }}">REST</a> &rsaquo;</p>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
     {% block main %}
     {% endblock %}
 

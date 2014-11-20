@@ -1,0 +1,68 @@
+{% extends "rest/_layout" %}
+
+{% block main %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+
+                <h1>Twitter Places</h1>
+
+                {% set placesResponse = craft.rest.request({
+                    url: 'https://api.twitter.com/1.1/geo/search.json',
+                    verb: 'get',
+                    format: 'json',
+                    query: {
+                        accuracy: 0,
+                        query: "Grenoble",
+                        granularity: "neighborhood"
+                    },
+                    api: 'twitter'
+                }).send() %}
+
+
+                {% if placesResponse.success %}
+
+                    {% set place = placesResponse.data.result.places|first %}
+
+                    <h2>Tweeted from {{ place.full_name }} — {{ place.id }}</h2>
+
+                    {% set tweetsResponse = craft.rest.request({
+                        url: 'https://api.twitter.com/1.1/search/tweets.json',
+                        verb: 'get',
+                        format: 'json',
+                        query: {
+                            q: 'place:'~place.id
+                        },
+                        api: 'twitter'
+                    }).send() %}
+
+                    {% if tweetsResponse.success %}
+
+                        {% set tweets = tweetsResponse.data.statuses %}
+
+                        {% for tweet in tweets %}
+
+                            <hr />
+
+                            {{ tweet.text }}
+
+                        {% endfor %}
+                    {% else %}
+                        Couldn't find tweets
+                    {% endif %}
+
+                {% else %}
+
+                    <p>
+                        <strong>An error occured:</strong>
+                        <pre>{{ dump(placesResponse.data) }}</pre>
+                    </p>
+
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

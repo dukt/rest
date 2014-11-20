@@ -16,8 +16,8 @@
                         sort: 'pushed',
                         direction: 'desc',
                     },
-                    identity: 'github',
-                }) %}
+                    api: 'github',
+                }).send() %}
 
                 {% if response.success %}
 
@@ -75,7 +75,7 @@
 
                     <p>
                         <strong>An error occured:</strong>
-                        {{ response.error }}
+                        {{ dump(response.data) }}
                     </p>
 
                 {% endif %}

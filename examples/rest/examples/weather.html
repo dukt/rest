@@ -49,7 +49,7 @@
                     verb: 'get',
                     format: 'json',
                     query: { q: q }
-                }) %}
+                }).send() %}
 
 
                 {% if response.success %}

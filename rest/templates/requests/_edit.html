@@ -14,7 +14,7 @@
         <input type="hidden" name="redirect" value="rest/requests">
 
         {% if request.id %}
-          <input type="hidden" name="id" value="{{ request.id }}">
+          <input type="hidden" name="requestId" value="{{ request.id }}">
         {% endif %}
 
         {{ forms.textField({
@@ -23,6 +23,7 @@
             required: true,
             first: true,
             value : request ? request.name : null,
+            errors: request.getErrors('name')
         }) }}
 
         {{ forms.textField({
@@ -30,6 +31,20 @@
             name: 'handle',
             required: true,
             value : request ? request.handle : null,
+            errors: request.getErrors('handle')
+        }) }}
+
+
+        {% set apiOptions = [{label:"None", value:""}] %}
+        {% for api in apis %}
+            {% set apiOptions = apiOptions|merge([{ label: api.name|t, value: api.handle }]) %}
+        {% endfor %}
+
+        {{ forms.selectField({
+            label: "API" | t,
+            name: 'api',
+            options: apiOptions,
+            value : request ? request.api : null
         }) }}
 
         {{ forms.textField({
@@ -37,8 +52,28 @@
             name: 'url',
             required: true,
             value : request ? request.url : null,
+            errors: request.getErrors('url')
         }) }}
 
+{#         {{ forms.textField({
+            label: 'URI'|t,
+            name: 'url',
+            value : 'search',
+        }) }}
+
+        <p>
+            <strong>Preview:</strong><br />
+            <span class="light">https://www.googleapis.com/youtube/v3/</span>search
+        </p>
+ #}
+
+{#
+        {{ forms.textField({
+            label: 'URL'|t,
+            name: 'url',
+            value : request ? request.url : null,
+        }) }}
+ #}
         {% set queryRows = [] %}
         {% for key, value in request.query %}
           {% set queryRows = queryRows|merge([{ key: key, value: value }]) %}
@@ -88,19 +123,6 @@
             name: 'format',
             options: responseFormatOptions,
             value: request ? request.format : null,
-        }) }}
-
-
-        {% set identityOptions = [{label:"None", value:""}] %}
-        {% for identity in identities %}
-            {% set identityOptions = identityOptions|merge([{ label: identity.providerHandle|t, value: identity.id }]) %}
-        {% endfor %}
-
-        {{ forms.selectField({
-            label: "Identity" | t,
-            name: 'identityId',
-            options: identityOptions,
-            value : request ? request.identityId : null,
         }) }}
 
 

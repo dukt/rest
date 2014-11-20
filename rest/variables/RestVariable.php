@@ -4,29 +4,13 @@ namespace Craft;
 
 class RestVariable {
 
-    public function getIdentities()
+    public function request($attributes = null)
     {
-        return craft()->rest->getIdentities();
+        return craft()->rest->request($attributes);
     }
 
-    public function getRequests()
+    public function getAuthenticationByHandle($handle)
     {
-        return craft()->rest->getRequests();
-    }
-
-    public function get($requestHandle, $queryParams)
-    {
-        return craft()->rest->get($requestHandle, $queryParams);
-    }
-
-    public function request($options)
-    {
-        return craft()->rest->request($options);
-    }
-
-    public function api($url, $headers = array(), $enableCache = false, $cacheDuration = 0)
-    {
-        return craft()->rest->api($url, $headers, $enableCache, $cacheDuration);
+        return craft()->rest->getAuthenticationByHandle($handle);
     }
 }
-

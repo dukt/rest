@@ -8,45 +8,295 @@ use Guzzle\Http\Client;
 class RestService extends BaseApplicationComponent
 {
     /**
-     * Get
+     * Request
      */
-    public function get($requestHandle, $queryParams = null)
+    public function request($attributes)
     {
-        $request = $this->getRequestByHandle($requestHandle);
+        $criteria = new Rest_RequestCriteriaModel($attributes);
 
-        // query
-
-        if(!empty($queryParams))
-        {
-            $request->query = array_merge($request->query, $queryParams);
-        }
-
-        return $this->sendRequest($request);
+        return $criteria;
     }
 
     /**
-     * Request
+     * Send Request
      */
-    public function request(array $params)
+    public function sendRequest(Rest_RequestCriteriaModel $criteria)
     {
-        if(!empty($params['identity']))
+        if($criteria->handle)
         {
+            $request = $this->getRequestByHandle($criteria->handle);
 
-            $identity = $this->getIdentityByHandle($params['identity']);
-
-            if($identity)
+            if($request)
             {
-                $params['identityId'] = $identity->id;
-            }
+                $criteria->url = $request->url;
+                $criteria->headers = $request->headers;
+                $criteria->query = $request->query;
+                $criteria->verb = $request->verb;
+                $criteria->format = $request->format;
 
-            $params['identity'] = null;
+                if($request->authentication)
+                {
+                    $criteria->api = $request->authentication->handle;
+                }
+            }
+            else
+            {
+                throw new Exception("Couldn't find request with handle ".$criteria->handle);
+
+            }
         }
 
-        $request = new Rest_RequestModel;
+        $options = array();
 
-        $request->setAttributes($params);
+        if(!empty($criteria->headers))
+        {
+            $options['headers'] = $criteria->headers;
+        }
 
-        return $this->sendRequest($request);
+        if(!empty($criteria->query))
+        {
+            $options['query'] = $criteria->query;
+        }
+
+
+        // c
+
+        $c = $this->getApiByHandle($criteria->api);
+
+
+        // baseUrl & url
+
+        $baseUrl = null;
+        $url = null;
+        $uri = null;
+
+        if(strpos($criteria->url, 'http://') === 0 || strpos($criteria->url, 'https://') === 0)
+        {
+            $baseUrl = $criteria->url;
+        }
+        else
+        {
+            $url = $criteria->url;
+
+            if(!empty($c['apiUrl']))
+            {
+                $baseUrl = $c['apiUrl'];
+            }
+        }
+
+
+        // client
+
+        $client = new Client($baseUrl);
+
+
+        // authentication
+
+        $authentication = $this->getAuthenticationByHandle($criteria->api);
+
+        if($authentication)
+        {
+            $providerHandle = $c['providerHandle'];
+            $provider = craft()->oauth->getProvider($providerHandle);
+
+            $tokenModel = $authentication->getToken();
+
+            if($tokenModel)
+            {
+                $token = $tokenModel->token;
+
+                if($token)
+                {
+                    // authenticate client
+
+                    $client = \Dukt\Rest\ApiFactory::getClient($client, $provider, $token);
+                }
+            }
+        }
+
+
+
+        // send request
+
+        try
+        {
+            $guzzleRequest = $client->{$criteria->verb}($criteria->uri, array(), $options);
+
+            $response = $guzzleRequest->send();
+
+            return array(
+                'success' => true,
+                'data' => $response->{$criteria->format}()
+            );
+        }
+        catch(\Exception $e)
+        {
+            return array(
+                'success' => false,
+                'data' => $e->getResponse()->{$criteria->format}(true)
+            );
+        }
+    }
+
+    /**
+     * Get APIs
+     */
+    public function getApis()
+    {
+        $path = CRAFT_PLUGINS_PATH.'rest/data/apis.json';
+        $json = file_get_contents($path);
+        return json_decode($json, true);
+    }
+
+    /**
+     * Get API By Handle
+     */
+    public function getApiByHandle($handle)
+    {
+        $apis = $this->getApis();
+
+        foreach($apis as $api)
+        {
+            if($api['handle'] == $handle)
+            {
+                return $api;
+            }
+        }
+    }
+
+    /**
+     * Get Authentication By Handle
+     */
+    public function getAuthenticationByHandle($handle)
+    {
+        $record = Rest_AuthenticationRecord::model()->find(
+            array(
+                'condition' => 'handle=:handle',
+                'params' => array(':handle' => $handle)
+            )
+        );
+
+        if($record)
+        {
+            return Rest_AuthenticationModel::populateModel($record);
+        }
+    }
+
+    /**
+     * Get Authentication By ID
+     */
+    public function getAuthenticationById($id)
+    {
+        $record = Rest_AuthenticationRecord::model()->findByPk($id);
+
+        if($record)
+        {
+            return Rest_AuthenticationModel::populateModel($record);
+        }
+    }
+
+    /**
+     * Save Authentication Token
+     */
+    public function saveAuthenticationToken($handle, $token)
+    {
+        // get authentication
+
+        $authentication = $this->getAuthenticationByHandle($handle);
+
+        if(!$authentication)
+        {
+            $authentication = new Rest_AuthenticationModel;
+        }
+
+
+        // get api
+
+        $api = $this->getApiByHandle($handle);
+
+
+        // save token
+
+        $tokenModel = craft()->oauth->getTokenById($authentication->tokenId);
+
+        if(!$tokenModel)
+        {
+            $tokenModel = new Oauth_TokenModel;
+        }
+
+
+        $tokenModel->providerHandle = $api['providerHandle'];
+        $tokenModel->pluginHandle = 'rest';
+        $tokenModel->encodedToken = craft()->oauth->encodeToken($token);
+
+        craft()->oauth->saveToken($tokenModel);
+
+
+        // save authentication
+
+        $authentication->handle = $handle;
+        $authentication->tokenId = $tokenModel->id;
+
+        $this->saveAuthentication($authentication);
+    }
+
+    /**
+     * Delete Authentication By ID
+     */
+    public function deleteAuthenticationById($id)
+    {
+        $authentication = $this->getAuthenticationById($id);
+
+
+        // delete token
+
+        if($authentication->tokenId)
+        {
+            $token = craft()->oauth->getTokenById($authentication->tokenId);
+
+            if($token)
+            {
+                craft()->oauth->deleteToken($token);
+            }
+        }
+
+        return Rest_AuthenticationRecord::model()->deleteByPk($id);
+    }
+
+    /**
+     * Get Authentications
+     */
+    public function getAuthentications()
+    {
+        $records = Rest_AuthenticationRecord::model()->findAll(array('order' => 't.id'));
+        return Rest_AuthenticationModel::populateModels($records, 'id');
+    }
+
+    /**
+     * Save Authentication
+     */
+    public function saveAuthentication(Rest_AuthenticationModel $model)
+    {
+        $record = Rest_AuthenticationRecord::model()->findByPk($model->id);
+
+        if(!$record)
+        {
+            $record = new Rest_AuthenticationRecord;
+        }
+
+        $record->handle = $model->handle;
+        $record->tokenId = $model->tokenId;
+
+        if($record->save())
+        {
+            $model->setAttribute('id', $record->getAttribute('id'));
+            return true;
+        }
+        else
+        {
+            $model->addErrors($record->getErrors());
+            return false;
+        }
     }
 
     /**
@@ -71,7 +321,6 @@ class RestService extends BaseApplicationComponent
         }
     }
 
-
     /**
      * Get Request By Handle
      */
@@ -91,86 +340,6 @@ class RestService extends BaseApplicationComponent
     }
 
     /**
-     * Send Request
-     */
-    public function sendRequest(Rest_RequestModel $request)
-    {
-        $client = new Client();
-        $options = array();
-        $verb = 'get';
-        $format = 'json';
-
-        if(!empty($request->headers))
-        {
-            $options['headers'] = $request->headers;
-        }
-
-        if(!empty($request->query))
-        {
-            $options['query'] = $request->query;
-        }
-
-        if(!empty($request->verb))
-        {
-            $verb = $request->verb;
-        }
-
-        if(!empty($request->format))
-        {
-            $format = $request->format;
-        }
-
-
-        // identity
-
-        $identity = null;
-
-        if(!empty($request->identityId))
-        {
-            $identityId = $request->identityId;
-            $identity = craft()->rest->getIdentityById($identityId);
-
-            $providerHandle = $identity->providerHandle;
-            $provider = craft()->oauth->getProvider($providerHandle);
-
-            $tokenModel = $identity->getToken();
-
-            if($tokenModel)
-            {
-                $token = $tokenModel->token;
-
-                if($token)
-                {
-                    // authenticate client
-
-                    $client = \Dukt\Rest\ApiFactory::getClient($client, $provider, $token);
-                }
-            }
-        }
-
-        // send request
-
-        try
-        {
-            $guzzleRequest = $client->{$verb}($request->url, array(), $options);
-
-            $response = $guzzleRequest->send();
-
-            return array(
-                'success' => true,
-                'data' => $response->{$format}()
-            );
-        }
-        catch(\Exception $e)
-        {
-            return array(
-                'success' => false,
-                'data' => $e->getResponse()->{$format}(true)
-            );
-        }
-    }
-
-    /**
      * Save Request
      */
     public function saveRequest(Rest_RequestModel $model)
@@ -182,7 +351,7 @@ class RestService extends BaseApplicationComponent
             $record = new Rest_RequestRecord;
         }
 
-        $record->identityId = $model->identityId;
+        $record->api = $model->api;
         $record->name = $model->name;
         $record->handle = $model->handle;
         $record->verb = $model->verb;
@@ -209,127 +378,5 @@ class RestService extends BaseApplicationComponent
     public function deleteRequestById($id)
     {
         return Rest_RequestRecord::model()->deleteByPk($id);
-    }
-
-    /**
-     * Get Identities
-     */
-    public function getIdentities()
-    {
-        $records = Rest_IdentityRecord::model()->findAll(array('order' => 't.id'));
-        return Rest_IdentityModel::populateModels($records, 'id');
-    }
-
-    /**
-     * Get Identity By ID
-     */
-    public function getIdentityById($id)
-    {
-        $record = Rest_IdentityRecord::model()->findByPk($id);
-
-        if($record)
-        {
-            return Rest_IdentityModel::populateModel($record);
-        }
-    }
-
-    /**
-     * Save Identity
-     */
-    public function saveIdentity(Rest_IdentityModel $model)
-    {
-        $record = Rest_IdentityRecord::model()->findByPk($model->id);
-
-        if(!$record)
-        {
-            $record = new Rest_IdentityRecord;
-        }
-
-        $record->tokenId = $model->tokenId;
-        $record->name = $model->name;
-        $record->handle = $model->handle;
-        $record->providerHandle = $model->providerHandle;
-        $record->scopes = $model->scopes;
-        $record->params = $model->params;
-
-        $recordValidates = $record->validate();
-
-        if ($recordValidates)
-        {
-            $record->save(false);
-
-            if (!$model->id)
-            {
-                $model->id = $record->id;
-            }
-
-            return true;
-        }
-        else
-        {
-            $model->addErrors($record->getErrors());
-            return false;
-        }
-
-        return $record->save();
-    }
-
-    /**
-     * Get Identity By Handle
-     */
-    public function getIdentityByHandle($handle)
-    {
-        $record = Rest_IdentityRecord::model()->find(
-            array(
-                'condition' => 'handle=:handle',
-                'params' => array(':handle' => $handle)
-            )
-        );
-
-        if($record)
-        {
-            return Rest_IdentityModel::populateModel($record);
-        }
-    }
-
-    /**
-     * Delete Identity By ID
-     */
-    public function deleteIdentityById($id)
-    {
-        return Rest_IdentityRecord::model()->deleteByPk($id);
-    }
-
-    /**
-     * Save Token
-     */
-    public function saveToken($identity, $token)
-    {
-        // get tokenId
-        $tokenId = $identity->tokenId;
-
-        // get token
-        $model = craft()->oauth->getTokenById($tokenId);
-
-
-        // populate token model
-
-        if(!$model)
-        {
-            $model = new Oauth_TokenModel;
-        }
-
-        $model->providerHandle = $identity->providerHandle;
-        $model->pluginHandle = 'rest';
-        $model->encodedToken = craft()->oauth->encodeToken($token);
-
-        // save token
-        craft()->oauth->saveToken($model);
-
-        // set token ID
-        $identity->tokenId = $model->id;
-
-        // save identity
-        $this->saveIdentity($identity);
     }
 }

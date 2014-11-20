@@ -3,7 +3,7 @@
 {% import "_includes/forms" as forms %}
 
 {% set title = "REST"|t %}
-{% set requests = craft.rest.getRequests %}
+
 {% set selectedTab = 'requests' %}
 {% set content %}
 
@@ -11,25 +11,22 @@
         <table id="requests" class="data fullwidth collapsible">
             <thead>
                 <tr>
-                    <th scope="col">{{ "ID"|t }}</th>
                     <th scope="col">{{ "Name"|t }}</th>
                     <th scope="col">{{ "Handle"|t }}</th>
                     <th scope="col">{{ "URL"|t }}</th>
-                    <th scope="col">{{ "Identity"|t }}</th>
+                    <th scope="col">{{ "API"|t }}</th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
                 {% for request in requests %}
                     <tr data-id="{{ request.id }}" data-name="{{ request.name }}">
-                        <td>{{ request.id }}</td>
                         <td><a href="{{ url('rest/requests/'~request.id) }}">{{ request.name }}</a></td>
                         <td>{{ request.handle }}</td>
                         <td>{{ request.url }}</td>
                         <td>
-                            {% set identity = request.identity %}
-                            {% if identity %}
-                                {{ identity.providerHandle }}
+                            {% if request.api %}
+                                {{ request.api }}
                             {% else %}
                                 —
                             {% endif %}

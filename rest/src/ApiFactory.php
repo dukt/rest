@@ -38,8 +38,6 @@ class ApiFactory {
                 break;
         }
 
-        $client = new \Guzzle\Http\Client();
-
         $client->setDefaultOption('headers', $headers);
         $client->setDefaultOption('query', $query);
 

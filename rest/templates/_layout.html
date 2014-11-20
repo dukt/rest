@@ -2,7 +2,9 @@
 
 {% set tabs = {
     requests: { label: "Requests"|t, url: url('rest/requests') },
-    identities: { label: "Identities"|t, url: url('rest/identities') },
+    authentications: { label: "Authentications"|t, url: url('rest/authentications') },
 } %}
+
+{% includeCssResource "rest/css/styles.css" %}
 
 {% set title = 'REST'|t %}

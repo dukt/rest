@@ -72,12 +72,7 @@
 
 
                 {% else %}
-
-                    <p>
-                        <strong>An error occured:</strong>
-                        {{ dump(response.data) }}
-                    </p>
-
+                    {% include 'rest/_error' with { response: response } %}
                 {% endif %}
 
             </div>

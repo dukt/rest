@@ -42,7 +42,11 @@
 
                 {% set response = craft.rest.request.handle('youtubeSearch').uri('search').query( options ).send() %}
 
-                <pre>{{ dump(response) }}</pre>
+                {% if response.success %}
+                    <pre>{{ dump(response) }}</pre>
+                {% else %}
+                    {% include 'rest/_error' with { response: response } %}
+                {% endif %}
 
             </div>
         </div>

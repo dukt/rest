@@ -30,7 +30,7 @@ class RestController extends BaseController
 
         if(!$redirect)
         {
-            $redirect = 'rest/authentications';
+            $redirect = 'rest/apis';
         }
 
         $api = craft()->rest->getApiByHandle($handle);

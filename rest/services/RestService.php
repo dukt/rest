@@ -34,9 +34,9 @@ class RestService extends BaseApplicationComponent
                 $criteria->verb = $request->verb;
                 $criteria->format = $request->format;
 
-                if($request->authentication)
+                if($request->api)
                 {
-                    $criteria->api = $request->authentication->handle;
+                    $criteria->api = $request->api;
                 }
             }
             else
@@ -130,9 +130,21 @@ class RestService extends BaseApplicationComponent
         }
         catch(\Exception $e)
         {
+            $errorMsg = $e->getMessage();
+
+
+            try {
+                $data = @$e->getResponse()->{$criteria->format}(true);
+            }
+            catch(\Exception $e2)
+            {
+                $data = null;
+            }
+
             return array(
                 'success' => false,
-                'data' => $e->getResponse()->{$criteria->format}(true)
+                'data' => $data,
+                'errorMsg' => $errorMsg
             );
         }
     }

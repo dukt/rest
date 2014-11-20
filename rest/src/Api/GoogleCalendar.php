@@ -25,4 +25,12 @@ class GoogleCalendar extends AbstractApi {
             'https://www.googleapis.com/auth/calendar'
         );
     }
+
+    public function getParams()
+    {
+        return array(
+            'approval_prompt' => 'force',
+            'access_type' => 'offline',
+        );
+    }
 }

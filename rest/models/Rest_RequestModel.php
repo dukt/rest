@@ -1,4 +1,5 @@
 <?php
+
 namespace Craft;
 
 class Rest_RequestModel extends BaseModel
@@ -7,7 +8,7 @@ class Rest_RequestModel extends BaseModel
     {
         return array(
             'id'    => AttributeType::Number,
-            'identityId' => AttributeType::Number,
+            'api' => AttributeType::Number,
             'name' => AttributeType::String,
             'handle' => AttributeType::String,
             'verb' => AttributeType::String,
@@ -18,8 +19,8 @@ class Rest_RequestModel extends BaseModel
         );
     }
 
-    public function getIdentity()
+    public function getAuthentication()
     {
-        return craft()->rest->getIdentityById($this->identityId);
+        return craft()->rest->getAuthenticationByHandle($this->api);
     }
 }

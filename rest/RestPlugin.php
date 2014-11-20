@@ -56,13 +56,15 @@ class RestPlugin extends BasePlugin
         return true;
     }
 
+    /**
+     * Register CP Routes
+     */
     public function registerCpRoutes()
     {
         return array(
-
-            "rest/identities/(?P<id>\d+)" => array('action' => "rest/editIdentity"),
-            "rest/identities/new" => array('action' => "rest/editIdentity"),
-            "rest/requests/(?P<id>\d+)" => array('action' => "rest/editRequest"),
+            "rest/authentications" => array('action' => "rest/authenticationsIndex"),
+            "rest/requests" => array('action' => "rest/requestsIndex"),
+            "rest/requests/(?P<requestId>\d+)" => array('action' => "rest/editRequest"),
             "rest/requests/new" => array('action' => "rest/editRequest"),
         );
     }

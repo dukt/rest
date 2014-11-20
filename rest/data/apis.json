@@ -1,0 +1,92 @@
+[
+    {
+        "name":"Dribbble",
+        "handle":"dribbble",
+        "providerHandle":"dribbble",
+        "scopes":[
+        ],
+        "params": [
+
+        ]
+    },
+    {
+        "name":"Facebook",
+        "handle":"facebook",
+        "providerHandle":"facebook",
+        "scopes":[
+        ],
+        "params": [
+
+        ]
+    },
+    {
+        "name":"GitHub",
+        "handle":"github",
+        "providerHandle":"github",
+        "scopes":[
+            "repo"
+        ],
+        "params": [
+
+        ]
+    },
+    {
+        "name":"Google Calendar",
+        "handle":"calendar",
+        "providerHandle":"google",
+        "scopes":[
+            "https://www.googleapis.com/auth/calendar"
+        ],
+        "params": [
+
+        ]
+    },
+    {
+        "name": "RunKeeper",
+        "handle": "runkeeper",
+        "providerHandle": "runkeeper",
+        "scopes": [
+        ],
+        "params": [
+
+        ]
+    },
+    {
+        "name": "Twitter",
+        "handle": "twitter",
+        "providerHandle": "twitter",
+        "scopes": [
+        ],
+        "params": [
+
+        ]
+    },
+    {
+        "name": "Vimeo",
+        "handle": "vimeo",
+        "providerHandle": "vimeo",
+        "scopes": [
+        ],
+        "params": [
+
+        ]
+    },
+    {
+        "name": "YouTube",
+        "handle": "youtube",
+        "providerHandle": "google",
+        "apiUrl": "https://www.googleapis.com/youtube/v3/",
+        "scopes": [
+            "https://www.googleapis.com/auth/yt-analytics-monetary.readonly",
+            "https://www.googleapis.com/auth/yt-analytics.readonly",
+            "https://www.googleapis.com/auth/youtube",
+            "https://www.googleapis.com/auth/youtube.readonly",
+            "https://www.googleapis.com/auth/youtube.upload",
+            "https://www.googleapis.com/auth/youtubepartner"
+        ],
+
+        "params": [
+
+        ]
+    }
+]

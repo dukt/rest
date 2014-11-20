@@ -17,15 +17,9 @@ class Rest_RequestRecord extends BaseRecord
             'verb' => array(AttributeType::String, 'required' => true),
             'format' => array(AttributeType::String, 'required' => true),
             'url' => array(AttributeType::String, 'required' => true),
+            'api' => AttributeType::String,
             'headers' => AttributeType::Mixed,
             'query' => AttributeType::Mixed,
-        );
-    }
-
-    public function defineRelations()
-    {
-        return array(
-            'identity' => array(static::BELONGS_TO, 'Rest_IdentityRecord', 'identityId', 'required' => false, 'onDelete' => static::SET_NULL)
         );
     }
 

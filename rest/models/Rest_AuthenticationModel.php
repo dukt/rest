@@ -1,18 +1,15 @@
 <?php
+
 namespace Craft;
 
-class Rest_IdentityModel extends BaseModel
+class Rest_AuthenticationModel extends BaseModel
 {
     protected function defineAttributes()
     {
         return array(
             'id'    => AttributeType::Number,
             'tokenId' => AttributeType::Number,
-            'name' => AttributeType::String,
             'handle' => AttributeType::String,
-            'providerHandle' => AttributeType::String,
-            'scopes' => AttributeType::Mixed,
-            'params' => AttributeType::Mixed,
         );
     }
 

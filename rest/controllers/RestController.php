@@ -39,9 +39,9 @@ class RestController extends BaseController
         {
             if($response = craft()->oauth->connect(array(
                 'plugin' => 'rest',
-                'provider' => $api['providerHandle'],
-                'scopes' => $api['scopes'],
-                'params' => $api['params'],
+                'provider' => $api->getProviderHandle(),
+                'scopes' => $api->getScopes(),
+                'params' => $api->getParams(),
             )))
             {
                 if($response['success'])

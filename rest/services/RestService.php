@@ -22,6 +22,8 @@ class RestService extends BaseApplicationComponent
      */
     public function sendRequest(Rest_RequestCriteriaModel $criteria)
     {
+        // get started from a saved request ?
+
         if($criteria->handle)
         {
             $request = $this->getRequestByHandle($criteria->handle);
@@ -42,9 +44,11 @@ class RestService extends BaseApplicationComponent
             else
             {
                 throw new Exception("Couldn't find request with handle ".$criteria->handle);
-
             }
         }
+
+
+        // options
 
         $options = array();
 
@@ -59,12 +63,12 @@ class RestService extends BaseApplicationComponent
         }
 
 
-        // c
+        // api
 
-        $c = $this->getApiByHandle($criteria->api);
+        $api = $this->getApiByHandle($criteria->api);
 
 
-        // baseUrl & url
+        // url
 
         $baseUrl = null;
         $url = null;
@@ -78,9 +82,9 @@ class RestService extends BaseApplicationComponent
         {
             $url = $criteria->url;
 
-            if(!empty($c['apiUrl']))
+            if($api->getApiUrl())
             {
-                $baseUrl = $c['apiUrl'];
+                $baseUrl = $api->getApiUrl();
             }
         }
 
@@ -90,13 +94,13 @@ class RestService extends BaseApplicationComponent
         $client = new Client($baseUrl);
 
 
-        // authentication
+        // authenticate client
 
         $authentication = $this->getAuthenticationByHandle($criteria->api);
 
         if($authentication)
         {
-            $providerHandle = $c['providerHandle'];
+            $providerHandle = $api->getProviderHandle();
             $provider = craft()->oauth->getProvider($providerHandle);
 
             $tokenModel = $authentication->getToken();
@@ -107,13 +111,10 @@ class RestService extends BaseApplicationComponent
 
                 if($token)
                 {
-                    // authenticate client
-
-                    $client = \Dukt\Rest\ApiFactory::getClient($client, $provider, $token);
+                    \Dukt\Rest\ClientFactory::authenticateClient($client, $provider, $token);
                 }
             }
         }
-
 
 
         // send request
@@ -143,9 +144,36 @@ class RestService extends BaseApplicationComponent
      */
     public function getApis()
     {
-        $path = CRAFT_PLUGINS_PATH.'rest/data/apis.json';
-        $json = file_get_contents($path);
-        return json_decode($json, true);
+        $apis = array();
+
+        $path = CRAFT_PLUGINS_PATH.'rest/src/API/';
+        $folderContents = IOHelper::getFolderContents($path, false);
+
+        if($folderContents)
+        {
+            foreach($folderContents as $path)
+            {
+                $path = IOHelper::normalizePathSeparators($path);
+                $fileName = IOHelper::getFileName($path, false);
+
+                if($fileName == 'AbstractApi') continue;
+
+                $class = $fileName;
+
+                $apis[] = $this->_getApi($class);
+            }
+        }
+
+        return $apis;
+    }
+
+    /**
+     * Get API Instance
+     */
+    public function _getApi($class)
+    {
+        $fullClass = '\\Dukt\\Rest\\Api\\'.$class;
+        return new $fullClass;
     }
 
     /**
@@ -157,7 +185,7 @@ class RestService extends BaseApplicationComponent
 
         foreach($apis as $api)
         {
-            if($api['handle'] == $handle)
+            if($api->getHandle() == $handle)
             {
                 return $api;
             }
@@ -225,7 +253,7 @@ class RestService extends BaseApplicationComponent
         }
 
 
-        $tokenModel->providerHandle = $api['providerHandle'];
+        $tokenModel->providerHandle = $api->getProviderHandle();
         $tokenModel->pluginHandle = 'rest';
         $tokenModel->encodedToken = craft()->oauth->encodeToken($token);
 

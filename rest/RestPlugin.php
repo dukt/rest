@@ -62,10 +62,11 @@ class RestPlugin extends BasePlugin
     public function registerCpRoutes()
     {
         return array(
-            "rest/authentications" => array('action' => "rest/authenticationsIndex"),
+            "rest" => array('action' => "rest/requestsIndex"),
             "rest/requests" => array('action' => "rest/requestsIndex"),
             "rest/requests/(?P<requestId>\d+)" => array('action' => "rest/editRequest"),
             "rest/requests/new" => array('action' => "rest/editRequest"),
+            "rest/authentications" => array('action' => "rest/authenticationsIndex"),
         );
     }
 }

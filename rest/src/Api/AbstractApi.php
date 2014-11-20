@@ -37,7 +37,7 @@ abstract class AbstractApi {
 
     public function getScopes()
     {
-        return null;
+        return array();
     }
 
     public function getParams()

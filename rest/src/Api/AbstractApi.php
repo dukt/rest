@@ -44,4 +44,9 @@ abstract class AbstractApi {
     {
         return null;
     }
+
+    public function getAuthorizationMethod()
+    {
+        return null;
+    }
 }

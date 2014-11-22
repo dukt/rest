@@ -118,7 +118,9 @@ class RestService extends BaseApplicationComponent
 
                 if($token)
                 {
-                    \Dukt\Rest\ClientFactory::authenticateClient($client, $provider, $token);
+                    $oauthSubscriber = \Dukt\Rest\SubscriberFactory::get($api, $client, $provider, $token);
+
+                    $client->addSubscriber($oauthSubscriber);
                 }
             }
         }

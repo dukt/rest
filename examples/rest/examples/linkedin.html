@@ -1,0 +1,39 @@
+{% extends "rest/_layout" %}
+
+{% block main %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+
+                <h1>Linked In</h1>
+
+                <hr>
+
+                {% set response = craft.rest.request({
+                    uri: 'groups/38178/posts',
+                    api: 'linkedin'
+                }).send() %}
+
+{#                 {% set response = craft.rest.request.api('linkedin').url('groups/38178/posts') %}
+ #}
+
+                {% set response = craft.rest.request({
+                    uri: 'people/~?format=json',
+                    api: 'linkedin'
+                }).send() %}
+
+                {% if response.success %}
+
+                    {% set data = response.data %}
+
+                    {{ dump(data) }}
+                {% else %}
+                    {% include 'rest/_error' with { response: response } %}
+                {% endif %}
+
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

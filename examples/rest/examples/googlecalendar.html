@@ -10,7 +10,7 @@
 
                 {% set response = craft.rest.request({
                     api: 'googlecalendar',
-                    uri: 'users/me/calendarList'
+                    url: 'users/me/calendarList'
                 }).send() %}
 
                 {% if response.success %}

@@ -13,7 +13,11 @@
                 {% set response = craft.rest.request({
                     url: 'http://api.dribbble.com/shots/popular'
                 }).send() %}
-
+{#
+                {% set response = craft.rest.request({
+                    url: 'http://api.dribbble.com/shots/popular'
+                }).send() %}
+ #}
                 {% if response.success %}
 
                     {% set shots = response.data.shots %}

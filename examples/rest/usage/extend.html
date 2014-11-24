@@ -40,7 +40,7 @@
                     q: 'slow motion'
                 } %}
 
-                {% set response = craft.rest.request.handle('youtubeSearch').uri('search').query( options ).send() %}
+                {% set response = craft.rest.request.handle('youtubeSearch').query( options ).send() %}
 
                 {% if response.success %}
                     <pre>{{ dump(response) }}</pre>

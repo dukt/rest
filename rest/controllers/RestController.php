@@ -49,7 +49,7 @@ class RestController extends BaseController
 
         if($api)
         {
-            $oauthProvider = craft()->oauth->getProvider('handle');
+            $oauthProvider = craft()->oauth->getProvider($api->getProviderHandle());
 
             if($oauthProvider)
             {

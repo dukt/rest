@@ -34,6 +34,8 @@ class RestController extends BaseController
 
     public function actionConnect()
     {
+        craft()->rest->requireOAuth();
+
         $handle = craft()->request->getParam('handle');
 
         $redirect = craft()->request->getParam('redirect');

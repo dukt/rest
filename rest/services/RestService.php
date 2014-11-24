@@ -130,6 +130,8 @@ class RestService extends BaseApplicationComponent
 
         if($api && $authentication)
         {
+            $this->requireOAuth();
+
             $providerHandle = $api->getProviderHandle();
             $provider = craft()->oauth->getProvider($providerHandle);
 
@@ -287,6 +289,8 @@ class RestService extends BaseApplicationComponent
      */
     public function saveAuthenticationToken($apiHandle, $token)
     {
+        $this->requireOAuth();
+
         // get authentication
 
         $authentication = $this->getAuthenticationByHandle($apiHandle);
@@ -332,6 +336,8 @@ class RestService extends BaseApplicationComponent
      */
     public function deleteAuthenticationById($id)
     {
+        $this->requireOAuth();
+
         $authentication = $this->getAuthenticationById($id);
 
 
@@ -465,5 +471,16 @@ class RestService extends BaseApplicationComponent
     public function deleteRequestById($id)
     {
         return Rest_RequestRecord::model()->deleteByPk($id);
+    }
+
+    /**
+     * Require OAuth
+     */
+    public function requireOAuth()
+    {
+        if(!isset(craft()->oauth))
+        {
+            throw new Exception(Craft::t('OAuth plugin is required to perform this action.'));
+        }
     }
 }

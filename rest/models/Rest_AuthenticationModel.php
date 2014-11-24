@@ -25,6 +25,8 @@ class Rest_AuthenticationModel extends BaseModel
 
     public function getToken()
     {
+        craft()->rest->requireOAuth();
+
         return craft()->oauth->getTokenById($this->tokenId);
     }
 }

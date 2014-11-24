@@ -49,29 +49,42 @@ class RestController extends BaseController
 
         if($api)
         {
-            if($response = craft()->oauth->connect(array(
-                'plugin' => 'rest',
-                'provider' => $api->getProviderHandle(),
-                'scopes' => $api->getScopes(),
-                'params' => $api->getParams(),
-            )))
+            $oauthProvider = craft()->oauth->getProvider('handle');
+
+            if($oauthProvider)
             {
-                if($response['success'])
+                if($response = craft()->oauth->connect(array(
+                    'plugin' => 'rest',
+                    'provider' => $api->getProviderHandle(),
+                    'scopes' => $api->getScopes(),
+                    'params' => $api->getParams(),
+                )))
                 {
-                    // token
-                    $token = $response['token'];
+                    if($response['success'])
+                    {
+                        // token
+                        $token = $response['token'];
 
-                    // save token
-                    craft()->rest->saveAuthenticationToken($handle, $token);
+                        // save token
+                        craft()->rest->saveAuthenticationToken($handle, $token);
 
-                    // session notice
-                    craft()->userSession->setNotice(Craft::t("Connected."));
-                }
-                else
-                {
-                    craft()->userSession->setError(Craft::t($response['errorMsg']));
+                        // session notice
+                        craft()->userSession->setNotice(Craft::t("Connected."));
+                    }
+                    else
+                    {
+                        craft()->userSession->setError(Craft::t($response['errorMsg']));
+                    }
                 }
             }
+            else
+            {
+                craft()->userSession->setError(Craft::t("OAuth provider not configured."));
+            }
+        }
+        else
+        {
+            craft()->userSession->setError(Craft::t("Couldn’t find API: ".$handle));
         }
 
         $this->redirect($redirect);

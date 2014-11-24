@@ -178,7 +178,7 @@ class RestService extends BaseApplicationComponent
     {
         $apis = array();
 
-        $path = CRAFT_PLUGINS_PATH.'rest/src/API/';
+        $path = CRAFT_PLUGINS_PATH.'rest/src/Api/';
         $folderContents = IOHelper::getFolderContents($path, false);
 
         if($folderContents)

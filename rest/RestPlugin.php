@@ -67,4 +67,15 @@ class RestPlugin extends BasePlugin
             "rest/apis" => array('action' => "rest/apisIndex"),
         );
     }
+
+    /**
+     * On Before Uninstall
+     */
+    public function onBeforeUninstall()
+    {
+        if(isset(craft()->oauth))
+        {
+            craft()->oauth->deleteTokensByPlugin('rest');
+        }
+    }
 }

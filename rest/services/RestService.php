@@ -12,6 +12,8 @@
 
 namespace Craft;
 
+require_once(CRAFT_PLUGINS_PATH.'rest/vendor/autoload.php');
+
 use Guzzle\Http\Client;
 
 class RestService extends BaseApplicationComponent

@@ -18,59 +18,46 @@
 
                 {% if response.success %}
 
-                    {% set photos = response.data.photos %}
+                    {% if response.data.photos is defined %}
+                        {% set photos = response.data.photos %}
 
-                    {% set farmId = '' %}
-                    {% set serverId = '' %}
-                    {% set id = '' %}
-                    {% set secret = '' %}
+                        {% set farmId = '' %}
+                        {% set serverId = '' %}
+                        {% set id = '' %}
+                        {% set secret = '' %}
 
-                    <div class="row">
-                        {% for photo in photos.children %}
-                            {% for k, v in photo.attributes %}
+                        <div class="row">
+                            {% for photo in photos.children %}
+                                {% for k, v in photo.attributes %}
 
-                                {# <pre>{{ dump([k, v]) }}</pre> #}
+                                    {% if k == 'farm' %}
+                                        {% set farmId = v %}
+                                    {% endif %}
 
-                                {% if k == 'farm' %}
-                                    {% set farmId = v %}
-                                {% endif %}
+                                    {% if k == 'server' %}
+                                        {% set serverId = v %}
+                                    {% endif %}
 
-                                {% if k == 'server' %}
-                                    {% set serverId = v %}
-                                {% endif %}
+                                    {% if k == 'id' %}
+                                        {% set id = v %}
+                                    {% endif %}
 
-                                {% if k == 'id' %}
-                                    {% set id = v %}
-                                {% endif %}
+                                    {% if k == 'secret' %}
+                                        {% set secret = v %}
+                                    {% endif %}
 
-                                {% if k == 'secret' %}
-                                    {% set secret = v %}
-                                {% endif %}
+                                    {% set farm = v %}
+                                {% endfor %}
 
-                                {% set farm = v %}
-                            {% endfor %}
-
-                            <div class="col-md-4">
-                                <img src="https://farm{{farmId}}.staticflickr.com/{{serverId}}/{{id}}_{{secret}}.jpg" class="img-responsive" />
-                            </div>
-
-                        {% endfor %}
-                    </div>
-
-
-{#
-                    {% set shots = response.data.shots %}
-
-                    <div class="row">
-                        {% for shot in shots %}
-                            <div class="col-xs-6 col-sm-4">
-                                <div class="thumbnail">
-                                    <img src="{{ shot.image_url }}" width="100%" />
+                                <div class="col-md-4">
+                                    <img src="https://farm{{farmId}}.staticflickr.com/{{serverId}}/{{id}}_{{secret}}.jpg" class="img-responsive" />
                                 </div>
-                            </div>
-                        {% endfor %}
 
-                    </div> #}
+                            {% endfor %}
+                        </div>
+                    {% else %}
+                        {% include 'rest/_error' with { response: response } %}
+                    {% endif %}
 
                 {% else %}
                     {% include 'rest/_error' with { response: response } %}

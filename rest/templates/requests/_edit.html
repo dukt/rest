@@ -20,6 +20,7 @@
         {{ forms.textField({
             label: 'Name'|t,
             name: 'name',
+            id: 'name',
             required: true,
             first: true,
             value : request ? request.name : null,
@@ -29,6 +30,7 @@
         {{ forms.textField({
             label: 'Handle'|t,
             name: 'handle',
+            id: 'handle',
             required: true,
             value : request ? request.handle : null,
             errors: request.getErrors('handle')
@@ -136,3 +138,10 @@
     </form>
 
 {% endset %}
+
+{% if isNew %}
+    {% set js %}
+        new Craft.HandleGenerator('#name', '#handle');
+    {% endset %}
+    {% includeJs js %}
+{% endif %}

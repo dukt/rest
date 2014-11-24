@@ -108,7 +108,7 @@ class RestController extends BaseController
         $name = craft()->request->getParam('name');
         $handle = craft()->request->getParam('handle');
         $url = craft()->request->getParam('url');
-        $verb = craft()->request->getParam('verb');
+        $verb = 'get'; // $verb = craft()->request->getParam('verb');
         $format = craft()->request->getParam('format');
         $query = craft()->request->getParam('query');
 

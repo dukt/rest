@@ -107,12 +107,16 @@
             { label: 'DELETE', value: 'delete' },
         ] %}
 
+        {#
+
         {{ forms.selectField({
             label: "Verb" | t,
             name: 'verb',
             options: verbOptions,
             value: request ? request.verb : null,
         }) }}
+
+        #}
 
         {% set responseFormatOptions = [
             { label: 'JSON', value: 'json' },

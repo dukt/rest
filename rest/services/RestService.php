@@ -31,7 +31,7 @@ class RestService extends BaseApplicationComponent
      */
     public function sendRequest(Rest_RequestCriteriaModel $criteria)
     {
-        // get started from a saved request ?
+        // are we dealing with a saved request ?
 
         if($criteria->handle)
         {
@@ -39,6 +39,11 @@ class RestService extends BaseApplicationComponent
 
             if($request)
             {
+                $attributes = $criteria->getAttributes();
+
+
+                // update criteria from request
+
                 $criteria->url = $request->url;
                 $criteria->headers = $request->headers;
                 $criteria->query = $request->query;
@@ -49,6 +54,31 @@ class RestService extends BaseApplicationComponent
                 {
                     $criteria->api = $request->apiHandle;
                 }
+
+
+                // remix criteria with original attributes
+
+                foreach($attributes as $key => $value)
+                {
+                    if($value)
+                    {
+                        switch($key)
+                        {
+                            case 'headers':
+                            case 'query':
+                            $criteria->setAttribute($key, array_merge($criteria->{$key}, $attributes[$key]));
+                            break;
+
+                            default:
+                            $criteria->setAttribute($key, $value);
+                        }
+                    }
+                }
+
+                if(strpos($criteria->url, 'http://') === false && strpos($criteria->url, 'https://') === false)
+                {
+                    $criteria->url = $request->url.$attributes['url'];
+                }
             }
             else
             {
@@ -56,16 +86,21 @@ class RestService extends BaseApplicationComponent
             }
         }
 
+        return $this->_sendRequest($criteria);
+    }
 
-        // options
-
+    private function _sendRequest(Rest_RequestCriteriaModel $criteria)
+    {
         $options = array();
+        $baseUrl = null;
 
+        // headers
         if(!empty($criteria->headers))
         {
             $options['headers'] = $criteria->headers;
         }
 
+        // query
         if(!empty($criteria->query))
         {
             $options['query'] = $criteria->query;
@@ -76,22 +111,9 @@ class RestService extends BaseApplicationComponent
 
         $api = $this->getApiByHandle($criteria->api);
 
-
-        // url
-
-        $baseUrl = null;
-        $url = null;
-        $uri = null;
-
-        if(strpos($criteria->url, 'http://') === 0 || strpos($criteria->url, 'https://') === 0)
+        if($api && $api->getApiUrl())
         {
-            $baseUrl = $criteria->url;
-        }
-        else
-        {
-            $url = $criteria->url;
-
-            if($api->getApiUrl())
+            if(strpos($criteria->url, 'http://') === false && strpos($criteria->url, 'https://') === false)
             {
                 $baseUrl = $api->getApiUrl();
             }
@@ -99,15 +121,14 @@ class RestService extends BaseApplicationComponent
 
 
         // client
-
         $client = new Client($baseUrl);
 
 
-        // authenticate client
+        // authentication
 
         $authentication = $this->getAuthenticationByHandle($criteria->api);
 
-        if($authentication)
+        if($api && $authentication)
         {
             $providerHandle = $api->getProviderHandle();
             $provider = craft()->oauth->getProvider($providerHandle);
@@ -127,11 +148,17 @@ class RestService extends BaseApplicationComponent
             }
         }
 
+
         // send request
 
         try
         {
-            $guzzleRequest = $client->{$criteria->verb}($criteria->uri, array(), $options);
+            // force get request
+            $criteria->verb = 'get';
+
+            // perform request
+
+            $guzzleRequest = $client->{$criteria->verb}($criteria->url, array(), $options);
             $response = $guzzleRequest->send();
             $data = $response->{$criteria->format}();
 

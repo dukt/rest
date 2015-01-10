@@ -10,16 +10,10 @@
 
                 <hr>
 
-                {#
-
-                {% set response = craft.rest.request.api('linkedin').url('groups/38178/posts') %}
-
-                #}
-
-                {% set response = craft.rest.request({
-                    handle: 'linkedin',
-                    url: 'people/~?format=json'
-                }).send() %}
+                {% set response = craft.rest.request
+                    .api('linkedin')
+                    .url('people/~?format=json')
+                    .send() %}
 
                 {% if response.success %}
 

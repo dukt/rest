@@ -8,19 +8,10 @@
 
                 <h1>RunKeeper Activities</h1>
 
-                {# {% set response = craft.rest.request({
-                    url: 'https://api.runkeeper.com/fitnessActivities/443164165',
-                    verb: 'get',
-                    format: 'json',
-                    identity: 'runkeeper',
-                }) %} #}
-
-                {% set response = craft.rest.request({
-                    url: 'https://api.runkeeper.com/fitnessActivities',
-                    verb: 'get',
-                    format: 'json',
-                    api: 'runkeeper',
-                }).send() %}
+                {% set response = craft.rest.request
+                    .api('runkeeper')
+                    .url('fitnessActivities')
+                    .send() %}
 
                 {% if response.success %}
                     {% set data = response.data %}

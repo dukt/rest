@@ -44,12 +44,10 @@
 
                 </form>
 
-                {% set response = craft.rest.request({
-                    url: 'http://api.openweathermap.org/data/2.5/weather',
-                    verb: 'get',
-                    format: 'json',
-                    query: { q: q }
-                }).send() %}
+                {% set response = craft.rest.request
+                    .url('http://api.openweathermap.org/data/2.5/weather')
+                    .query({ q: q })
+                    .send() %}
 
 
                 {% if response.success %}

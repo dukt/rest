@@ -1,0 +1,22 @@
+{%- spaceless %}
+
+    {% header "Content-Type: application/json" %}
+
+    {% set options = {
+        api: 'flickr',
+        query: { method: 'flickr.photos.getRecent' },
+        format: 'xml'
+    } %}
+
+    {% set response = craft.rest.request(options).send() %}
+
+    {% if response.success %}
+
+        {{ response|json_encode|raw|nl2br }}
+
+    {% else %}
+
+        {{ dump(response) }}
+    {% endif %}
+
+{% endspaceless -%}

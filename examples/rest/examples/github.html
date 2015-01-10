@@ -8,16 +8,14 @@
 
                 <h1>Github Repos</h1>
 
-                {% set response = craft.rest.request({
-                    url: 'https://api.github.com/user/repos',
-                    verb: 'get',
-                    format: 'json',
-                    query: {
+                {% set response = craft.rest.request
+                    .api('github')
+                    .url('user/repos')
+                    .query({
                         sort: 'pushed',
                         direction: 'desc',
-                    },
-                    api: 'github',
-                }).send() %}
+                    })
+                    .send() %}
 
                 {% if response.success %}
 

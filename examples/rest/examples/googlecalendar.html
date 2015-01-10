@@ -8,10 +8,10 @@
 
                 <h1>Google Calendar</h1>
 
-                {% set response = craft.rest.request({
-                    api: 'googlecalendar',
-                    url: 'users/me/calendarList'
-                }).send() %}
+                {% set response = craft.rest.request
+                    .api('googlecalendar')
+                    .url('users/me/calendarList')
+                    .send() %}
 
                 {% if response.success %}
 

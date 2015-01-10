@@ -10,14 +10,10 @@
 
                 <hr>
 
-                {% set response = craft.rest.request({
-                    url: 'http://api.dribbble.com/shots/popular'
-                }).send() %}
-{#
-                {% set response = craft.rest.request({
-                    url: 'http://api.dribbble.com/shots/popular'
-                }).send() %}
- #}
+                {% set requestUrl = 'http://api.dribbble.com/shots/popular' %}
+
+                {% set response = craft.rest.request.url(requestUrl).send() %}
+
                 {% if response.success %}
 
                     {% set shots = response.data.shots %}

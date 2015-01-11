@@ -30,6 +30,11 @@ abstract class AbstractApi {
         return $handle;
     }
 
+    public function getDefaultQuery()
+    {
+        return array();
+    }
+
     public function getApiUrl()
     {
         return null;

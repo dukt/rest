@@ -94,22 +94,27 @@ class RestService extends BaseApplicationComponent
         $options = array();
         $baseUrl = null;
 
+        $api = $this->getApiByHandle($criteria->api);
+
         // headers
+
         if(!empty($criteria->headers))
         {
             $options['headers'] = $criteria->headers;
         }
 
+
         // query
+
+        $options['query'] = $api->getDefaultQuery();
+
         if(!empty($criteria->query))
         {
-            $options['query'] = $criteria->query;
+            $options['query'] = array_merge($options['query'], $criteria->query);
         }
 
 
         // api
-
-        $api = $this->getApiByHandle($criteria->api);
 
         if($api && $api->getApiUrl())
         {

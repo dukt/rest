@@ -19,6 +19,13 @@ class Linkedin extends AbstractApi {
         return "LinkedIn";
     }
 
+    public function getDefaultQuery()
+    {
+        return array(
+            'format' => 'json'
+        );
+    }
+
     public function getProviderHandle()
     {
         return 'linkedin';

@@ -21,17 +21,15 @@
 
                 {% if q %}
 
-                    {% set response = craft.rest.request({
-                        url: 'https://www.googleapis.com/youtube/v3/search',
-                        verb: 'get',
-                        format: 'json',
-                        query: {
+                    {% set response = craft.rest.request
+                        .api('youtube')
+                        .url('search')
+                        .query({
                             q: q,
                             part: 'snippet',
                             maxResults: 24
-                        },
-                        api: 'youtube'
-                    }).send() %}
+                        })
+                        .send() %}
 
                     {% if response.success %}
 

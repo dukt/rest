@@ -10,9 +10,9 @@
 
                 <hr>
 
-                {% set requestUrl = 'http://api.dribbble.com/shots/popular' %}
-
-                {% set response = craft.rest.request.url(requestUrl).send() %}
+                {% set response = craft.rest.request
+                    .url('http://api.dribbble.com/shots/popular')
+                    .send() %}
 
                 {% if response.success %}
 
@@ -22,7 +22,9 @@
                         {% for shot in shots %}
                             <div class="col-xs-6 col-sm-4">
                                 <div class="thumbnail">
-                                    <img src="{{ shot.image_url }}" width="100%" />
+                                    <a href="{{ shot.url }}">
+                                        <img src="{{ shot.image_url }}" width="100%" />
+                                    </a>
                                 </div>
                             </div>
                         {% endfor %}

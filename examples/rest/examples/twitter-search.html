@@ -10,13 +10,13 @@
 
                 <hr>
 
-                {% set response = craft.rest.request({
-                    url: 'https://api.twitter.com/1.1/search/tweets.json',
-                    verb: 'get',
-                    format: 'json',
-                    query: { q:'craftcms' },
-                    api: 'twitter'
-                }).send() %}
+                {% set response = craft.rest.request
+                    .api('twitter')
+                    .url('search/tweets.json')
+                    .query({
+                        q: 'craftcms'
+                    })
+                    .send() %}
 
                 {% if response.success %}
 

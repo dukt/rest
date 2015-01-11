@@ -8,17 +8,15 @@
 
                 <h1>Twitter Places</h1>
 
-                {% set placesResponse = craft.rest.request({
-                    url: 'https://api.twitter.com/1.1/geo/search.json',
-                    verb: 'get',
-                    format: 'json',
-                    query: {
+                {% set placesResponse = craft.rest.request
+                    .api('twitter')
+                    .url('geo/search.json')
+                    .query({
                         accuracy: 0,
                         query: "Grenoble",
                         granularity: "neighborhood"
-                    },
-                    api: 'twitter'
-                }).send() %}
+                    })
+                    .send() %}
 
 
                 {% if placesResponse.success %}
@@ -27,15 +25,13 @@
 
                     <h2>Tweeted from {{ place.full_name }} — {{ place.id }}</h2>
 
-                    {% set tweetsResponse = craft.rest.request({
-                        url: 'https://api.twitter.com/1.1/search/tweets.json',
-                        verb: 'get',
-                        format: 'json',
-                        query: {
+                    {% set tweetsResponse = craft.rest.request
+                        .api('twitter')
+                        .url('search/tweets.json')
+                        .query({
                             q: 'place:'~place.id
-                        },
-                        api: 'twitter'
-                    }).send() %}
+                        })
+                        .send() %}
 
                     {% if tweetsResponse.success %}
 

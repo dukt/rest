@@ -12,7 +12,7 @@
 
                 {% set response = craft.rest.request
                     .api('linkedin')
-                    .url('people/~?format=json')
+                    .url('people/~')
                     .send() %}
 
                 {% if response.success %}

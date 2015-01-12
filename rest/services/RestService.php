@@ -54,8 +54,8 @@ class RestService extends BaseApplicationComponent
 
         if($api)
         {
-            // request is based on an API, repopulate criteria
-            // from scratch, with default values from api
+            // request is based on an API so we need to re-populate criteria
+            // from scratch, beginning with default values from api (if any)
 
             $criteria->url = null;
             $criteria->headers = null;

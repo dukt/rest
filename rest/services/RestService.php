@@ -31,49 +31,62 @@ class RestService extends BaseApplicationComponent
      */
     public function sendRequest(Rest_RequestCriteriaModel $criteria)
     {
-        // are we dealing with a saved request ?
+        // remember current attributes
+        $attributes = $criteria->getAttributes();
+        $requestHandle = $criteria->handle;
 
-        if($criteria->handle)
+        // reset criteria to default values
+        $criteria->url = null;
+        $criteria->headers = null;
+        $criteria->query = null;
+        $criteria->verb = 'get';
+        $criteria->format = 'json';
+
+        // set from saved request
+        $this->_populateSavedRequest($criteria, $requestHandle);
+
+        // set passed attributes
+        $this->_populateAttributes($criteria, $attributes);
+
+        // api
+
+        $api = $this->getApiByHandle($criteria->api);
+
+        if($api)
         {
-            $request = $this->getRequestByHandle($criteria->handle);
+            // request is based on an API, repopulate criteria
+            // from scratch, with default values from api
+
+            $criteria->url = null;
+            $criteria->headers = null;
+            $criteria->query = $api->getDefaultQuery();
+            $criteria->verb = 'get';
+            $criteria->format = 'json';
+
+            // set from saved request
+            $this->_populateSavedRequest($criteria, $requestHandle);
+
+            // set passed attributes
+            $this->_populateAttributes($criteria, $attributes);
+        }
+
+        // send request
+        return $this->_sendRequest($criteria);
+    }
+
+    private function _populateSavedRequest($criteria, $handle)
+    {
+        if(!empty($handle))
+        {
+            $request = $this->getRequestByHandle($handle);
 
             if($request)
             {
-                $attributes = $criteria->getAttributes();
-
-
                 // update criteria from request
 
                 $criteria->url = $request->url;
-                $criteria->headers = $request->headers;
-                $criteria->query = $request->query;
-                $criteria->verb = $request->verb;
-                $criteria->format = $request->format;
 
-                if($request->apiHandle)
-                {
-                    $criteria->api = $request->apiHandle;
-                }
-
-
-                // remix criteria with original attributes
-
-                foreach($attributes as $key => $value)
-                {
-                    if($value)
-                    {
-                        switch($key)
-                        {
-                            case 'headers':
-                            case 'query':
-                            $criteria->setAttribute($key, array_merge($criteria->{$key}, $attributes[$key]));
-                            break;
-
-                            default:
-                            $criteria->setAttribute($key, $value);
-                        }
-                    }
-                }
+                $this->_populateAttributes($request->getAttributes());
 
                 if(strpos($criteria->url, 'http://') === false && strpos($criteria->url, 'https://') === false)
                 {
@@ -82,11 +95,42 @@ class RestService extends BaseApplicationComponent
             }
             else
             {
-                throw new Exception("Couldn't find request with handle ".$criteria->handle);
+                throw new Exception("Couldn't find request with handle: ".$handle);
             }
         }
+    }
 
-        return $this->_sendRequest($criteria);
+    private function _populateAttributes($criteria, $attributes)
+    {
+        foreach($attributes as $key => $value)
+        {
+            if($value)
+            {
+                switch($key)
+                {
+                    case 'headers':
+                    case 'query':
+
+                    if(is_array($criteria->{$key}) && is_array($attributes[$key]))
+                    {
+                        $criteria->setAttribute($key, array_merge($criteria->{$key}, $attributes[$key]));
+                    }
+                    elseif(is_array($attributes[$key]))
+                    {
+                        $criteria->setAttribute($key, $attributes[$key]);
+                    }
+
+                    break;
+
+                    case 'apiHandle':
+                    $criteria->api = $attributes['apiHandle'];
+                    break;
+
+                    default:
+                    $criteria->setAttribute($key, $value);
+                }
+            }
+        }
     }
 
     private function _sendRequest(Rest_RequestCriteriaModel $criteria)
@@ -103,14 +147,11 @@ class RestService extends BaseApplicationComponent
             $options['headers'] = $criteria->headers;
         }
 
-
         // query
 
-        $options['query'] = $api->getDefaultQuery();
-
-        if(!empty($criteria->query))
+        if(is_array($criteria->query))
         {
-            $options['query'] = array_merge($options['query'], $criteria->query);
+            $options['query'] = $criteria->query;
         }
 
 

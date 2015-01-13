@@ -189,8 +189,8 @@ class RestService extends BaseApplicationComponent
                 $providerSource->setProvider($provider);
                 $providerSource->setToken($token);
 
-                $oauthSubscriber = \Dukt\Rest\SubscriberFactory::get($api, $providerSource);
-
+                // subscriber
+                $oauthSubscriber = $providerSource->getSubscriber();
                 $client->addSubscriber($oauthSubscriber);
             }
         }
@@ -353,25 +353,17 @@ class RestService extends BaseApplicationComponent
 
         // save token
 
-        $tokenModel = craft()->oauth->getTokenById($authentication->tokenId);
+        $token->id = $authentication->tokenId;
+        $token->providerHandle = $api->getProviderHandle();
+        $token->pluginHandle = 'rest';
 
-        if(!$tokenModel)
-        {
-            $tokenModel = new Oauth_TokenModel;
-        }
-
-
-        $tokenModel->providerHandle = $api->getProviderHandle();
-        $tokenModel->pluginHandle = 'rest';
-        $tokenModel->encodedToken = craft()->oauth->encodeToken($token);
-
-        craft()->oauth->saveToken($tokenModel);
+        craft()->oauth->saveToken($token);
 
 
         // save authentication
 
         $authentication->apiHandle = $apiHandle;
-        $authentication->tokenId = $tokenModel->id;
+        $authentication->tokenId = $token->id;
 
         $this->saveAuthentication($authentication);
     }

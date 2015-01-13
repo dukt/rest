@@ -62,11 +62,8 @@ class RestController extends BaseController
                 {
                     if($response['success'])
                     {
-                        // token
-                        $token = $response['token'];
-
                         // save token
-                        craft()->rest->saveAuthenticationToken($handle, $token);
+                        craft()->rest->saveAuthenticationToken($handle, $response['token']);
 
                         // session notice
                         craft()->userSession->setNotice(Craft::t("Connected."));

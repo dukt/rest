@@ -181,18 +181,17 @@ class RestService extends BaseApplicationComponent
             $providerHandle = $api->getProviderHandle();
             $provider = craft()->oauth->getProvider($providerHandle);
 
-            $tokenModel = $authentication->getToken();
+            $token = $authentication->getToken();
 
-            if($tokenModel)
+            if($token)
             {
-                $token = $tokenModel->token;
+                $providerSource = craft()->oauth->getProviderSource($providerHandle);
+                $providerSource->setProvider($provider);
+                $providerSource->setToken($token);
 
-                if($token)
-                {
-                    $oauthSubscriber = \Dukt\Rest\SubscriberFactory::get($api, $client, $provider, $token);
+                $oauthSubscriber = \Dukt\Rest\SubscriberFactory::get($api, $providerSource);
 
-                    $client->addSubscriber($oauthSubscriber);
-                }
+                $client->addSubscriber($oauthSubscriber);
             }
         }
 

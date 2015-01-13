@@ -14,21 +14,22 @@ namespace Dukt\Rest;
 
 class SubscriberFactory {
 
-    public static function get($api, $client, $provider, $token)
+    public static function get($api, $providerSource)
     {
-        $fullClassname = get_class($provider->source->service);
-
         $headers = array();
         $query = array();
 
-        switch($fullClassname::OAUTH_VERSION)
+        $provider = $providerSource->getProvider();
+        $realToken = $providerSource->getRealToken();
+
+        switch($providerSource->oauthVersion)
         {
             case 1:
                 $oauth = new \Guzzle\Plugin\Oauth\OauthPlugin(array(
                     'consumer_key'    => $provider->clientId,
                     'consumer_secret' => $provider->clientSecret,
-                    'token'           => $token->getAccessToken(),
-                    'token_secret'    => $token->getAccessTokenSecret()
+                    'token'           => $realToken->getAccessToken(),
+                    'token_secret'    => $realToken->getAccessTokenSecret()
                 ));
 
                 return $oauth;
@@ -40,7 +41,7 @@ class SubscriberFactory {
                     'consumer_key' => $provider->clientId,
                     'consumer_secret' => $provider->clientSecret,
                     'authorization_method' => $api->getAuthorizationMethod(),
-                    'access_token' => $token->getAccessToken(),
+                    'access_token' => $realToken->getAccessToken(),
                 );
 
                 $oauth = new \Dukt\Rest\Guzzle\Plugin\Oauth2Plugin($config);

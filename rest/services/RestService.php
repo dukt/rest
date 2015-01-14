@@ -185,12 +185,11 @@ class RestService extends BaseApplicationComponent
 
             if($token)
             {
-                $providerSource = craft()->oauth->getProviderSource($providerHandle);
-                $providerSource->setProvider($provider);
-                $providerSource->setToken($token);
+                // set token
+                $provider->setToken($token);
 
                 // subscriber
-                $oauthSubscriber = $providerSource->getSubscriber();
+                $oauthSubscriber = $provider->getSubscriber();
                 $client->addSubscriber($oauthSubscriber);
             }
         }

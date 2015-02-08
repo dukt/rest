@@ -86,11 +86,12 @@ class RestService extends BaseApplicationComponent
 
                 $criteria->url = $request->url;
 
-                $this->_populateAttributes($request->getAttributes());
+                $this->_populateAttributes($criteria, $request->getAttributes());
 
                 if(strpos($criteria->url, 'http://') === false && strpos($criteria->url, 'https://') === false)
                 {
-                    $criteria->url = $request->url.$attributes['url'];
+                    // $criteria->url = $request->url.$attributes['url'];
+                    $criteria->url = $request->url;
                 }
             }
             else

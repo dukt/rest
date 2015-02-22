@@ -177,7 +177,7 @@ class RestService extends BaseApplicationComponent
 
         if($api && $authentication)
         {
-            $this->requireOAuth();
+            $this->checkRequirements();
 
             $providerHandle = $api->getProviderHandle();
             $provider = craft()->oauth->getProvider($providerHandle);
@@ -334,7 +334,7 @@ class RestService extends BaseApplicationComponent
      */
     public function saveAuthenticationToken($apiHandle, $token)
     {
-        $this->requireOAuth();
+        $this->checkRequirements();
 
         // get authentication
 
@@ -373,7 +373,7 @@ class RestService extends BaseApplicationComponent
      */
     public function deleteAuthenticationById($id)
     {
-        $this->requireOAuth();
+        $this->checkRequirements();
 
         $authentication = $this->getAuthenticationById($id);
 
@@ -511,13 +511,17 @@ class RestService extends BaseApplicationComponent
     }
 
     /**
-     * Require OAuth
+     * Check Requirements
      */
-    public function requireOAuth()
+    public function checkRequirements()
     {
-        if(!isset(craft()->oauth))
+        $plugin = craft()->plugins->getPlugin('rest');
+
+        $pluginDependencies = $plugin->getPluginDependencies();
+
+        if(count($pluginDependencies) > 0)
         {
-            throw new Exception(Craft::t('OAuth plugin is required to perform this action.'));
+            throw new \Exception("REST is not configured properly. Check REST settings for more informations.");
         }
     }
 }

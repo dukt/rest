@@ -14,6 +14,17 @@ namespace Craft;
 
 class RestController extends BaseController
 {
+    public function init()
+    {
+        $plugin = craft()->plugins->getPlugin('rest');
+
+        $variables['pluginDependencies'] = $plugin->getPluginDependencies();
+
+        if(count($variables['pluginDependencies']) > 0)
+        {
+            $this->renderTemplate('rest/_dependencies', $variables);
+        }
+    }
     public function actionDisconnect()
     {
         $handle = craft()->request->getParam('handle');
@@ -34,8 +45,6 @@ class RestController extends BaseController
 
     public function actionConnect()
     {
-        craft()->rest->requireOAuth();
-
         $handle = craft()->request->getParam('handle');
 
         $redirect = craft()->request->getParam('redirect');

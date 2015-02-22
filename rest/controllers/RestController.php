@@ -25,6 +25,7 @@ class RestController extends BaseController
             $this->renderTemplate('rest/_dependencies', $variables);
         }
     }
+
     public function actionDisconnect()
     {
         $handle = craft()->request->getParam('handle');

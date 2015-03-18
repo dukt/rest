@@ -27,7 +27,7 @@ class RestPlugin extends BasePlugin
      */
     function getVersion()
     {
-        return '0.9.3';
+        return '0.9.4';
     }
 
     /**
@@ -40,7 +40,7 @@ class RestPlugin extends BasePlugin
                 'name' => "OAuth",
                 'handle' => 'oauth',
                 'url' => 'https://dukt.net/craft/oauth',
-                'version' => '0.9.62'
+                'version' => '0.9.63'
             )
         );
     }

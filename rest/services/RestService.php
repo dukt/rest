@@ -206,7 +206,9 @@ class RestService extends BaseApplicationComponent
             // perform request
 
             $guzzleRequest = $client->{$criteria->verb}($criteria->url, array(), $options);
+
             $response = $guzzleRequest->send();
+
             $data = $response->{$criteria->format}();
 
             return array(
@@ -231,7 +233,7 @@ class RestService extends BaseApplicationComponent
             return array(
                 'success' => false,
                 'data' => $data,
-                'errorMsg' => $errorMsg
+                'errorMsg' => $errorMsg,
             );
         }
         catch(\Exception $e)

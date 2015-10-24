@@ -23,14 +23,15 @@ class Rest_AuthenticationRecord extends BaseRecord
     {
         return array(
             'tokenId' => AttributeType::Number,
-            'apiHandle' => array(AttributeType::String, 'required' => true),
+            'oauthProviderHandle' => array(AttributeType::String, 'required' => true),
+            'scopes' => array(AttributeType::Mixed),
         );
     }
 
     public function defineIndexes()
     {
         return array(
-            array('columns' => array('apiHandle'), 'unique' => true),
+            array('columns' => array('oauthProviderHandle'), 'unique' => true),
         );
     }
 }

@@ -75,12 +75,12 @@ class RestPlugin extends BasePlugin
     public function registerCpRoutes()
     {
         return array(
-            "rest" => array('action' => "rest/requestsIndex"),
-            "rest/requests" => array('action' => "rest/requestsIndex"),
-            "rest/requests/(?P<requestId>\d+)" => array('action' => "rest/editRequest"),
-            "rest/requests/new" => array('action' => "rest/editRequest"),
-            "rest/apis" => array('action' => "rest/apisIndex"),
+            "rest" => array('action' => "rest/requests/index"),
+            "rest/requests" => array('action' => "rest/requests/index"),
+            "rest/requests/(?P<requestId>\d+)" => array('action' => "rest/requests/edit"),
+            "rest/requests/new" => array('action' => "rest/requests/edit"),
             "rest/authentications" => array('action' => "rest/authentications/index"),
+            "rest/authentications/(?P<providerHandle>{handle})" => array('action' => "rest/authentications/edit"),
         );
     }
 

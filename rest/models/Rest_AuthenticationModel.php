@@ -19,8 +19,14 @@ class Rest_AuthenticationModel extends BaseModel
         return array(
             'id'    => AttributeType::Number,
             'tokenId' => AttributeType::Number,
-            'apiHandle' => AttributeType::String,
+            'oauthProviderHandle' => AttributeType::String,
+            'scopes' => array(AttributeType::Mixed),
         );
+    }
+
+    public function getOAuthProvider()
+    {
+        return craft()->oauth->getProvider($this->oauthProviderHandle);
     }
 
     public function getToken()

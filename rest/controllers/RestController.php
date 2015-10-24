@@ -30,11 +30,11 @@ class RestController extends BaseController
     {
         $handle = craft()->request->getParam('handle');
 
-        $authentication = craft()->rest->getAuthenticationByHandle($handle);
+        $authentication = craft()->rest_authentications->getAuthenticationByHandle($handle);
 
         if($authentication)
         {
-            craft()->rest->deleteAuthenticationById($authentication->id);
+            craft()->rest_authentications->deleteAuthenticationById($authentication->id);
         }
 
         craft()->userSession->setNotice(Craft::t("Disconnected."));
@@ -52,7 +52,7 @@ class RestController extends BaseController
 
         if(!$redirect)
         {
-            $redirect = 'rest/apis';
+            $redirect = 'rest/authentications';
         }
 
         $oauthProvider = craft()->oauth->getProvider($handle);
@@ -61,15 +61,15 @@ class RestController extends BaseController
         {
             if($response = craft()->oauth->connect(array(
                 'plugin' => 'rest',
-                'provider' => $api->getProviderHandle(),
-                'scopes' => $api->getScopes(),
-                'params' => $api->getParams(),
+                'provider' => $oauthProvider->getHandle(),
+                'scopes' => $oauthProvider->getScopes(),
+                'params' => $oauthProvider->getParams(),
             )))
             {
                 if($response['success'])
                 {
                     // save token
-                    craft()->rest->saveAuthenticationToken($handle, $response['token']);
+                    craft()->rest_authentications->saveAuthenticationToken($handle, $response['token']);
 
                     // session notice
                     craft()->userSession->setNotice(Craft::t("Connected."));
@@ -85,181 +85,5 @@ class RestController extends BaseController
             craft()->userSession->setError(Craft::t("OAuth provider not configured."));
         }
         $this->redirect($redirect);
-    }
-
-    public function actionConnectDeprecated()
-    {
-        $handle = craft()->request->getParam('handle');
-
-        $redirect = craft()->request->getParam('redirect');
-
-        if(!$redirect)
-        {
-            $redirect = 'rest/apis';
-        }
-
-
-        $api = craft()->rest->getApiByHandle($handle);
-
-        if($api)
-        {
-            $oauthProvider = craft()->oauth->getProvider($api->getProviderHandle());
-
-            if($oauthProvider)
-            {
-                if($response = craft()->oauth->connect(array(
-                    'plugin' => 'rest',
-                    'provider' => $api->getProviderHandle(),
-                    'scopes' => $api->getScopes(),
-                    'params' => $api->getParams(),
-                )))
-                {
-                    if($response['success'])
-                    {
-                        // save token
-                        craft()->rest->saveAuthenticationToken($handle, $response['token']);
-
-                        // session notice
-                        craft()->userSession->setNotice(Craft::t("Connected."));
-                    }
-                    else
-                    {
-                        craft()->userSession->setError(Craft::t($response['errorMsg']));
-                    }
-                }
-            }
-            else
-            {
-                craft()->userSession->setError(Craft::t("OAuth provider not configured."));
-            }
-        }
-        else
-        {
-            craft()->userSession->setError(Craft::t("Couldn’t find API: ".$handle));
-        }
-
-        $this->redirect($redirect);
-    }
-
-    public function actionApisIndex()
-    {
-        $variables['apis'] = craft()->rest->getApis();
-
-        $this->renderTemplate('rest/apis', $variables);
-    }
-
-    public function actionRequestsIndex()
-    {
-        $variables['requests'] = craft()->rest->getRequests();
-
-        $this->renderTemplate('rest/requests', $variables);
-    }
-
-    public function actionDeleteRequest()
-    {
-       $this->requirePostRequest();
-       $this->requireAjaxRequest();
-
-       $id = craft()->request->getRequiredPost('id');
-
-       craft()->rest->deleteRequestById($id);
-
-       $this->returnJson(array('success' => true));
-    }
-
-    public function actionSaveRequest()
-    {
-        $requestId = craft()->request->getParam('requestId');
-        $apiHandle = craft()->request->getParam('apiHandle');
-        $name = craft()->request->getParam('name');
-        $handle = craft()->request->getParam('handle');
-        $url = craft()->request->getParam('url');
-        $verb = 'get'; // $verb = craft()->request->getParam('verb');
-        $format = craft()->request->getParam('format');
-        $query = craft()->request->getParam('query');
-
-        if($query)
-        {
-            $newParams = array();
-
-            foreach($query as $param)
-            {
-                $newParams[$param['key']] = $param['value'];
-            }
-
-            $query = $newParams;
-        }
-        else
-        {
-            $query = array();
-        }
-
-        if($requestId)
-        {
-            $request = craft()->rest->getRequestById($requestId);
-        }
-
-        if(!isset($request))
-        {
-            $request = new Rest_RequestModel;
-        }
-
-        $request->apiHandle = $apiHandle;
-        $request->name = $name;
-        $request->handle = $handle;
-        $request->verb = $verb;
-        $request->format = $format;
-        $request->url = $url;
-        $request->query = $query;
-
-        if(craft()->rest->saveRequest($request))
-        {
-            craft()->userSession->setNotice(Craft::t('Request saved.'));
-            $this->redirectToPostedUrl();
-        }
-        else
-        {
-            craft()->userSession->setError(Craft::t('Couldn’t save request.'));
-
-            // Send the request back to the template
-            craft()->urlManager->setRouteVariables(array(
-                'request' => $request
-            ));
-        }
-
-    }
-
-    public function actionEditRequest(array $variables = array())
-    {
-        $variables['isNew'] = false;
-
-        if (!empty($variables['requestId']))
-        {
-            if (empty($variables['request']))
-            {
-                $variables['request'] = craft()->rest->getRequestById($variables['requestId']);
-
-                if (!$variables['request'])
-                {
-                    throw new HttpException(404);
-                }
-            }
-
-            $variables['title'] = $variables['request']->name;
-        }
-        else
-        {
-            if (empty($variables['request']))
-            {
-                $variables['request'] = new Rest_RequestModel();
-                $variables['isNew'] = true;
-            }
-
-            $variables['title'] = Craft::t('Create a new request');
-        }
-
-        $variables['apis'] = craft()->rest->getApis();
-
-        $this->renderTemplate('rest/requests/_edit', $variables);
     }
 }

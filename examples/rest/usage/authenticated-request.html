@@ -1,0 +1,48 @@
+{% extends "rest/_layout" %}
+
+{% block main %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+
+                <h1>Authenticated Request</h1>
+
+                <hr>
+                {% set authentication = craft.rest.getAuthenticationByHandle('dribbble') %}
+
+                {% set options = {
+                    url: 'https://api.dribbble.com/v1/users/simplebits',
+                    headers: {
+                        'Authorization': 'Bearer '~authentication.token.accessToken
+                    }
+                } %}
+
+                {{ dump(options) }}
+                <hr>
+{#
+                {
+                    api: 'dribbble'
+                    uri: 'users/simplebits'
+                    authentication: systemToken('dribbble')
+                }
+ #}
+
+                {% set response = craft.rest.request(options).send() %}
+
+                {{ dump(response) }}
+{#
+                {% if response.success %}
+
+                    {% set data = response.data %}
+
+                    <pre>{{ dump(data) }}</pre>
+
+                {% else %}
+                    {% include 'rest/_error' with { response: response } %}
+                {% endif %} #}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

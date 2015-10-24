@@ -10,7 +10,7 @@
 
     <form method="post" accept-charset="UTF-8" data-saveshortcut>
 
-        <input type="hidden" name="action" value="rest/saveRequest">
+        <input type="hidden" name="action" value="rest/requests/save">
         <input type="hidden" name="redirect" value="rest/requests">
 
         {% if request.id %}
@@ -36,17 +36,17 @@
             errors: request.getErrors('handle')
         }) }}
 
+        {% set authenticationOptions = [{label:"None", value:""}] %}
 
-        {% set apiHandleOptions = [{label:"None", value:""}] %}
-        {% for api in apis %}
-            {% set apiHandleOptions = apiHandleOptions|merge([{ label: api.name|t, value: api.handle }]) %}
+        {% for authentication in authentications %}
+            {% set authenticationOptions = authenticationOptions|merge([{ label: authentication.oauthProviderHandle|t, value: authentication.oauthProviderHandle }]) %}
         {% endfor %}
 
         {{ forms.selectField({
-            label: "API" | t,
-            name: 'apiHandle',
-            options: apiHandleOptions,
-            value : request ? request.apiHandle : null
+            label: "Authentication" | t,
+            name: 'authenticationHandle',
+            options: authenticationOptions,
+            value : request ? request.authenticationHandle : null
         }) }}
 
         {{ forms.textField({

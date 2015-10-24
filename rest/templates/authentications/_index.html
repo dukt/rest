@@ -21,21 +21,25 @@
                 {% set authentication = null %}
 
                 {% for item in authentications %}
-                    {% if provider.handle == item.apiHandle %}
+                    {% if provider.handle == item.oauthProviderHandle %}
                         {% set authentication = item %}
                     {% endif %}
                 {% endfor %}
 
                 <tr>
                     <th>
-                        {{provider.name}}
+                        <a href="{{ url('rest/authentications/'~provider.handle) }}">{{ provider.name }}</a>
                     </th>
 
                     <td class="nowrap">
                         {% if authentication %}
-                            <span class="status on"></span> {{ "Connected"|t }} &nbsp; <a href="#" class="btn small">{{ "Disconnect"|t }}</a>
+                            <span class="status on"></span> {{ "Connected"|t }}
+                            &nbsp;
+                            <a class="btn small" href="{{ actionUrl('rest/disconnect', { handle: provider.handle }) }}">Disconnect</a>
                         {% else %}
-                            <span class="status"></span><span class="light">{{ "Not Connected"|t }}</span>  &nbsp; <a href="#" class="btn small">{{ "Connect"|t }}</a>
+                            <span class="status"></span><span class="light">{{ "Not Connected"|t }}</span>
+                            &nbsp;
+                            <a class="btn small" href="{{ actionUrl('rest/connect', { handle: provider.handle }) }}">Connect</a>
                         {% endif %}
                     </td>
 

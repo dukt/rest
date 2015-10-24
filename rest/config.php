@@ -1,9 +1,9 @@
 <?php
 
 return array(
-    // 'defaultScopes' => [
+    // 'oauthScopes' => [
     //     'instagram' => [
-    //         'basic',
+    //         'publi',
     //         'comments',
     //         'relationships',
     //         'likes',

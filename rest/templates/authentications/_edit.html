@@ -1,0 +1,66 @@
+{% extends "_layouts/cp" %}
+
+{% set title = provider.name %}
+
+{% set crumbs = [
+    { label: "Rest"|t, url: url('rest') },
+    { label: "Authentications"|t, url: url('rest/authentications') }
+] %}
+
+{% set content %}
+
+    <form method="post" accept-charset="UTF-8" data-saveshortcut>
+
+        {{ getCsrfInput() }}
+
+        <input type="hidden" name="action" value="rest/authentications/saveAuthentication">
+        <input type="hidden" name="redirect" value="rest/authentications">
+        <input type="hidden" name="authenticationHandle" value="{{ provider.handle }}">
+
+        <h2>Status</h2>
+
+        <ul>
+            <li>
+                {% if authentication %}
+                    <span class="status on"></span> {{ "Connected"|t }}
+                {% else %}
+                    <span class="status"></span><span class="light">{{ "Not Connected"|t }}</span>
+                {% endif %}
+            </li>
+        </ul>
+
+        <hr>
+
+        <h2>Scope</h2>
+
+        <p>{{ provider.name }} is connected with the following scope:</p>
+
+        {% set scopes = provider.getAvailableScopes() %}
+
+        {% if scopes|length > 0 %}
+            <ul>
+                {% for scope in scopes %}
+                    <li>
+                        {% if not authentication %}
+                            <input type="checkbox" name="scope" />
+                        {% else %}
+                            -
+                        {% endif %}
+
+                        {{ scope }}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+
+        <hr>
+
+        <input type="submit" class="btn submit" value="Save" />
+    </form>
+{#     {% if authentication %}
+        <a class="btn small" href="{{ actionUrl('rest/disconnect', { handle: provider.handle }) }}">Disconnect</a>
+    {% else %}
+        <a class="btn submit" href="{{ actionUrl('rest/connect', { handle: provider.handle }) }}">Connect</a>
+    {% endif %} #}
+
+{% endset %}

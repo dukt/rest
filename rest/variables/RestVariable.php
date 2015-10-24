@@ -21,6 +21,6 @@ class RestVariable {
 
     public function getAuthenticationByHandle($handle)
     {
-        return craft()->rest->getAuthenticationByHandle($handle);
+        return craft()->rest_authentications->getAuthenticationByHandle($handle);
     }
 }

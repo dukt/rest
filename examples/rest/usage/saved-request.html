@@ -16,16 +16,16 @@
 
                 <ul>
                     <li><strong>Name:</strong> Dribbble Popular Shots</li>
-                    <li><strong>Handle:</strong> dribbblePopularShots</li>
+                    <li><strong>Handle:</strong> dribbbleShots</li>
                     <li><strong>URL:</strong> http://api.dribbble.com/shots/popular</li>
                 </ul>
 
                 <h3>Template</h3>
 
-                <pre>{{ "{% set response = craft.rest.request.handle('dribbblePopularShots').send() %}" }}</pre>
+                <pre>{{ "{% set response = craft.rest.request.handle('dribbbleShots').send() %}" }}</pre>
 
                 <h3>Response</h3>
-                {% set response = craft.rest.request.handle('dribbblePopularShots').send() %}
+                {% set response = craft.rest.request.handle('dribbbleShots').send() %}
 
                 {% if response.success %}
 

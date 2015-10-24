@@ -24,7 +24,7 @@ class Rest_RequestCriteriaModel extends BaseModel
             'format' => array(AttributeType::String, 'default' => 'json'),
             'headers' => AttributeType::Mixed,
             'query' => AttributeType::Mixed,
-            'api' => AttributeType::String,
+            'authenticationHandle' => AttributeType::String,
         );
     }
 

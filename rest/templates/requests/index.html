@@ -13,7 +13,7 @@
                 <tr>
                     <th scope="col">{{ "Name"|t }}</th>
                     <th scope="col">{{ "Handle"|t }}</th>
-                    <th scope="col">{{ "API"|t }}</th>
+                    <th scope="col">{{ "Authentication"|t }}</th>
                     <th></th>
                 </tr>
             </thead>
@@ -23,8 +23,8 @@
                         <td><a href="{{ url('rest/requests/'~request.id) }}">{{ request.name }}</a></td>
                         <td class="light">{{ request.handle }}</td>
                         <td class="light">
-                            {% if request.apiHandle %}
-                                {{ request.apiHandle }}
+                            {% if request.authenticationHandle %}
+                                {{ request.authenticationHandle }}
                             {% else %}
                                 —
                             {% endif %}
@@ -39,7 +39,7 @@
           new Craft.AdminTable({
               tableSelector: '#requests',
               noObjectsSelector: '#norequests',
-              deleteAction: 'rest/deleteRequest'
+              deleteAction: 'rest/requests/delete'
           });
         {% endset %}
         {% includeJs js %}

@@ -18,9 +18,11 @@ class Rest_RequestModel extends BaseModel
     {
         return array(
             'id'    => AttributeType::Number,
-            'apiHandle' => AttributeType::Number,
             'name' => AttributeType::String,
             'handle' => AttributeType::String,
+
+            'authenticationHandle' => AttributeType::String,
+
             'verb' => AttributeType::String,
             'format' => AttributeType::String,
             'url' => AttributeType::String,

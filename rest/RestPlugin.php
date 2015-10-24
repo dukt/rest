@@ -80,6 +80,7 @@ class RestPlugin extends BasePlugin
             "rest/requests/(?P<requestId>\d+)" => array('action' => "rest/editRequest"),
             "rest/requests/new" => array('action' => "rest/editRequest"),
             "rest/apis" => array('action' => "rest/apisIndex"),
+            "rest/authentications" => array('action' => "rest/authentications/index"),
         );
     }
 

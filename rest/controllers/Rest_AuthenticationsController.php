@@ -35,15 +35,32 @@ class Rest_AuthenticationsController extends BaseController
         $this->renderTemplate('rest/authentications/_edit', $variables);
     }
 
-    public function actionSaveAuthentication()
+    public function actionSave()
     {
         $authenticationHandle = craft()->request->getRequiredPost('authenticationHandle');
         $scopes = craft()->request->getPost('scopes');
 
         $authentication = new Rest_AuthenticationModel;
-        $authentication->authenticationHandle = $authenticationHandle;
+        $authentication->oauthProviderHandle = $authenticationHandle;
         $authentication->scopes = $scopes;
 
-        craft()->rest_authentications->saveAuthentication($authentication);
+        if(craft()->rest_authentications->saveAuthentication($authentication))
+        {
+            craft()->userSession->setNotice(Craft::t('Authentication saved.'));
+            // $this->redirectToPostedUrl();
+
+            $redirectUrl = UrlHelper::getActionUrl('rest/connect', ['handle' => $authenticationHandle]);
+
+            $this->redirect($redirectUrl);
+        }
+        else
+        {
+            craft()->userSession->setError(Craft::t('Couldn’t save authentication.'));
+
+            // Send the request back to the template
+            craft()->urlManager->setRouteVariables(array(
+                'authentication' => $authentication
+            ));
+        }
     }
 }

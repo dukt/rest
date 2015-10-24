@@ -100,7 +100,7 @@ class Rest_RequestsController extends BaseController
         $request->url = $url;
         $request->query = $query;
 
-        if(craft()->rest->saveRequest($request))
+        if(craft()->rest_requests->saveRequest($request))
         {
             craft()->userSession->setNotice(Craft::t('Request saved.'));
             $this->redirectToPostedUrl();

@@ -33,6 +33,19 @@ class Rest_AuthenticationsService extends BaseApplicationComponent
     }
 
     /**
+     * Get Authentication By Handle
+     */
+    public function _getAuthenticationRecordByHandle($oauthProviderHandle)
+    {
+        return Rest_AuthenticationRecord::model()->find(
+            array(
+                'condition' => 'oauthProviderHandle=:oauthProviderHandle',
+                'params' => array(':oauthProviderHandle' => $oauthProviderHandle)
+            )
+        );
+    }
+
+    /**
      * Get Authentication By ID
      */
     public function getAuthenticationById($id)
@@ -118,7 +131,7 @@ class Rest_AuthenticationsService extends BaseApplicationComponent
      */
     public function saveAuthentication(Rest_AuthenticationModel $model)
     {
-        $record = Rest_AuthenticationRecord::model()->findByPk($model->id);
+        $record = $this->_getAuthenticationRecordByHandle($model->oauthProviderHandle);
 
         if(!$record)
         {
@@ -127,6 +140,7 @@ class Rest_AuthenticationsService extends BaseApplicationComponent
 
         $record->oauthProviderHandle = $model->oauthProviderHandle;
         $record->tokenId = $model->tokenId;
+        $record->scopes = $model->scopes;
 
         if($record->save())
         {

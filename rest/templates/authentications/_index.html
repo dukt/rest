@@ -32,28 +32,22 @@
                     </th>
 
                     <td class="nowrap">
-                        {% if authentication %}
+                        {% if authentication and authentication.token %}
                             <span class="status on"></span> {{ "Connected"|t }}
-                            &nbsp;
-                            <a class="btn small" href="{{ actionUrl('rest/disconnect', { handle: provider.handle }) }}">Disconnect</a>
+                            {# &nbsp;
+                            <a class="btn small" href="{{ actionUrl('rest/disconnect', { handle: provider.handle }) }}">Disconnect</a> #}
                         {% else %}
                             <span class="status"></span><span class="light">{{ "Not Connected"|t }}</span>
-                            &nbsp;
-                            <a class="btn small" href="{{ actionUrl('rest/connect', { handle: provider.handle }) }}">Connect</a>
+                            {# &nbsp;
+                            <a class="btn small" href="{{ actionUrl('rest/connect', { handle: provider.handle }) }}">Connect</a> #}
                         {% endif %}
                     </td>
 
                     <td class="light">
-                        {% set scopes = provider.scopes|join(', ') %}
-
-                        {% if scopes|length > 0 %}
-                            {{ scopes }}
-                        {% else %}
-                            —
+                        {% if authentication and authentication.scopes|length > 0 %}
+                            {{ authentication.scopes|join(', ') }}
                         {% endif %}
                     </td>
-
-
 
                 </tr>
 

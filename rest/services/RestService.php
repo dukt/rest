@@ -155,7 +155,7 @@ class RestService extends BaseApplicationComponent
     {
         if(!empty($handle))
         {
-            $request = $this->getRequestByHandle($handle);
+            $request = craft()->rest_requests->getRequestByHandle($handle);
 
             if($request)
             {

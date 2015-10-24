@@ -34,7 +34,11 @@ class RestController extends BaseController
 
         if($authentication)
         {
-            craft()->rest_authentications->deleteAuthenticationById($authentication->id);
+            craft()->oauth->deleteToken($authentication->getToken());
+
+            $authentication->tokenId = null;
+
+            craft()->rest_authentications->saveAuthentication($authentication);
         }
 
         craft()->userSession->setNotice(Craft::t("Disconnected."));
@@ -47,7 +51,6 @@ class RestController extends BaseController
     public function actionConnect()
     {
         $handle = craft()->request->getParam('handle');
-
         $redirect = craft()->request->getParam('redirect');
 
         if(!$redirect)
@@ -56,13 +59,14 @@ class RestController extends BaseController
         }
 
         $oauthProvider = craft()->oauth->getProvider($handle);
+        $authentication = craft()->rest_authentications->getAuthenticationByHandle($handle);
 
         if($oauthProvider)
         {
             if($response = craft()->oauth->connect(array(
                 'plugin' => 'rest',
                 'provider' => $oauthProvider->getHandle(),
-                'scopes' => $oauthProvider->getScopes(),
+                'scopes' => $authentication->scopes,
                 'params' => $oauthProvider->getParams(),
             )))
             {

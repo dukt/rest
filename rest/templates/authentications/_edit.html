@@ -13,15 +13,14 @@
 
         {{ getCsrfInput() }}
 
-        <input type="hidden" name="action" value="rest/authentications/saveAuthentication">
-        <input type="hidden" name="redirect" value="rest/authentications">
+        <input type="hidden" name="action" value="rest/authentications/save">
         <input type="hidden" name="authenticationHandle" value="{{ provider.handle }}">
 
-        <h2>Status</h2>
+        <h2 class="first">Status</h2>
 
         <ul>
             <li>
-                {% if authentication %}
+                {% if authentication and authentication.token %}
                     <span class="status on"></span> {{ "Connected"|t }}
                 {% else %}
                     <span class="status"></span><span class="light">{{ "Not Connected"|t }}</span>
@@ -29,11 +28,12 @@
             </li>
         </ul>
 
-        <hr>
 
-        <h2>Scope</h2>
+        <h2>Scopes</h2>
 
-        <p>{{ provider.name }} is connected with the following scope:</p>
+        {% if authentication and authentication.token %}
+            <p>{{ provider.name }} is connected with the following scope:</p>
+        {% endif %}
 
         {% set scopes = provider.getAvailableScopes() %}
 
@@ -41,21 +41,36 @@
             <ul>
                 {% for scope in scopes %}
                     <li>
-                        {% if not authentication %}
-                            <input type="checkbox" name="scope" />
-                        {% else %}
-                            -
+                        {% set disabled = false %}
+                        {% set checked = false %}
+
+                        {% if authentication %}
+
+                            {% if authentication.token %}
+                                {% set disabled = true %}
+                            {% endif %}
+
+                            {% for authenticationScope in authentication.scopes %}
+                                {% if authenticationScope == scope %}
+                                    {% set checked = true %}
+                                {% endif %}
+                            {% endfor %}
                         {% endif %}
 
-                        {{ scope }}
+                        <label><input type="checkbox" name="scopes[]" value="{{ scope }}"{{ checked ? ' checked="checked"' }}{{ disabled ? ' disabled="true"' }} /> &nbsp;{{ scope }}</label>
                     </li>
                 {% endfor %}
             </ul>
         {% endif %}
 
-        <hr>
+        <div class="buttons">
+            {% if authentication and authentication.token %}
+                <a class="btn" href="{{ actionUrl('rest/disconnect', { handle: provider.handle }) }}">Disconnect</a>
+            {% else %}
+                <input type="submit" class="btn submit" value="Connect" />
+            {% endif %}
+        </div>
 
-        <input type="submit" class="btn submit" value="Save" />
     </form>
 {#     {% if authentication %}
         <a class="btn small" href="{{ actionUrl('rest/disconnect', { handle: provider.handle }) }}">Disconnect</a>

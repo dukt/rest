@@ -55,6 +55,50 @@ class RestController extends BaseController
             $redirect = 'rest/apis';
         }
 
+        $oauthProvider = craft()->oauth->getProvider($handle);
+
+        if($oauthProvider)
+        {
+            if($response = craft()->oauth->connect(array(
+                'plugin' => 'rest',
+                'provider' => $api->getProviderHandle(),
+                'scopes' => $api->getScopes(),
+                'params' => $api->getParams(),
+            )))
+            {
+                if($response['success'])
+                {
+                    // save token
+                    craft()->rest->saveAuthenticationToken($handle, $response['token']);
+
+                    // session notice
+                    craft()->userSession->setNotice(Craft::t("Connected."));
+                }
+                else
+                {
+                    craft()->userSession->setError(Craft::t($response['errorMsg']));
+                }
+            }
+        }
+        else
+        {
+            craft()->userSession->setError(Craft::t("OAuth provider not configured."));
+        }
+        $this->redirect($redirect);
+    }
+
+    public function actionConnectDeprecated()
+    {
+        $handle = craft()->request->getParam('handle');
+
+        $redirect = craft()->request->getParam('redirect');
+
+        if(!$redirect)
+        {
+            $redirect = 'rest/apis';
+        }
+
+
         $api = craft()->rest->getApiByHandle($handle);
 
         if($api)

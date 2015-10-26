@@ -20,14 +20,6 @@
         <tbody>
             {% for api in apis %}
 
-                {% set apiAuthentication = null %}
-
-                {% for item in apiAuthentications %}
-                    {% if api.handle == item.apiHandle %}
-                        {% set apiAuthentication = item %}
-                    {% endif %}
-                {% endfor %}
-
                 <tr>
                     <td class="thin">
                         <img src="{{ api.getIconUrl }}" height="24" />

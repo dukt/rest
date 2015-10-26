@@ -10,29 +10,30 @@
  * @license   https://dukt.net/craft/rest/docs#license
  */
 
+
+
 namespace Craft;
 
-class Rest_AuthenticationRecord extends BaseRecord
+class Rest_ApiAuthenticationRecord extends BaseRecord
 {
     public function getTableName()
     {
-        return 'rest_authentications';
+        return 'rest_api_authentications';
     }
 
     protected function defineAttributes()
     {
         return array(
             'tokenId' => AttributeType::Number,
-            'authenticationHandle' => array(AttributeType::String, 'required' => true),
+            'apiHandle' => array(AttributeType::String, 'required' => true),
             'scopes' => array(AttributeType::Mixed),
-            'customScopes' => array(AttributeType::Mixed),
         );
     }
 
     public function defineIndexes()
     {
         return array(
-            array('columns' => array('authenticationHandle'), 'unique' => true),
+            array('columns' => array('apiHandle'), 'unique' => true),
         );
     }
 }

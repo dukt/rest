@@ -12,27 +12,27 @@
 
 namespace Craft;
 
-class Rest_AuthenticationRecord extends BaseRecord
+class Rest_ApiAuthenticationModel extends BaseModel
 {
-    public function getTableName()
-    {
-        return 'rest_authentications';
-    }
-
     protected function defineAttributes()
     {
         return array(
+            'id'    => AttributeType::Number,
             'tokenId' => AttributeType::Number,
-            'authenticationHandle' => array(AttributeType::String, 'required' => true),
+            'apiHandle' => AttributeType::String,
             'scopes' => array(AttributeType::Mixed),
-            'customScopes' => array(AttributeType::Mixed),
         );
     }
 
-    public function defineIndexes()
+    public function getApi()
     {
-        return array(
-            array('columns' => array('authenticationHandle'), 'unique' => true),
-        );
+        return craft()->rest_apis->getApi($this->apiHandle);
+    }
+
+    public function getToken()
+    {
+        craft()->rest->checkRequirements();
+
+        return craft()->oauth->getTokenById($this->tokenId);
     }
 }

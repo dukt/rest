@@ -87,16 +87,24 @@ class RestService extends BaseApplicationComponent
         }
 
 
-        $authentication = craft()->rest_authentications->getAuthenticationByHandle($criteria->authenticationHandle);
+        $authentication = craft()->rest_authentications->getAuthenticationByHandle($criteria->authentication);
 
         if($authentication)
         {
             $oauthProvider = $authentication->getOAuthProvider();
+
             $client = $oauthProvider->getClient($authentication->getToken());
         }
         else
         {
-            $client = new Client($criteria->url);
+            $client = new Client();
+        }
+
+        if(!empty($criteria->api))
+        {
+            $api = craft()->rest_apis->getApi($criteria->api);
+
+            $client->setBaseUrl($api->getBaseUrl());
         }
 
 

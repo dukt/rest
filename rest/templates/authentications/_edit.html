@@ -1,6 +1,7 @@
 {% extends "_layouts/cp" %}
+{% import "_includes/forms" as forms %}
 
-{% set title = provider.name %}
+{% set title = authenticationProvider.name %}
 
 {% set crumbs = [
     { label: "Rest"|t, url: url('rest') },
@@ -14,7 +15,8 @@
         {{ getCsrfInput() }}
 
         <input type="hidden" name="action" value="rest/authentications/save">
-        <input type="hidden" name="authenticationHandle" value="{{ provider.handle }}">
+        <input type="hidden" name="redirect" value="rest/authentications">
+        <input type="hidden" name="authenticationProviderHandle" value="{{ authenticationProvider.handle }}">
 
         <h2 class="first">Status</h2>
 
@@ -28,18 +30,16 @@
             </li>
         </ul>
 
+        {% if availableScopes is defined and availableScopes|length > 0 %}
+            <hr>
+            <h2>Scopes</h2>
 
-        <h2>Scopes</h2>
+            {% if authentication and authentication.token %}
+                <p>{{ authenticationProvider.name }} is connected with the following scope:</p>
+            {% endif %}
 
-        {% if authentication and authentication.token %}
-            <p>{{ provider.name }} is connected with the following scope:</p>
-        {% endif %}
-
-        {% set scopes = provider.getAvailableScopes() %}
-
-        {% if scopes|length > 0 %}
             <ul>
-                {% for scope in scopes %}
+                {% for scope in availableScopes %}
                     <li>
                         {% set disabled = false %}
                         {% set checked = false %}
@@ -63,19 +63,48 @@
             </ul>
         {% endif %}
 
+        <hr>
+        <h2>{{ "Custom Scopes"|t }}</h2>
+
+        {% set queryRows = [] %}
+
+        {% if authentication %}
+            {% for scope in authentication.customScopes %}
+              {% set queryRows = queryRows|merge([{ scope: scope }]) %}
+            {% endfor %}
+        {% endif %}
+
+        {{ forms.editableTableField({
+          id: 'custom-scopes',
+          rows: 4,
+          textual: false,
+          name: 'customScopes',
+          addRowLabel : 'Add Scope',
+          cols : {
+            'scope' : {
+                'heading' : 'Scope',
+                'type'   : 'singleline'
+            }
+          },
+          rows : queryRows
+        }) }}
+
+        <hr>
+
         <div class="buttons">
             {% if authentication and authentication.token %}
-                <a class="btn" href="{{ actionUrl('rest/disconnect', { handle: provider.handle }) }}">Disconnect</a>
+                <a class="btn" href="{{ actionUrl('rest/authentications/disconnect', { handle: authenticationProvider.handle }) }}">Disconnect</a>
             {% else %}
-                <input type="submit" class="btn submit" value="Connect" />
+                <input type="submit" class="btn submit" value="Save" />
+                <input type="submit" name="connect" class="btn" value="Save & Connect" />
             {% endif %}
         </div>
 
     </form>
 {#     {% if authentication %}
-        <a class="btn small" href="{{ actionUrl('rest/disconnect', { handle: provider.handle }) }}">Disconnect</a>
+        <a class="btn small" href="{{ actionUrl('rest/disconnect', { handle: authenticationProvider.handle }) }}">Disconnect</a>
     {% else %}
-        <a class="btn submit" href="{{ actionUrl('rest/connect', { handle: provider.handle }) }}">Connect</a>
+        <a class="btn submit" href="{{ actionUrl('rest/connect', { handle: authenticationProvider.handle }) }}">Connect</a>
     {% endif %} #}
 
 {% endset %}

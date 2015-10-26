@@ -14,15 +14,58 @@ namespace Craft;
 
 class Rest_AuthenticationsService extends BaseApplicationComponent
 {
+    public function getAuthenticationProvider($handle)
+    {
+        $authenticationProviders = $this->getAuthenticationProviders();
+
+        if(isset($authenticationProviders[$handle]))
+        {
+            return $authenticationProviders[$handle];
+        }
+    }
+
+    public function getAuthenticationProviders()
+    {
+        $authenticationProviders = [];
+
+        $oauthProviders = craft()->oauth->getProviders();
+
+        foreach($oauthProviders as $oauthProvider)
+        {
+            $authenticationProviders[$oauthProvider->getHandle()] = [
+                'name' => $oauthProvider->getName(),
+                'handle' => $oauthProvider->getHandle(),
+                'type' => 'oauthProvider',
+                'oauthProviderHandle' => $oauthProvider->getHandle(),
+                'iconUrl' => null,
+            ];
+        }
+
+        $apis = craft()->rest_apis->getApis();
+
+        foreach($apis as $api)
+        {
+            $authenticationProviders[$api->getHandle()] = [
+                'name' => $api->getName(),
+                'handle' => $api->getHandle(),
+                'type' => 'api',
+                'oauthProviderHandle' => $api->getOAuthProviderHandle(),
+                'iconUrl' => $api->getIconUrl(),
+            ];
+        }
+
+        return $authenticationProviders;
+    }
+
     /**
      * Get Authentication By Handle
      */
-    public function getAuthenticationByHandle($oauthProviderHandle)
+    public function getAuthenticationByHandle($authenticationHandle)
     {
         $record = Rest_AuthenticationRecord::model()->find(
             array(
-                'condition' => 'oauthProviderHandle=:oauthProviderHandle',
-                'params' => array(':oauthProviderHandle' => $oauthProviderHandle)
+                'condition' => 'authenticationHandle=:authenticationHandle',
+                'params' => array(':authenticationHandle' => $authenticationHandle)
             )
         );
 
@@ -35,12 +78,12 @@ class Rest_AuthenticationsService extends BaseApplicationComponent
     /**
      * Get Authentication By Handle
      */
-    public function _getAuthenticationRecordByHandle($oauthProviderHandle)
+    public function _getAuthenticationRecordByHandle($authenticationHandle)
     {
         return Rest_AuthenticationRecord::model()->find(
             array(
-                'condition' => 'oauthProviderHandle=:oauthProviderHandle',
-                'params' => array(':oauthProviderHandle' => $oauthProviderHandle)
+                'condition' => 'authenticationHandle=:authenticationHandle',
+                'params' => array(':authenticationHandle' => $authenticationHandle)
             )
         );
     }
@@ -86,7 +129,7 @@ class Rest_AuthenticationsService extends BaseApplicationComponent
 
         // save authentication
 
-        $authentication->oauthProviderHandle = $providerHandle;
+        $authentication->authenticationHandle = $providerHandle;
         $authentication->tokenId = $token->id;
 
         $this->saveAuthentication($authentication);
@@ -131,16 +174,17 @@ class Rest_AuthenticationsService extends BaseApplicationComponent
      */
     public function saveAuthentication(Rest_AuthenticationModel $model)
     {
-        $record = $this->_getAuthenticationRecordByHandle($model->oauthProviderHandle);
+        $record = $this->_getAuthenticationRecordByHandle($model->authenticationHandle);
 
         if(!$record)
         {
             $record = new Rest_AuthenticationRecord;
         }
 
-        $record->oauthProviderHandle = $model->oauthProviderHandle;
+        $record->authenticationHandle = $model->authenticationHandle;
         $record->tokenId = $model->tokenId;
         $record->scopes = $model->scopes;
+        $record->customScopes = $model->customScopes;
 
         if($record->save())
         {

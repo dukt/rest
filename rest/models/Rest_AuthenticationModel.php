@@ -19,14 +19,36 @@ class Rest_AuthenticationModel extends BaseModel
         return array(
             'id'    => AttributeType::Number,
             'tokenId' => AttributeType::Number,
-            'oauthProviderHandle' => AttributeType::String,
+            'authenticationHandle' => AttributeType::String,
             'scopes' => array(AttributeType::Mixed),
+            'customScopes' => array(AttributeType::Mixed),
         );
+    }
+
+    public function getAllScopes()
+    {
+        $allScopes = array_merge($this->scopes, $this->customScopes);
+
+        return $allScopes;
     }
 
     public function getOAuthProvider()
     {
-        return craft()->oauth->getProvider($this->oauthProviderHandle);
+        $oauthProvider = craft()->oauth->getProvider($this->authenticationHandle);
+
+        if(!$oauthProvider)
+        {
+            $api = craft()->rest_apis->getApi($this->authenticationHandle);
+
+            if($api)
+            {
+                $oauthProviderHandle = $api->getOAuthProviderHandle();
+
+                $oauthProvider = craft()->oauth->getProvider($oauthProviderHandle);
+            }
+        }
+
+        return $oauthProvider;
     }
 
     public function getToken()

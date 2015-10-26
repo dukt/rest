@@ -1,0 +1,39 @@
+{% extends "rest/_layout" %}
+
+{% block main %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+
+                <h1>APIs</h1>
+
+                {% set response = craft.rest.request
+                    .authentication('youtube')
+                    .api('youtube')
+                    .url('search')
+                    .query({
+                        part: 'snippet',
+                        q: 'timelapse',
+                    })
+                    .send() %}
+
+                {#
+
+                {% set response = craft.rest.request
+                    .authentication('youtube')
+                    .url('https://www.googleapis.com/youtube/v3/search')
+                    .query({
+                        part: 'snippet',
+                        q: 'timelapse',
+                    })
+                    .send() %}
+
+                #}
+
+                {{ dump(response) }}
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

@@ -3,11 +3,6 @@
 {% set selectedTab = 'apps' %}
 {% set q = craft.request.param('q') %}
 
-{% if not q %}
-{% set q = 'timelapse' %}
-{% endif %}
-
-
 {% block main %}
 
     <div class="container">

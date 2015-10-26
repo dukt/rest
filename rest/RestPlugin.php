@@ -12,6 +12,8 @@
 
 namespace Craft;
 
+require_once(CRAFT_PLUGINS_PATH.'rest/vendor/autoload.php');
+
 class RestPlugin extends BasePlugin
 {
     /**
@@ -80,7 +82,9 @@ class RestPlugin extends BasePlugin
             "rest/requests/(?P<requestId>\d+)" => array('action' => "rest/requests/edit"),
             "rest/requests/new" => array('action' => "rest/requests/edit"),
             "rest/authentications" => array('action' => "rest/authentications/index"),
-            "rest/authentications/(?P<providerHandle>{handle})" => array('action' => "rest/authentications/edit"),
+            "rest/authentications/(?P<authenticationProviderHandle>{handle})" => array('action' => "rest/authentications/edit"),
+            "rest/apis" => array('action' => "rest/apis/index"),
+            "rest/apis/(?P<apiHandle>{handle})" => array('action' => "rest/apis/edit"),
         );
     }
 

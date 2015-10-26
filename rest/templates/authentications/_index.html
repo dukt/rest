@@ -9,43 +9,48 @@
     <table id="fields" class="data fullwidth collapsible">
         <thead>
             <tr>
+                <th scope="col"></th>
                 <th scope="col">{{ "Name"|t }}</th>
+                <th scope="col">{{ "Handle"|t }}</th>
                 <th scope="col">{{ "Status"|t }}</th>
-                <th scope="col">{{ "Scope"|t }}</th>
             </tr>
         </thead>
 
         <tbody>
-            {% for provider in providers %}
+            {% for authenticationProvider in authenticationProviders %}
 
                 {% set authentication = null %}
 
                 {% for item in authentications %}
-                    {% if provider.handle == item.oauthProviderHandle %}
+                    {% if authenticationProvider.handle == item.authenticationHandle %}
                         {% set authentication = item %}
                     {% endif %}
                 {% endfor %}
 
                 <tr>
+                    <td class="thin">
+                        {% if authenticationProvider.iconUrl %}
+                            <img src="{{ authenticationProvider.iconUrl }}" height="24" />
+                        {% endif %}
+                    </td>
+
                     <th>
-                        <a href="{{ url('rest/authentications/'~provider.handle) }}">{{ provider.name }}</a>
+                        <a href="{{ url('rest/authentications/'~authenticationProvider.handle) }}">{{ authenticationProvider.name }}</a>
                     </th>
+
+                    <td class="light">
+                        {{ authenticationProvider.handle }}
+                    </td>
 
                     <td class="nowrap">
                         {% if authentication and authentication.token %}
                             <span class="status on"></span> {{ "Connected"|t }}
                             {# &nbsp;
-                            <a class="btn small" href="{{ actionUrl('rest/disconnect', { handle: provider.handle }) }}">Disconnect</a> #}
+                            <a class="btn small" href="{{ actionUrl('rest/authentications/disconnect', { handle: authenticationProvider.handle }) }}">Disconnect</a> #}
                         {% else %}
                             <span class="status"></span><span class="light">{{ "Not Connected"|t }}</span>
                             {# &nbsp;
-                            <a class="btn small" href="{{ actionUrl('rest/connect', { handle: provider.handle }) }}">Connect</a> #}
-                        {% endif %}
-                    </td>
-
-                    <td class="light">
-                        {% if authentication and authentication.scopes|length > 0 %}
-                            {{ authentication.scopes|join(', ') }}
+                            <a class="btn small" href="{{ actionUrl('rest/authentications/connect', { handle: authenticationProvider.handle }) }}">Connect</a> #}
                         {% endif %}
                     </td>
 

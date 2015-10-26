@@ -1,0 +1,57 @@
+{% extends "rest/_layouts/cp" %}
+
+{% set title = "REST"|t %}
+
+{% set selectedTab = 'apis' %}
+
+{% set content %}
+
+    <table id="fields" class="data fullwidth collapsible">
+        <thead>
+            <tr>
+                <th scope="col"></th>
+                <th scope="col">{{ "Name"|t }}</th>
+                <th scope="col">{{ "Handle"|t }}</th>
+                <th scope="col">{{ "Version"|t }}</th>
+                <th scope="col">{{ "Base URL"|t }}</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for api in apis %}
+
+                {% set apiAuthentication = null %}
+
+                {% for item in apiAuthentications %}
+                    {% if api.handle == item.apiHandle %}
+                        {% set apiAuthentication = item %}
+                    {% endif %}
+                {% endfor %}
+
+                <tr>
+                    <td class="thin">
+                        <img src="{{ api.getIconUrl }}" height="24" />
+                    </td>
+
+                    <th>
+                        {{ api.name }}
+                    </th>
+
+                    <td class="light">
+                        {{ api.handle }}
+                    </td>
+
+                    <td>
+                        {{ api.version }}
+                    </td>
+
+                    <td>
+                        {{ api.baseUrl }}
+                    </td>
+                </tr>
+
+            {% endfor %}
+        </tbody>
+    </table>
+
+{% endset %}

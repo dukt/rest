@@ -179,7 +179,7 @@ class RestService extends BaseApplicationComponent
                 // update criteria from request
 
                 $criteria->url = $request->url;
-                $criteria->authenticationHandle = $request->authenticationHandle;
+                $criteria->authentication = $request->authenticationHandle;
 
                 $this->_populateAttributes($criteria, $request->getAttributes());
 

@@ -30,4 +30,9 @@ class Rest_RequestModel extends BaseModel
             'query' => AttributeType::Mixed,
         );
     }
+
+    public function getAuthentication()
+    {
+        return craft()->rest_authentications->getAuthenticationByHandle($this->authenticationHandle);
+    }
 }

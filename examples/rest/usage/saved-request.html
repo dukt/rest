@@ -15,17 +15,24 @@
                 <p>For this example to work you need to create a REST request in the control panel with the following options:</p>
 
                 <ul>
-                    <li><strong>Name:</strong> Dribbble Popular Shots</li>
-                    <li><strong>Handle:</strong> dribbbleShots</li>
-                    <li><strong>URL:</strong> http://api.dribbble.com/shots/popular</li>
+                    <li><strong>Name:</strong> YouTube Search</li>
+                    <li><strong>Handle:</strong> youtubeSearch</li>
+                    <li><strong>URL:</strong> https://www.googleapis.com/youtube/v3/search</li>
+                    <li><strong>Query Parameters:</strong>
+                        <ul>
+                            <li><strong>part:</strong> snippet</li>
+                            <li><strong>q:</strong> timelapse</li>
+                        </ul>
+                    </li>
                 </ul>
 
                 <h3>Template</h3>
 
-                <pre>{{ "{% set response = craft.rest.request.handle('dribbbleShots').send() %}" }}</pre>
+                <pre>{{ "{% set response = craft.rest.request.handle('youtubeSearch').send() %}" }}</pre>
 
                 <h3>Response</h3>
-                {% set response = craft.rest.request.handle('dribbbleShots').send() %}
+
+                {% set response = craft.rest.request.handle('youtubeSearch').send() %}
 
                 {% if response.success %}
 

@@ -37,7 +37,9 @@ class Rest_AuthenticationsService extends BaseApplicationComponent
                 'handle' => $oauthProvider->getHandle(),
                 'type' => 'oauthProvider',
                 'oauthProviderHandle' => $oauthProvider->getHandle(),
-                'iconUrl' => null,
+                'iconUrl' => $oauthProvider->getIconUrl(),
+                'scopeDocsUrl' => $oauthProvider->getScopeDocsUrl(),
+
             ];
         }
 

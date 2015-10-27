@@ -27,7 +27,18 @@ class Rest_AuthenticationModel extends BaseModel
 
     public function getAllScopes()
     {
-        $allScopes = array_merge($this->scopes, $this->customScopes);
+        $allScopes = [];
+
+        if(is_array($this->scopes))
+        {
+            $allScopes = array_merge($allScopes, $this->scopes);
+        }
+
+        if(is_array($this->customScopes))
+        {
+            $allScopes = array_merge($allScopes, $this->customScopes);
+        }
+
 
         return $allScopes;
     }

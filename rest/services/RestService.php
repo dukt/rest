@@ -79,6 +79,7 @@ class RestService extends BaseApplicationComponent
             $options['headers'] = $criteria->headers;
         }
 
+
         // query
 
         if(is_array($criteria->query))
@@ -87,18 +88,26 @@ class RestService extends BaseApplicationComponent
         }
 
 
+        // client
+
+        $client = new Client();
+
+
+        // authentication
+
         $authentication = craft()->rest_authentications->getAuthenticationByHandle($criteria->authentication);
 
         if($authentication)
         {
-            $oauthProvider = $authentication->getOAuthProvider();
+            if($authentication->tokenId)
+            {
+                $oauthProvider = $authentication->getOAuthProvider();
+                $client = $oauthProvider->getClient($authentication->getToken());
+            }
+        }
 
-            $client = $oauthProvider->getClient($authentication->getToken());
-        }
-        else
-        {
-            $client = new Client();
-        }
+
+        // api
 
         if(!empty($criteria->api))
         {

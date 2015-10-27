@@ -30,73 +30,101 @@
             </li>
         </ul>
 
-        {% if availableScopes is defined and availableScopes|length > 0 %}
+
+        {% if authentication and authentication.token %}
             <hr>
+
             <h2>Scopes</h2>
 
-            {% if authentication and authentication.token %}
-                <p>{{ authenticationProvider.name }} is connected with the following scope:</p>
-            {% endif %}
-
             <ul>
-                {% for scope in availableScopes %}
-                    <li>
-                        {% set disabled = false %}
-                        {% set checked = false %}
-
-                        {% if authentication %}
-
-                            {% if authentication.token %}
-                                {% set disabled = true %}
-                            {% endif %}
-
-                            {% for authenticationScope in authentication.scopes %}
-                                {% if authenticationScope == scope %}
-                                    {% set checked = true %}
-                                {% endif %}
-                            {% endfor %}
-                        {% endif %}
-
-                        <label><input type="checkbox" name="scopes[]" value="{{ scope }}"{{ checked ? ' checked="checked"' }}{{ disabled ? ' disabled="true"' }} /> &nbsp;{{ scope }}</label>
-                    </li>
+                {% for scope in authentication.allScopes %}
+                    <label><input type="checkbox" name="scopes[]" value="{{ scope }}" checked="true" disabled="true" /> &nbsp;{{ scope }}</label>
                 {% endfor %}
             </ul>
+        {% else %}
+
+            {% if availableScopes is defined and availableScopes|length > 0 %}
+                <hr>
+                <h2>Scopes</h2>
+
+                {% if authentication and authentication.token %}
+                    <p>{{ authenticationProvider.name }} is connected with the following scope:</p>
+                {% endif %}
+
+                <ul>
+                    {% for scope in availableScopes %}
+                        <li>
+                            {% set disabled = false %}
+                            {% set checked = false %}
+
+                            {% if authentication %}
+
+                                {% if authentication.token %}
+                                    {% set disabled = true %}
+                                {% endif %}
+
+                                {% for authenticationScope in authentication.scopes %}
+                                    {% if authenticationScope == scope %}
+                                        {% set checked = true %}
+                                    {% endif %}
+                                {% endfor %}
+                            {% endif %}
+
+                            <label><input type="checkbox" name="scopes[]" value="{{ scope }}"{{ checked ? ' checked="checked"' }}{{ disabled ? ' disabled="true"' }} /> &nbsp;{{ scope }}</label>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+
+            <hr>
+
+            {% if availableScopes is defined and availableScopes|length > 0 %}
+                <h2>{{ "Custom Scopes"|t }}</h2>
+            {% else %}
+                <h2>{{ "Scopes"|t }}</h2>
+            {% endif %}
+
+            <p>
+                Scopes express the permissions you'll be authorized for when making requests.
+
+                {% if authenticationProvider.scopeDocsUrl %}
+                    <a href="{{ authenticationProvider.scopeDocsUrl }}" target="_blank">See available scopes for {{ authenticationProvider.name }}</a>
+                {% endif %}
+            </p>
+
+
+            {% set queryRows = [] %}
+
+            {% if authentication %}
+                {% for scope in authentication.customScopes %}
+                  {% set queryRows = queryRows|merge([{ scope: scope }]) %}
+                {% endfor %}
+            {% endif %}
+
+            {{ forms.editableTableField({
+              id: 'custom-scopes',
+              rows: 4,
+              textual: false,
+              name: 'customScopes',
+              addRowLabel : 'Add Scope',
+              cols : {
+                'scope' : {
+                    'heading' : 'Scope',
+                    'type'   : 'singleline'
+                }
+              },
+              rows : queryRows
+            }) }}
+
         {% endif %}
-
-        <hr>
-        <h2>{{ "Custom Scopes"|t }}</h2>
-
-        {% set queryRows = [] %}
-
-        {% if authentication %}
-            {% for scope in authentication.customScopes %}
-              {% set queryRows = queryRows|merge([{ scope: scope }]) %}
-            {% endfor %}
-        {% endif %}
-
-        {{ forms.editableTableField({
-          id: 'custom-scopes',
-          rows: 4,
-          textual: false,
-          name: 'customScopes',
-          addRowLabel : 'Add Scope',
-          cols : {
-            'scope' : {
-                'heading' : 'Scope',
-                'type'   : 'singleline'
-            }
-          },
-          rows : queryRows
-        }) }}
-
         <hr>
 
         <div class="buttons">
             {% if authentication and authentication.token %}
                 <a class="btn" href="{{ actionUrl('rest/authentications/disconnect', { handle: authenticationProvider.handle }) }}">Disconnect</a>
             {% else %}
-                <input type="submit" class="btn submit" value="Save" />
-                <input type="submit" name="connect" class="btn" value="Save & Connect" />
+                <input type="submit" name="connect" class="btn submit" value="Connect" />
+                {# <input type="submit" class="btn" value="Save without Connect" /> #}
             {% endif %}
         </div>
 

@@ -13,6 +13,7 @@
                 <th scope="col">{{ "Name"|t }}</th>
                 <th scope="col">{{ "Handle"|t }}</th>
                 <th scope="col">{{ "Status"|t }}</th>
+                <th scope="col">{{ "OAuth Provider"|t }}</th>
             </tr>
         </thead>
 
@@ -54,6 +55,9 @@
                         {% endif %}
                     </td>
 
+                    <td class="light">
+                        {{ authenticationProvider.oauthProviderHandle }}
+                    </td>
                 </tr>
 
             {% endfor %}

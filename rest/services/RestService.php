@@ -102,7 +102,9 @@ class RestService extends BaseApplicationComponent
             if($authentication->tokenId)
             {
                 $oauthProvider = $authentication->getOAuthProvider();
-                $client = $oauthProvider->getClient($authentication->getToken());
+                $token = $authentication->getToken();
+                $subscriber = $oauthProvider->getSubscriber($token);
+                $client->addSubscriber($subscriber);
             }
         }
 

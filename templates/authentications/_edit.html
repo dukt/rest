@@ -124,15 +124,9 @@
                 <a class="btn" href="{{ actionUrl('rest/authentications/disconnect', { handle: authenticationProvider.handle }) }}">Disconnect</a>
             {% else %}
                 <input type="submit" name="connect" class="btn submit" value="Connect" />
-                {# <input type="submit" class="btn" value="Save without Connect" /> #}
             {% endif %}
         </div>
 
     </form>
-{#     {% if authentication %}
-        <a class="btn small" href="{{ actionUrl('rest/disconnect', { handle: authenticationProvider.handle }) }}">Disconnect</a>
-    {% else %}
-        <a class="btn submit" href="{{ actionUrl('rest/connect', { handle: authenticationProvider.handle }) }}">Connect</a>
-    {% endif %} #}
 
 {% endset %}

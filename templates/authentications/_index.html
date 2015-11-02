@@ -46,12 +46,8 @@
                     <td class="nowrap">
                         {% if authentication and authentication.token %}
                             <span class="status on"></span> {{ "Connected"|t }}
-                            {# &nbsp;
-                            <a class="btn small" href="{{ actionUrl('rest/authentications/disconnect', { handle: authenticationProvider.handle }) }}">Disconnect</a> #}
                         {% else %}
                             <span class="status"></span><span class="light">{{ "Not Connected"|t }}</span>
-                            {# &nbsp;
-                            <a class="btn small" href="{{ actionUrl('rest/authentications/connect', { handle: authenticationProvider.handle }) }}">Connect</a> #}
                         {% endif %}
                     </td>
 

@@ -29,7 +29,7 @@ class RestPlugin extends BasePlugin
      */
     function getVersion()
     {
-        return '0.9.4';
+        return '1.0.5';
     }
 
     /**

@@ -127,5 +127,4 @@ class Rest_RequestsController extends BaseController
 
        $this->returnJson(array('success' => true));
     }
-
 }

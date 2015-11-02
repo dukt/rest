@@ -58,7 +58,6 @@ class Rest_AuthenticationsController extends BaseController
             }
         }
 
-
         $authentication = new Rest_AuthenticationModel;
         $authentication->authenticationHandle = $authenticationProviderHandle;
         $authentication->scopes = $scopes;
@@ -89,7 +88,6 @@ class Rest_AuthenticationsController extends BaseController
             ));
         }
     }
-
 
     public function actionDisconnect()
     {

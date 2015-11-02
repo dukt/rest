@@ -25,7 +25,6 @@ class Rest_RequestCriteriaModel extends BaseModel
             'headers' => AttributeType::Mixed,
             'query' => AttributeType::Mixed,
             'authentication' => AttributeType::String,
-            'api' => AttributeType::String,
             'token' => 'Oauth_TokenModel',
         );
     }

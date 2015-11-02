@@ -47,18 +47,6 @@ class Rest_AuthenticationModel extends BaseModel
     {
         $oauthProvider = craft()->oauth->getProvider($this->authenticationHandle);
 
-        if(!$oauthProvider)
-        {
-            $api = craft()->rest_apis->getApi($this->authenticationHandle);
-
-            if($api)
-            {
-                $oauthProviderHandle = $api->getOAuthProviderHandle();
-
-                $oauthProvider = craft()->oauth->getProvider($oauthProviderHandle);
-            }
-        }
-
         return $oauthProvider;
     }
 

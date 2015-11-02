@@ -43,19 +43,6 @@ class Rest_AuthenticationsService extends BaseApplicationComponent
             ];
         }
 
-        // $apis = craft()->rest_apis->getApis();
-
-        // foreach($apis as $api)
-        // {
-        //     $authenticationProviders[$api->getHandle()] = [
-        //         'name' => $api->getName(),
-        //         'handle' => $api->getHandle(),
-        //         'type' => 'api',
-        //         'oauthProviderHandle' => $api->getOAuthProviderHandle(),
-        //         'iconUrl' => $api->getIconUrl(),
-        //     ];
-        // }
-
         return $authenticationProviders;
     }
 

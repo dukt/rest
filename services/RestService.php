@@ -120,16 +120,6 @@ class RestService extends BaseApplicationComponent
         }
 
 
-        // api
-
-        if(!empty($criteria->api))
-        {
-            $api = craft()->rest_apis->getApi($criteria->api);
-
-            $client->setBaseUrl($api->getBaseUrl());
-        }
-
-
         // send request
 
         try
@@ -231,12 +221,8 @@ class RestService extends BaseApplicationComponent
 
                     break;
 
-                    // case 'authenticationHandle':
-                    // $criteria->api = $attributes['authenticationHandle'];
-                    // break;
-
                     default:
-                    $criteria->setAttribute($key, $value);
+                        $criteria->setAttribute($key, $value);
                 }
             }
         }

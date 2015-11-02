@@ -32,13 +32,6 @@ class Rest_AuthenticationsController extends BaseController
         $authenticationProvider = craft()->rest_authentications->getAuthenticationProvider($authenticationProviderHandle);
         $authentication = craft()->rest_authentications->getAuthenticationByHandle($authenticationProviderHandle);
 
-        if($authenticationProvider && $authenticationProvider['type'] == 'api')
-        {
-            $api = craft()->rest_apis->getApi($authenticationProvider['handle']);
-            $variables['api'] = $api;
-            $variables['availableScopes'] = $api->getAvailableScopes();
-        }
-
         $variables['authenticationProvider'] = $authenticationProvider;
         $variables['authentication'] = $authentication;
 

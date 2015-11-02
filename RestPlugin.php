@@ -83,8 +83,6 @@ class RestPlugin extends BasePlugin
             "rest/requests/new" => array('action' => "rest/requests/edit"),
             "rest/authentications" => array('action' => "rest/authentications/index"),
             "rest/authentications/(?P<authenticationProviderHandle>{handle})" => array('action' => "rest/authentications/edit"),
-            "rest/apis" => array('action' => "rest/apis/index"),
-            "rest/apis/(?P<apiHandle>{handle})" => array('action' => "rest/apis/edit"),
         );
     }
 

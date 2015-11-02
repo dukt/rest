@@ -43,6 +43,13 @@ class Rest_AuthenticationModel extends BaseModel
         return $allScopes;
     }
 
+    public function getAllOptions()
+    {
+        $allOptions = [];
+
+        return $allOptions;
+    }
+
     public function getOAuthProvider()
     {
         $oauthProvider = craft()->oauth->getProvider($this->authenticationHandle);

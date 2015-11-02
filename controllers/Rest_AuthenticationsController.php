@@ -135,7 +135,7 @@ class Rest_AuthenticationsController extends BaseController
                 'plugin' => 'rest',
                 'provider' => $oauthProvider->getHandle(),
                 'scopes' => $authentication->getAllScopes(),
-                'params' => $oauthProvider->getParams(),
+                'params' => $authentication->getAllOptions(),
             )))
             {
                 if($response['success'])

@@ -109,6 +109,17 @@ class RestService extends BaseApplicationComponent
         }
 
 
+        // token
+
+        if(!empty($criteria->token))
+        {
+            $token = $criteria->token;
+            $oauthProvider = $token->getProvider();
+            $subscriber = $oauthProvider->getSubscriber($token);
+            $client->addSubscriber($subscriber);
+        }
+
+
         // api
 
         if(!empty($criteria->api))

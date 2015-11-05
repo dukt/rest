@@ -92,7 +92,6 @@
                 {% endif %}
             </p>
 
-
             {% set queryRows = [] %}
 
             {% if authentication %}
@@ -117,6 +116,56 @@
             }) }}
 
         {% endif %}
+
+        <hr>
+
+
+        <h2>{{ "Authorization Options"|t }}</h2>
+
+        {% if authentication and authentication.token %}
+
+            {% if authentication.customAuthorizationOptions|length > 0 %}
+                <ul>
+                    {% for authorizationOptions in authentication.customAuthorizationOptions %}
+                        <li><strong>{{ authorizationOptions.key }}:</strong> {{ authorizationOptions.value }}</li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% else %}
+
+            {% set queryRows = [] %}
+
+            {% if authentication %}
+                {% for authorizationOptionKey, authorizationOptionValue in authentication.customAuthorizationOptions %}
+                  {% set queryRows = queryRows|merge([{
+                        authorizationOptionKey: authorizationOptionKey,
+                        authorizationOptionValue: authorizationOptionValue
+                  }]) %}
+                {% endfor %}
+            {% endif %}
+
+            {{ forms.editableTableField({
+              id: 'custom-authorizationOptions',
+              rows: 4,
+              textual: false,
+              name: 'customAuthorizationOptions',
+              addRowLabel : 'Add Authorization Option',
+              cols : {
+                'authorizationOptionKey' : {
+                    'heading' : 'Key',
+                    'type'   : 'singleline'
+                },
+                'authorizationOptionValue' : {
+                    'heading' : 'Value',
+                    'type'   : 'singleline'
+                }
+              },
+              rows : queryRows
+            }) }}
+
+        {% endif %}
+
+
         <hr>
 
         <div class="buttons">

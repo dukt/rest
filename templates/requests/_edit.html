@@ -42,7 +42,7 @@
 
         {% for authentication in authentications %}
             {% if authentication.oauthProvider %}
-                {% set authenticationOptions = authenticationOptions|merge([{ label: authentication.oauthProvider.handle, value: authentication.oauthProvider.handle }]) %}
+                {% set authenticationOptions = authenticationOptions|merge([{ label: authentication.oauthProvider.name, value: authentication.oauthProvider.handle }]) %}
             {% endif %}
         {% endfor %}
 

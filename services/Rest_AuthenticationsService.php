@@ -174,6 +174,7 @@ class Rest_AuthenticationsService extends BaseApplicationComponent
         $record->tokenId = $model->tokenId;
         $record->scopes = $model->scopes;
         $record->customScopes = $model->customScopes;
+        $record->customAuthorizationOptions = $model->customAuthorizationOptions;
 
         if($record->save())
         {

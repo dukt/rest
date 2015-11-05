@@ -9,4 +9,11 @@ return array(
     //         'likes',
     //     ]
     // ]
+
+    'authorizationOptions' => [
+        'google' => [
+            'access_type' => 'offline',
+            'approval_prompt' => 'force'
+        ]
+    ]
 );

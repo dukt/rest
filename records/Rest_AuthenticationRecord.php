@@ -26,7 +26,6 @@ class Rest_AuthenticationRecord extends BaseRecord
             'authenticationHandle' => array(AttributeType::String, 'required' => true),
             'scopes' => array(AttributeType::Mixed),
             'customScopes' => array(AttributeType::Mixed),
-            'customAuthorizationOptions' => array(AttributeType::Mixed),
         );
     }
 

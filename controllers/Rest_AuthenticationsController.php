@@ -58,23 +58,10 @@ class Rest_AuthenticationsController extends BaseController
             }
         }
 
-        $customAuthorizationOptions = [];
-
-        $postCustomAuthorizationOptions = craft()->request->getPost('customAuthorizationOptions');
-
-        if($postCustomAuthorizationOptions)
-        {
-            foreach($postCustomAuthorizationOptions as $postCustomAuthorizationOption)
-            {
-                $customAuthorizationOptions[$postCustomAuthorizationOption['authorizationOptionKey']] = $postCustomAuthorizationOption['authorizationOptionValue'];
-            }
-        }
-
         $authentication = new Rest_AuthenticationModel;
         $authentication->authenticationHandle = $authenticationProviderHandle;
         $authentication->scopes = $scopes;
         $authentication->customScopes = $customScopes;
-        $authentication->customAuthorizationOptions = $customAuthorizationOptions;
 
         if(craft()->rest_authentications->saveAuthentication($authentication))
         {
@@ -144,11 +131,19 @@ class Rest_AuthenticationsController extends BaseController
 
         if($oauthProvider)
         {
+            $authorizationOptions = null;
+            $allAuthorizationOptions = craft()->config->get('authorizationOptions', 'rest');
+
+            if(isset($allAuthorizationOptions[$oauthProvider->getHandle()]))
+            {
+                $authorizationOptions = $allAuthorizationOptions[$oauthProvider->getHandle()];
+            }
+
             if($response = craft()->oauth->connect(array(
                 'plugin' => 'rest',
                 'provider' => $oauthProvider->getHandle(),
                 'scope' => $authentication->getAllScopes(),
-                'authorizationOptions' => $authentication->getAllAuthorizationOptions(),
+                'authorizationOptions' => $authorizationOptions,
             )))
             {
                 if($response['success'])

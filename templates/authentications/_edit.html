@@ -119,55 +119,6 @@
 
         <hr>
 
-
-        <h2>{{ "Authorization Options"|t }}</h2>
-
-        {% if authentication and authentication.token %}
-
-            {% if authentication.customAuthorizationOptions|length > 0 %}
-                <ul>
-                    {% for authorizationOptionsKey, authorizationOptionsValue in authentication.customAuthorizationOptions %}
-                        <li><strong>{{ authorizationOptionsKey }}:</strong> {{ authorizationOptionsValue }}</li>
-                    {% endfor %}
-                </ul>
-            {% endif %}
-        {% else %}
-
-            {% set queryRows = [] %}
-
-            {% if authentication %}
-                {% for authorizationOptionKey, authorizationOptionValue in authentication.customAuthorizationOptions %}
-                  {% set queryRows = queryRows|merge([{
-                        authorizationOptionKey: authorizationOptionKey,
-                        authorizationOptionValue: authorizationOptionValue
-                  }]) %}
-                {% endfor %}
-            {% endif %}
-
-            {{ forms.editableTableField({
-              id: 'custom-authorizationOptions',
-              rows: 4,
-              textual: false,
-              name: 'customAuthorizationOptions',
-              addRowLabel : 'Add Authorization Option',
-              cols : {
-                'authorizationOptionKey' : {
-                    'heading' : 'Key',
-                    'type'   : 'singleline'
-                },
-                'authorizationOptionValue' : {
-                    'heading' : 'Value',
-                    'type'   : 'singleline'
-                }
-              },
-              rows : queryRows
-            }) }}
-
-        {% endif %}
-
-
-        <hr>
-
         <div class="buttons">
             {% if authentication and authentication.token %}
                 <a class="btn" href="{{ actionUrl('rest/authentications/disconnect', { handle: authenticationProvider.handle }) }}">Disconnect</a>

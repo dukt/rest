@@ -22,7 +22,6 @@ class Rest_AuthenticationModel extends BaseModel
             'authenticationHandle' => AttributeType::String,
             'scopes' => array(AttributeType::Mixed),
             'customScopes' => array(AttributeType::Mixed),
-            'customAuthorizationOptions' => array(AttributeType::Mixed),
         );
     }
 
@@ -42,18 +41,6 @@ class Rest_AuthenticationModel extends BaseModel
 
 
         return $allScopes;
-    }
-
-    public function getAllAuthorizationOptions()
-    {
-        $allAuthorizationOptions = [];
-
-        if(is_array($this->customAuthorizationOptions))
-        {
-            $allAuthorizationOptions = array_merge($allAuthorizationOptions, $this->customAuthorizationOptions);
-        }
-
-        return $allAuthorizationOptions;
     }
 
     public function getOauthProvider()

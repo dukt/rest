@@ -23,8 +23,6 @@ class Rest_RequestModel extends BaseModel
 
             'authenticationHandle' => AttributeType::String,
 
-            'verb' => AttributeType::String,
-            'format' => AttributeType::String,
             'url' => AttributeType::String,
             'headers' => AttributeType::Mixed,
             'query' => AttributeType::Mixed,

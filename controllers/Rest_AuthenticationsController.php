@@ -134,8 +134,8 @@ class Rest_AuthenticationsController extends BaseController
             if($response = craft()->oauth->connect(array(
                 'plugin' => 'rest',
                 'provider' => $oauthProvider->getHandle(),
-                'scopes' => $authentication->getAllScopes(),
-                'params' => $authentication->getAllOptions(),
+                'scope' => $authentication->getAllScopes(),
+                'authorizationOptions' => $authentication->getAllAuthorizationOptions(),
             )))
             {
                 if($response['success'])

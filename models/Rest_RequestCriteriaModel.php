@@ -20,8 +20,6 @@ class Rest_RequestCriteriaModel extends BaseModel
             'handle' => AttributeType::String,
             'url' => AttributeType::String,
             'uri' => AttributeType::String,
-            'verb' => array(AttributeType::String, 'default' => 'get'),
-            'format' => array(AttributeType::String, 'default' => 'json'),
             'headers' => AttributeType::Mixed,
             'query' => AttributeType::Mixed,
             'authentication' => AttributeType::String,

@@ -70,8 +70,6 @@ The following authentication providers are supported:
 - handle
 - url
 - uri
-- verb
-- format
 - headers
 - query
 - authentication

@@ -24,8 +24,6 @@ class Rest_RequestRecord extends BaseRecord
         return array(
             'name' => array(AttributeType::String, 'required' => true),
             'handle' => array(AttributeType::String, 'required' => true),
-            'verb' => array(AttributeType::String, 'required' => true),
-            'format' => array(AttributeType::String, 'required' => true),
             'url' => array(AttributeType::String, 'required' => true),
             'authenticationHandle' => AttributeType::String,
             'headers' => AttributeType::Mixed,

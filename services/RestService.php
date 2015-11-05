@@ -52,8 +52,6 @@ class RestService extends BaseApplicationComponent
         $criteria->url = null;
         $criteria->headers = null;
         $criteria->query = null;
-        $criteria->verb = 'get';
-        $criteria->format = 'json';
 
         // set from saved request
         $this->_populateSavedRequest($criteria, $requestHandle);
@@ -101,7 +99,7 @@ class RestService extends BaseApplicationComponent
         {
             if($authentication->tokenId)
             {
-                $oauthProvider = $authentication->getOAuthProvider();
+                $oauthProvider = $authentication->getOauthProvider();
                 $token = $authentication->getToken();
                 $subscriber = $oauthProvider->getSubscriber($token);
                 $client->addSubscriber($subscriber);
@@ -124,16 +122,26 @@ class RestService extends BaseApplicationComponent
 
         try
         {
-            // force get request
-            $criteria->verb = 'get';
-
             // perform request
 
-            $guzzleRequest = $client->{$criteria->verb}($criteria->url, array(), $options);
+            $guzzleRequest = $client->get($criteria->url, array(), $options);
 
             $response = $guzzleRequest->send();
+            $contentType = $response->getContentType();
 
-            $data = $response->{$criteria->format}();
+            $data = $response;
+
+            if($data->getBody())
+            {
+                if(stripos($contentType, 'json') !== false)
+                {
+                    $data = $data->json();
+                }
+                elseif(stripos($contentType, 'xml') !== false)
+                {
+                    $data = $data->xml();
+                }
+            }
 
             return array(
                 'success' => true,
@@ -147,11 +155,26 @@ class RestService extends BaseApplicationComponent
 
             try
             {
-                $data = $e->getResponse()->{$criteria->format}(true);
+                $response = $e->getResponse();
+                $contentType = $response->getContentType();
+
+                $data = $response;
+
+                if($data->getBody())
+                {
+                    if(stripos($contentType, 'json') !== false)
+                    {
+                        $data = $data->json();
+                    }
+                    elseif(stripos($contentType, 'xml') !== false)
+                    {
+                        $data = $data->xml();
+                    }
+                }
             }
             catch(\Exception $e2)
             {
-                // couldn't get error data
+                // todo: improve error handling when couldn't get error data
             }
 
             return array(

@@ -62,8 +62,6 @@ class Rest_RequestsController extends BaseController
         $name = craft()->request->getParam('name');
         $handle = craft()->request->getParam('handle');
         $url = craft()->request->getParam('url');
-        $verb = 'get'; // $verb = craft()->request->getParam('verb');
-        $format = craft()->request->getParam('format');
         $query = craft()->request->getParam('query');
 
         if($query)
@@ -95,8 +93,6 @@ class Rest_RequestsController extends BaseController
         $request->authenticationHandle = $authenticationHandle;
         $request->name = $name;
         $request->handle = $handle;
-        $request->verb = $verb;
-        $request->format = $format;
         $request->url = $url;
         $request->query = $query;
 

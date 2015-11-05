@@ -71,8 +71,6 @@ class Rest_RequestsService extends BaseApplicationComponent
         $record->authenticationHandle = $model->authenticationHandle;
         $record->name = $model->name;
         $record->handle = $model->handle;
-        $record->verb = $model->verb;
-        $record->format = $model->format;
         $record->url = $model->url;
         $record->headers = $model->headers;
         $record->query = $model->query;

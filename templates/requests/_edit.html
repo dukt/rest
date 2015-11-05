@@ -41,7 +41,9 @@
         {% set authenticationOptions = [{label:"None", value:""}] %}
 
         {% for authentication in authentications %}
-            {% set authenticationOptions = authenticationOptions|merge([{ label: authentication.oauthProvider.name|t, value: authentication.oauthProvider.handle }]) %}
+            {% if authentication.oauthProvider %}
+                {% set authenticationOptions = authenticationOptions|merge([{ label: authentication.oauthProvider.handle, value: authentication.oauthProvider.handle }]) %}
+            {% endif %}
         {% endfor %}
 
         {{ forms.selectField({
@@ -83,28 +85,6 @@
             }
           },
           rows : queryRows
-        }) }}
-
-
-        {% set verbOptions = [
-            { label: 'GET', value: 'get' },
-            { label: 'POST', value: 'post' },
-            { label: 'PUT', value: 'put' },
-            { label: 'DELETE', value: 'delete' },
-        ] %}
-
-        {% set responseFormatOptions = [
-            { label: 'JSON', value: 'json' },
-            { label: 'XML', value: 'xml' }
-        ] %}
-
-        <hr>
-
-        {{ forms.selectField({
-            label: "Response Format" | t,
-            name: 'format',
-            options: responseFormatOptions,
-            value: request ? request.format : null,
         }) }}
 
         <hr>

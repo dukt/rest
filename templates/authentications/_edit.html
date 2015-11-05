@@ -126,8 +126,8 @@
 
             {% if authentication.customAuthorizationOptions|length > 0 %}
                 <ul>
-                    {% for authorizationOptions in authentication.customAuthorizationOptions %}
-                        <li><strong>{{ authorizationOptions.key }}:</strong> {{ authorizationOptions.value }}</li>
+                    {% for authorizationOptionsKey, authorizationOptionsValue in authentication.customAuthorizationOptions %}
+                        <li><strong>{{ authorizationOptionsKey }}:</strong> {{ authorizationOptionsValue }}</li>
                     {% endfor %}
                 </ul>
             {% endif %}

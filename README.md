@@ -1,6 +1,19 @@
-# REST
+# Craft REST
 
 Perform authenticated REST requests
+
+-------------------------------------------
+
+## Requirements
+
+- Craft 2.5
+- Craft OAuth 1.0
+
+## Installation
+
+1. Download the latest release of the plugin
+2. Drop the `rest` plugin folder to `craft/plugins`
+3. Install REST plugin from the control panel in `Settings > Plugins`
 
 ## Requests
 
@@ -50,27 +63,13 @@ The following authentication providers are supported:
 - Facebook <small>— Native</small>
 - Google <small>— Native</small>
 - Twitter <small>— Native</small>
-- [GitHub](https://dukt.net/craft/github)
-- [Slack](https://dukt.net/craft/slack)
-- [Pinterest](https://dukt.net/craft/pinterest)
+- Vimeo <small>— Native</small>
+- [Slack](https://github.com/dukt/craft-slack)
 
 
-## API Reference
+## Links
 
-### Rest_AuthenticationModel
+- [REST Plugin Overview](https://dukt.net/craft/rest/)
+- [REST Documentation](https://dukt.net/craft/rest/docs)
 
-- id
-- tokenId
-- authenticationHandle
-- scopes
-- customScopes
-
-### Rest_RequestCriteriaModel
-
-- handle
-- url
-- uri
-- headers
-- query
-- authentication
-- token
+[Dukt.net](https://dukt.net/) © 2015 - All rights reserved

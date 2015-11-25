@@ -36,11 +36,17 @@
 
             <h2>Scopes</h2>
 
-            <ul>
-                {% for scope in authentication.allScopes %}
-                    <label><input type="checkbox" name="scopes[]" value="{{ scope }}" checked="true" disabled="true" /> &nbsp;{{ scope }}</label>
-                {% endfor %}
-            </ul>
+            {% if authentication.allScopes|length > 0 %}
+                <ul>
+                    {% for scope in authentication.allScopes %}
+                        <label><input type="checkbox" name="scopes[]" value="{{ scope }}" checked="true" disabled="true" /> &nbsp;{{ scope }}</label>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>{{ "Scope is empty."|t }}</p>
+            {% endif %}
+
+            <p class="light">{{ 'You need to disconnect first in order to bring modifications to the scope.'|t }}</p>
         {% else %}
 
             {% if availableScopes is defined and availableScopes|length > 0 %}

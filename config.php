@@ -1,19 +1,20 @@
 <?php
 
 return array(
-    // 'oauthScopes' => [
-    //     'instagram' => [
-    //         'publi',
-    //         'comments',
-    //         'relationships',
-    //         'likes',
-    //     ]
-    // ]
+    // 'instagramScope' => [
+    //     'publi',
+    //     'comments',
+    //     'relationships',
+    //     'likes',
+    // ],
 
-    'authorizationOptions' => [
-        'google' => [
-            'access_type' => 'offline',
-            'approval_prompt' => 'force'
-        ]
-    ]
+    // 'googleScope' => [
+    //     'access_type' => 'offline',
+    //     'approval_prompt' => 'force',
+    // ],
+
+    // 'googleAuthorizationOptions' => [
+    //     'access_type' => 'offline',
+    //     'approval_prompt' => 'force',
+    // ],
 );

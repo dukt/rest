@@ -1,7 +1,9 @@
 {% extends "_layouts/cp" %}
 {% import "_includes/forms" as forms %}
 
-{% set title = authenticationProvider.oauthProvider.name %}
+{% set oauthProvider = authenticationProvider.oauthProvider %}
+
+{% set title = oauthProvider.name %}
 
 {% set crumbs = [
     { label: "Rest"|t, url: url('rest') },
@@ -14,9 +16,9 @@
 
         {{ getCsrfInput() }}
 
-        <input type="hidden" name="action" value="rest/authentications/save">
+        <input type="hidden" name="action" value="rest/authentications/connect">
         <input type="hidden" name="redirect" value="rest/authentications">
-        <input type="hidden" name="authenticationProviderHandle" value="{{ authenticationProvider.oauthProvider.handle }}">
+        <input type="hidden" name="handle" value="{{ oauthProvider.handle }}">
 
         <h2 class="first">Status</h2>
 
@@ -30,105 +32,34 @@
             </li>
         </ul>
 
+        <hr>
 
-        {% if authentication and authentication.token %}
-            <hr>
+        {% set scope = authenticationProvider.getScope() %}
 
-            <h2>{{ "OAuth Scope"|t }}</h2>
+        <h2>{{ "OAuth Scope"|t }}</h2>
 
-            {% if authentication.allScopes|length > 0 %}
-                <ul>
-                    {% for scope in authentication.allScopes %}
-                        <label><input type="checkbox" name="scopes[]" value="{{ scope }}" checked="true" disabled="true" /> &nbsp;{{ scope }}</label>
-                    {% endfor %}
-                </ul>
-            {% else %}
-                <p>{{ "Scope is empty."|t }}</p>
-            {% endif %}
+        <p class="light">{{ "Scopes express the permissions you'll be authorized for when making requests."|t }}</p>
 
-            <p class="light">{{ 'You need to disconnect first in order to bring modifications to the scope.'|t }}</p>
-        {% else %}
-
-            {% if availableScopes is defined and availableScopes|length > 0 %}
-                <hr>
-                <h2>Scopes</h2>
-
-                {% if authentication and authentication.token %}
-                    <p>{{ authenticationProvider.name }} is connected with the following scope:</p>
-                {% endif %}
-
-                <ul>
-                    {% for scope in availableScopes %}
-                        <li>
-                            {% set disabled = false %}
-                            {% set checked = false %}
-
-                            {% if authentication %}
-
-                                {% if authentication.token %}
-                                    {% set disabled = true %}
-                                {% endif %}
-
-                                {% for authenticationScope in authentication.scopes %}
-                                    {% if authenticationScope == scope %}
-                                        {% set checked = true %}
-                                    {% endif %}
-                                {% endfor %}
-                            {% endif %}
-
-                            <label><input type="checkbox" name="scopes[]" value="{{ scope }}"{{ checked ? ' checked="checked"' }}{{ disabled ? ' disabled="true"' }} /> &nbsp;{{ scope }}</label>
-                        </li>
-                    {% endfor %}
-                </ul>
-            {% endif %}
-
-            <hr>
-
-            {% if availableScopes is defined and availableScopes|length > 0 %}
-                <h2>{{ "Custom Scopes"|t }}</h2>
-            {% else %}
-                <h2>{{ "Scopes"|t }}</h2>
-            {% endif %}
-
-            <p>
-                Scopes express the permissions you'll be authorized for when making requests.
-
-                {% if authenticationProvider.oauthProvider.scopeDocsUrl %}
-                    <a href="{{ authenticationProvider.oauthProvider.scopeDocsUrl }}" target="_blank">See available scopes for {{ authenticationProvider.oauthProvider.name }}</a>
-                {% endif %}
-            </p>
-
-            {% set queryRows = [] %}
-
-            {% if authentication %}
-                {% for scope in authentication.customScopes %}
-                  {% set queryRows = queryRows|merge([{ scope: scope }]) %}
+        {% if scope %}
+            <ul>
+                {% for permission in scope %}
+                    <li>{{ permission }}</li>
                 {% endfor %}
-            {% endif %}
-
-            {{ forms.editableTableField({
-              id: 'custom-scopes',
-              rows: 4,
-              textual: false,
-              name: 'customScopes',
-              addRowLabel : 'Add Scope',
-              cols : {
-                'scope' : {
-                    'heading' : 'Scope',
-                    'type'   : 'singleline'
-                }
-              },
-              rows : queryRows
-            }) }}
-
+            </ul>
+        {% else %}
+            <p class="light">{{ "No scope defined." }}</p>
         {% endif %}
+
+        {% if oauthProvider.scopeDocsUrl %}
+            <p><a href="{{ oauthProvider.scopeDocsUrl }}" target="_blank">{{ "See available scopes for {provider}"|t({ provider: oauthProvider.name }) }}</a></p>
+        {% endif %}
+
 
         <hr>
 
-
         {% set authorizationOptions = authenticationProvider.getAuthorizationOptions() %}
 
-        <h2>{{ "Authorization Options"|t }}</h2>
+        <h2>{{ "OAuth Authorization Options"|t }}</h2>
 
         {% if authorizationOptions %}
             <ul>
@@ -139,6 +70,20 @@
         {% else %}
             <p class="light">{{ "No authorization options defined." }}</p>
         {% endif %}
+
+        <hr>
+
+        <h2>{{ "OAuth Provider"|t }}</h2>
+
+        <p>
+            {% if oauthProvider.isConfigured %}
+                <span class="status on"></span> {{ "{provider} OAuth provider is configured"|t({ provider: oauthProvider.name }) }}
+            {% else %}
+                <span class="status"></span><span class="light">{{ "{provider} OAuth provider not configured"|t({ provider: oauthProvider.name }) }}</span>
+            {% endif %}
+        </p>
+
+        <p><a href="{{ url('oauth/providers/'~oauthProvider.handle) }}">{{ "{provider} OAuth Settings"|t({ provider: oauthProvider.name }) }}</a></p>
 
         <hr>
 

@@ -20,27 +20,7 @@ class Rest_AuthenticationModel extends BaseModel
             'id'    => AttributeType::Number,
             'tokenId' => AttributeType::Number,
             'authenticationHandle' => AttributeType::String,
-            'scopes' => array(AttributeType::Mixed),
-            'customScopes' => array(AttributeType::Mixed),
         );
-    }
-
-    public function getAllScopes()
-    {
-        $allScopes = [];
-
-        if(is_array($this->scopes))
-        {
-            $allScopes = array_merge($allScopes, $this->scopes);
-        }
-
-        if(is_array($this->customScopes))
-        {
-            $allScopes = array_merge($allScopes, $this->customScopes);
-        }
-
-
-        return $allScopes;
     }
 
     public function getOauthProvider()

@@ -24,8 +24,6 @@ class Rest_AuthenticationRecord extends BaseRecord
         return array(
             'tokenId' => AttributeType::Number,
             'authenticationHandle' => array(AttributeType::String, 'required' => true),
-            'scopes' => array(AttributeType::Mixed),
-            'customScopes' => array(AttributeType::Mixed),
         );
     }
 

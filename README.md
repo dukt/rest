@@ -4,6 +4,19 @@ Perform authenticated REST requests
 
 -------------------------------------------
 
+## Table of Contents
+
+- [Installing & Updating](#installing--updating)
+    - [Requirements](#requirements)
+    - [Installation](#installation)
+    - [Updating](#updating)
+- [Requests](#requests)
+    - [Simple Request](#simple-request)
+    - [Query Parameters](#query-parameters)
+    - [Authentication](#authentication)
+    - [Token](#token)
+- [Authentications](#authentications)
+
 ## Installing & Updating
 
 ### Requirements

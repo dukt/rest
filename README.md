@@ -84,7 +84,3 @@ Perform authenticated REST requests
 You can set up authentication with any provider supported by Craft OAuth.
 
 [See All OAuth Providers](https://dukt.net/craft/oauth/docs/providers)
-
----
-
-[Dukt.net](https://dukt.net/) © 2015 - All rights reserved

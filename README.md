@@ -4,16 +4,24 @@ Perform authenticated REST requests
 
 -------------------------------------------
 
-## Requirements
+## Installing & Updating
+
+### Requirements
 
 - Craft 2.5
 - Craft OAuth 1.0
 
-## Installation
+### Installation
 
 1. Download the latest release of the plugin
 2. Drop the `rest` plugin folder to `craft/plugins`
 3. Install REST plugin from the control panel in `Settings > Plugins`
+
+### Updating
+
+1. Download the latest release of the plugin
+2. Replace the `rest` plugin folder by the new one under `craft/plugins`
+3. Access your Craft control panel. You might be prompted to "Finish Up" the update if one or more migrations need to be applied.
 
 ## Requests
 

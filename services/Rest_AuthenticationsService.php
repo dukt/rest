@@ -24,23 +24,18 @@ class Rest_AuthenticationsService extends BaseApplicationComponent
         }
     }
 
-    public function getAuthenticationProviders()
+    public function getAuthenticationProviders($enabledOnly = true)
     {
         $authenticationProviders = [];
 
-        $oauthProviders = craft()->oauth->getProviders();
+        $oauthProviders = craft()->oauth->getProviders($enabledOnly);
 
         foreach($oauthProviders as $oauthProvider)
         {
-            $authenticationProviders[$oauthProvider->getHandle()] = [
-                'name' => $oauthProvider->getName(),
-                'handle' => $oauthProvider->getHandle(),
-                'type' => 'oauthProvider',
-                'oauthProviderHandle' => $oauthProvider->getHandle(),
-                'iconUrl' => $oauthProvider->getIconUrl(),
-                'scopeDocsUrl' => $oauthProvider->getScopeDocsUrl(),
+            $authenticationProvider = new Rest_AuthenticationProviderModel;
+            $authenticationProvider->oauthProviderHandle = $oauthProvider->getHandle();
 
-            ];
+            $authenticationProviders[$authenticationProvider->oauthProviderHandle] = $authenticationProvider;
         }
 
         return $authenticationProviders;

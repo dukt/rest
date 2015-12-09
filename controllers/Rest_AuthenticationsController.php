@@ -16,7 +16,7 @@ class Rest_AuthenticationsController extends BaseController
 {
     public function actionIndex()
     {
-        $authenticationProviders = craft()->rest_authentications->getAuthenticationProviders();
+        $authenticationProviders = craft()->rest_authentications->getAuthenticationProviders(false);
         $authentications = craft()->rest_authentications->getAuthentications();
 
         $variables['authenticationProviders'] = $authenticationProviders;

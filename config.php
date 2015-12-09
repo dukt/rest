@@ -1,7 +1,7 @@
 <?php
 
 /**
- * To customize providers' `scope` and `authorizationOptions`, create a `craft/config/rest.php` and adjust the config variables to your needs.
+ * To customize providers' `scope` and `authorizationOptions`, create a `craft/config/rest.php` file and adjust the config variables to your needs.
  *
  * (Example with Google below)
  */

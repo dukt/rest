@@ -38,55 +38,25 @@ class Rest_AuthenticationsController extends BaseController
         $this->renderTemplate('rest/authentications/_edit', $variables);
     }
 
-    public function actionSave()
+    public function actionConnect()
     {
-        $connect = craft()->request->getPost('connect');
+        // referer
 
-        $authenticationProviderHandle = craft()->request->getRequiredPost('authenticationProviderHandle');
+        $referer = craft()->httpSession->get('rest.referer');
 
-        $scopes = craft()->request->getPost('scopes');
-
-        $customScopes = [];
-
-        $postCustomScopes = craft()->request->getPost('customScopes');
-
-        if($postCustomScopes)
+        if (!$referer)
         {
-            foreach($postCustomScopes as $postCustomScope)
-            {
-                $customScopes[] = $postCustomScope['scope'];
-            }
+            $referer = craft()->request->getUrlReferrer();
+
+            craft()->httpSession->add('rest.referer', $referer);
         }
 
-        $authentication = new Rest_AuthenticationModel;
-        $authentication->authenticationHandle = $authenticationProviderHandle;
-        $authentication->scopes = $scopes;
-        $authentication->customScopes = $customScopes;
 
-        if(craft()->rest_authentications->saveAuthentication($authentication))
-        {
-            craft()->userSession->setNotice(Craft::t('Authentication saved.'));
+        // redirect to rest/oauth/connect
 
-            if($connect)
-            {
-                $redirectUrl = UrlHelper::getActionUrl('rest/authentications/connect', ['handle' => $authenticationProviderHandle]);
-
-                $this->redirect($redirectUrl);
-            }
-            else
-            {
-                $this->redirectToPostedUrl();
-            }
-        }
-        else
-        {
-            craft()->userSession->setError(Craft::t('Couldn’t save authentication.'));
-
-            // Send the request back to the template
-            craft()->urlManager->setRouteVariables(array(
-                'authentication' => $authentication
-            ));
-        }
+        $handle = craft()->request->getParam('handle');
+        $redirectUrl = UrlHelper::getActionUrl('rest/oauth/connect', array('handle' => $handle));
+        $this->redirect($redirectUrl);
     }
 
     public function actionDisconnect()
@@ -109,62 +79,5 @@ class Rest_AuthenticationsController extends BaseController
         $referrer = craft()->request->getUrlReferrer();
 
         $this->redirect($referrer);
-    }
-
-    public function actionConnect()
-    {
-        $authenticationProviderHandle = craft()->request->getParam('handle');
-        $redirect = craft()->request->getParam('redirect');
-
-        if(!$redirect)
-        {
-            $redirect = 'rest/authentications';
-        }
-
-        $authenticationProvider = craft()->rest_authentications->getAuthenticationProvider($authenticationProviderHandle);
-
-        $oauthProviderHandle = $authenticationProvider['oauthProviderHandle'];
-
-        $oauthProvider = craft()->oauth->getProvider($oauthProviderHandle);
-
-        $authentication = craft()->rest_authentications->getAuthenticationByHandle($authenticationProviderHandle);
-
-        if($oauthProvider)
-        {
-            $authorizationOptions = null;
-            $allAuthorizationOptions = craft()->config->get('authorizationOptions', 'rest');
-
-            if(isset($allAuthorizationOptions[$oauthProvider->getHandle()]))
-            {
-                $authorizationOptions = $allAuthorizationOptions[$oauthProvider->getHandle()];
-            }
-
-            if($response = craft()->oauth->connect(array(
-                'plugin' => 'rest',
-                'provider' => $oauthProvider->getHandle(),
-                'scope' => $authentication->getAllScopes(),
-                'authorizationOptions' => $authorizationOptions,
-            )))
-            {
-                if($response['success'])
-                {
-                    // save token
-                    craft()->rest_authentications->saveAuthenticationToken($authenticationProviderHandle, $response['token']);
-
-                    // session notice
-                    craft()->userSession->setNotice(Craft::t("Connected."));
-                }
-                else
-                {
-                    craft()->userSession->setError(Craft::t($response['errorMsg']));
-                }
-            }
-        }
-        else
-        {
-            craft()->userSession->setError(Craft::t("OAuth provider not configured."));
-        }
-
-        $this->redirect($redirect);
     }
 }

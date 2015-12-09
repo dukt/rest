@@ -6,7 +6,7 @@ Perform authenticated REST requests
 
 ## Table of Contents
 
-- [Installing & Updating](#installing--updating)
+- [Installing and updating](#installing-and-updating)
     - [Requirements](#requirements)
     - [Installation](#installation)
     - [Updating](#updating)
@@ -17,7 +17,7 @@ Perform authenticated REST requests
     - [Token](#token)
 - [Authentications](#authentications)
 
-## Installing & Updating
+## Installing and updating
 
 ### Requirements
 

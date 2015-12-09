@@ -31,6 +31,16 @@ class RestPlugin extends BasePlugin
     }
 
     /**
+     * Get Schema Version
+     *
+     * @return string
+     */
+    public function getSchemaVersion()
+    {
+        return '1.0.0';
+    }
+
+    /**
      * Get Required Dependencies
      */
     function getRequiredPlugins()

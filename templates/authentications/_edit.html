@@ -1,7 +1,7 @@
 {% extends "_layouts/cp" %}
 {% import "_includes/forms" as forms %}
 
-{% set title = authenticationProvider.name %}
+{% set title = authenticationProvider.oauthProvider.name %}
 
 {% set crumbs = [
     { label: "Rest"|t, url: url('rest') },
@@ -16,7 +16,7 @@
 
         <input type="hidden" name="action" value="rest/authentications/save">
         <input type="hidden" name="redirect" value="rest/authentications">
-        <input type="hidden" name="authenticationProviderHandle" value="{{ authenticationProvider.handle }}">
+        <input type="hidden" name="authenticationProviderHandle" value="{{ authenticationProvider.oauthProvider.handle }}">
 
         <h2 class="first">Status</h2>
 
@@ -34,7 +34,7 @@
         {% if authentication and authentication.token %}
             <hr>
 
-            <h2>Scopes</h2>
+            <h2>{{ "OAuth Scope"|t }}</h2>
 
             {% if authentication.allScopes|length > 0 %}
                 <ul>
@@ -93,8 +93,8 @@
             <p>
                 Scopes express the permissions you'll be authorized for when making requests.
 
-                {% if authenticationProvider.scopeDocsUrl %}
-                    <a href="{{ authenticationProvider.scopeDocsUrl }}" target="_blank">See available scopes for {{ authenticationProvider.name }}</a>
+                {% if authenticationProvider.oauthProvider.scopeDocsUrl %}
+                    <a href="{{ authenticationProvider.oauthProvider.scopeDocsUrl }}" target="_blank">See available scopes for {{ authenticationProvider.oauthProvider.name }}</a>
                 {% endif %}
             </p>
 

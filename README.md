@@ -19,15 +19,17 @@ Perform authenticated REST requests
 
 ### Simple Request
 
-    {% set response = craft.rest.request.url('https://www.googleapis.com/youtube/v3/search').send() %}
+    {% set response = craft.rest.request.url('http://api.openweathermap.org/data/2.5/weather?q=London,uk&appid=2de143494c0b295cca9337e1e96b00e0').send() %}
+
+    <pre>{{ dump(response) }}</pre>
 
 ### Query Parameters
 
     {% set response = craft.rest.request
-        .url('https://www.googleapis.com/youtube/v3/search')
+        .url('http://api.openweathermap.org/data/2.5/weather')
         .query({
-            part: 'snippet',
-            q: 'timelapse',
+            q: 'London,uk',
+            appid: '2de143494c0b295cca9337e1e96b00e0',
         })
         .send() %}
 
@@ -58,13 +60,9 @@ Perform authenticated REST requests
 
 ## Authentications
 
-The following authentication providers are supported:
+You can set up authentication with any provider supported by Craft OAuth.
 
-- Facebook <small>— Native</small>
-- Google <small>— Native</small>
-- Twitter <small>— Native</small>
-- Vimeo <small>— Native</small>
-- [Slack](https://github.com/dukt/craft-slack)
+[See All OAuth Providers](https://dukt.net/craft/oauth/docs/providers)
 
 
 ## Links

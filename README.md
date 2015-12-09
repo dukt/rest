@@ -85,10 +85,6 @@ You can set up authentication with any provider supported by Craft OAuth.
 
 [See All OAuth Providers](https://dukt.net/craft/oauth/docs/providers)
 
-
-## Links
-
-- [REST Plugin Overview](https://dukt.net/craft/rest/)
-- [REST Documentation](https://dukt.net/craft/rest/docs)
+---
 
 [Dukt.net](https://dukt.net/) © 2015 - All rights reserved

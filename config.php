@@ -1,12 +1,12 @@
 <?php
 
-return array(
+/**
+ * To customize providers' `scope` and `authorizationOptions`, create a `craft/config/rest.php` and adjust the config variables to your needs.
+ *
+ * (Example with Google below)
+ */
 
-    /**
-     * You can define `scope` and `authorizationOptions` for each authentication provider.
-     *
-     * Example below with Google
-     */
+return array(
 
     /**
      * Google Scope

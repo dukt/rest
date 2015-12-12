@@ -89,12 +89,12 @@ You can set up authentication with any provider supported by Craft OAuth.
 
 #### Built-in
 
-Facebook
-Google
-Twitter
-Vimeo
+- Facebook
+- Google
+- Twitter
+- Vimeo
 
 #### Third-Party
 
-[GitHub](https://github.com/dukt/craft-github) by [Dukt](https://dukt.net/)
-[Slack](https://github.com/dukt/craft-slack) by [Dukt](https://dukt.net/)
+- [GitHub](https://github.com/dukt/craft-github) by [Dukt](https://dukt.net/)
+- [Slack](https://github.com/dukt/craft-slack) by [Dukt](https://dukt.net/)

@@ -83,18 +83,13 @@ Perform authenticated REST requests
 
 ### Supported Providers
 
-You can set up authentication with any provider supported by Craft OAuth.
+You can set up authentication with any provider supported by Craft OAuth:
 
-[See All Craft OAuth Providers](https://dukt.net/craft/oauth/docs/providers)
-
-#### Built-in
-
-- Facebook
-- Google
-- Twitter
-- Vimeo
-
-#### Third-Party
-
+- Facebook _(Built-in)_
+- Google _(Built-in)_
+- Twitter _(Built-in)_
+- Vimeo _(Built-in)_
 - [GitHub](https://github.com/dukt/craft-github) by [Dukt](https://dukt.net/)
 - [Slack](https://github.com/dukt/craft-slack) by [Dukt](https://dukt.net/)
+
+[See All Craft OAuth Providers](https://dukt.net/craft/oauth/docs/providers)

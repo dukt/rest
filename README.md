@@ -91,5 +91,6 @@ You can set up authentication with any Craft OAuth provider:
 - Vimeo _(Built-in)_
 - [GitHub](https://github.com/dukt/craft-github) by [Dukt](https://dukt.net/)
 - [Slack](https://github.com/dukt/craft-slack) by [Dukt](https://dukt.net/)
+- ...
 
-[See the list of all providers supported by Craft OAuth](https://dukt.net/craft/oauth/docs/providers)
+[Seel all Craft OAuth providers](https://dukt.net/craft/oauth/docs/providers)

@@ -68,6 +68,15 @@ class RestService extends BaseApplicationComponent
     {
         $options = array();
         $baseUrl = null;
+        $method = 'get';
+
+
+        // method
+
+        if(!empty($criteria->method))
+        {
+            $method = $criteria->method;
+        }
 
 
         // headers
@@ -76,7 +85,6 @@ class RestService extends BaseApplicationComponent
         {
             $options['headers'] = $criteria->headers;
         }
-
 
         // query
 
@@ -128,7 +136,7 @@ class RestService extends BaseApplicationComponent
         {
             // perform request
 
-            $guzzleRequest = $client->get($criteria->url, array(), $options);
+            $guzzleRequest = $client->{$method}($criteria->url, array(), $options);
 
             $response = $guzzleRequest->send();
             $contentType = $response->getContentType();

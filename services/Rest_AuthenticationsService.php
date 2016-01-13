@@ -1,12 +1,7 @@
 <?php
-
 /**
-* Craft REST by Dukt
- *
- * @package   Craft REST
- * @author    Benjamin David
- * @copyright Copyright (c) 2015, Dukt
  * @link      https://dukt.net/craft/rest/
+ * @copyright Copyright (c) 2016, Dukt
  * @license   https://dukt.net/craft/rest/docs#license
  */
 

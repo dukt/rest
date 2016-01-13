@@ -94,3 +94,5 @@ You can set up authentication with any Craft OAuth provider:
 - ...
 
 [Seel all Craft OAuth providers](https://dukt.net/craft/oauth/docs/providers)
+
+[Dukt.net](https://dukt.net/) © 2016 - All rights reserved

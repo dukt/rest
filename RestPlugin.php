@@ -67,6 +67,14 @@ class RestPlugin extends BasePlugin
     }
 
     /**
+     * Get Documentation URL
+     */
+    public function getDocumentationUrl()
+    {
+        return 'https://dukt.net/craft/rest/docs/';
+    }
+
+    /**
      * Has CP Section
      */
     public function hasCpSection()

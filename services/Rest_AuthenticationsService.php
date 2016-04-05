@@ -85,8 +85,6 @@ class Rest_AuthenticationsService extends BaseApplicationComponent
      */
     public function saveAuthenticationToken($providerHandle, $token)
     {
-        craft()->rest->checkRequirements();
-
         // get authentication
 
         $authentication = $this->getAuthenticationByHandle($providerHandle);
@@ -119,8 +117,6 @@ class Rest_AuthenticationsService extends BaseApplicationComponent
      */
     public function deleteAuthenticationById($id)
     {
-        craft()->rest->checkRequirements();
-
         $authentication = $this->getAuthenticationById($id);
 
 

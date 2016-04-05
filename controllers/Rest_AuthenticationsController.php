@@ -11,17 +11,21 @@ class Rest_AuthenticationsController extends BaseController
 {
     public function actionIndex()
     {
-        $authenticationProviders = craft()->rest_authentications->getAuthenticationProviders(false);
-        $authentications = craft()->rest_authentications->getAuthentications();
-
-        $variables['authenticationProviders'] = $authenticationProviders;
-        $variables['authentications'] = $authentications;
+        $variables['checkDependencies'] = craft()->rest->checkDependencies();
+        
+        if($variables['checkDependencies'])
+        {
+            $variables['authenticationProviders'] = craft()->rest_authentications->getAuthenticationProviders(false);
+            $variables['authentications'] = craft()->rest_authentications->getAuthentications();
+        }
 
         $this->renderTemplate('rest/authentications/_index', $variables);
     }
 
     public function actionEdit(array $variables = array())
     {
+        craft()->rest->requireDependencies();
+        
         $authenticationProviderHandle = $variables['authenticationProviderHandle'];
 
         $authenticationProvider = craft()->rest_authentications->getAuthenticationProvider($authenticationProviderHandle);

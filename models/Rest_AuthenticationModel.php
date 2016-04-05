@@ -20,14 +20,11 @@ class Rest_AuthenticationModel extends BaseModel
 
     public function getOauthProvider()
     {
-        $oauthProvider = craft()->oauth->getProvider($this->authenticationHandle);
-        return $oauthProvider;
+        return craft()->oauth->getProvider($this->authenticationHandle);
     }
 
     public function getToken()
     {
-        craft()->rest->checkRequirements();
-
         return craft()->oauth->getTokenById($this->tokenId);
     }
 }

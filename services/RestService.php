@@ -9,22 +9,17 @@ namespace Craft;
 
 use Guzzle\Http\Client;
 
+require_once(CRAFT_PLUGINS_PATH.'rest/base/RestTrait.php');
+
 class RestService extends BaseApplicationComponent
 {
-    /**
-     * Check Requirements
-     */
-    public function checkRequirements()
-    {
-        $plugin = craft()->plugins->getPlugin('rest');
+    // Traits
+	// =========================================================================
 
-        $pluginDependencies = $plugin->getPluginDependencies();
-
-        if(count($pluginDependencies) > 0)
-        {
-            throw new \Exception("REST is not configured properly. Check REST settings for more informations.");
-        }
-    }
+	use RestTrait;
+    
+    // Public Methods
+    // =========================================================================
 
     /**
      * Request
@@ -57,7 +52,9 @@ class RestService extends BaseApplicationComponent
         // send request
         return $this->_sendRequest($criteria);
     }
-
+	
+    // Public Methods
+    // =========================================================================
 
     private function _sendRequest(Rest_RequestCriteriaModel $criteria)
     {

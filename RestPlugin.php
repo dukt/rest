@@ -89,6 +89,7 @@ class RestPlugin extends BasePlugin
     {
         return array(
             "rest" => array('action' => "rest/requests/index"),
+            "rest/install" => array('action' => "rest/install/index"),
             "rest/requests" => array('action' => "rest/requests/index"),
             "rest/requests/(?P<requestId>\d+)" => array('action' => "rest/requests/edit"),
             "rest/requests/new" => array('action' => "rest/requests/edit"),

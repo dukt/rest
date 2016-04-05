@@ -5,80 +5,87 @@
 {% set selectedTab = 'authentications' %}
 
 {% set content %}
-
-    <table id="fields" class="data fullwidth collapsible">
-        <thead>
-            <tr>
-                <th scope="col"></th>
-                <th scope="col">{{ "Name"|t }}</th>
-                <th scope="col">{{ "Authentication Handle"|t }}</th>
-                <th scope="col">{{ "Status"|t }}</th>
-                <th scope="col">{{ "OAuth Scope"|t }}</th>
-                <th scope="col">{{ "OAuth Authorization Options"|t }}</th>
-                <th scope="col">{{ "OAuth Settings"|t }}</th>
-            </tr>
-        </thead>
-
-        <tbody>
-            {% for authenticationProvider in authenticationProviders %}
-
-                {% set oauthProvider = craft.oauth.getProvider(authenticationProvider.oauthProviderHandle, false) %}
-                {% set authentication = null %}
-
-                {% for item in authentications %}
-                    {% if authenticationProvider.handle == item.authenticationHandle %}
-                        {% set authentication = item %}
-                    {% endif %}
-                {% endfor %}
-
+    
+    {% if checkDependencies %}
+        <table id="fields" class="data fullwidth collapsible">
+            <thead>
                 <tr>
-                    <td class="thin">
-                        {% if authenticationProvider.iconUrl %}
-                            <img src="{{ authenticationProvider.iconUrl }}" height="24" />
-                        {% endif %}
-                    </td>
-
-                    <th>
-                        {% if oauthProvider.isConfigured %}
-                            <a href="{{ url('rest/authentications/'~authenticationProvider.handle) }}">{{ authenticationProvider.name }}</a>
-                        {% else %}
-                            {{ authenticationProvider.name }}
-                        {% endif %}
-                    </th>
-
-                    <td class="light">
-                        {{ authenticationProvider.handle }}
-                    </td>
-
-                    <td class="nowrap light">
-
-                        {% if oauthProvider.isConfigured %}
-                            {% if authentication and authentication.token %}
-                                <span class="status on"></span> {{ "Connected"|t }}
-                            {% else %}
-                                <span class="status"></span> {{ "Not connected"|t }}
-                            {% endif %}
-                        {% else %}
-                            <span class="status"></span> {{ "OAuth provider not configured"|t }}
-                        {% endif %}
-                    </td>
-
-                    <td class="light">
-                        {{ '{total} permissions'|t({ total: authenticationProvider.scope|length }) }}
-                    </td>
-
-                    <td class="light">
-                        {{ '{total} options'|t({ total: authenticationProvider.authorizationOptions|length }) }}
-                    </td>
-
-                    <td class="thin light">
-                        <a href="{{ url('oauth/providers/'~oauthProvider.handle) }}" title="{{ 'OAuth Settings'|t }}" data-icon="settings"></a>
-                    </td>
+                    <th scope="col"></th>
+                    <th scope="col">{{ "Name"|t }}</th>
+                    <th scope="col">{{ "Authentication Handle"|t }}</th>
+                    <th scope="col">{{ "Status"|t }}</th>
+                    <th scope="col">{{ "OAuth Scope"|t }}</th>
+                    <th scope="col">{{ "OAuth Authorization Options"|t }}</th>
+                    <th scope="col">{{ "OAuth Settings"|t }}</th>
                 </tr>
+            </thead>
 
-            {% endfor %}
-        </tbody>
-    </table>
+            <tbody>
+                {% for authenticationProvider in authenticationProviders %}
+
+                    {% set oauthProvider = craft.oauth.getProvider(authenticationProvider.oauthProviderHandle, false) %}
+                    {% set authentication = null %}
+
+                    {% for item in authentications %}
+                        {% if authenticationProvider.handle == item.authenticationHandle %}
+                            {% set authentication = item %}
+                        {% endif %}
+                    {% endfor %}
+
+                    <tr>
+                        <td class="thin">
+                            {% if authenticationProvider.iconUrl %}
+                                <img src="{{ authenticationProvider.iconUrl }}" height="24" />
+                            {% endif %}
+                        </td>
+
+                        <th>
+                            {% if oauthProvider.isConfigured %}
+                                <a href="{{ url('rest/authentications/'~authenticationProvider.handle) }}">{{ authenticationProvider.name }}</a>
+                            {% else %}
+                                {{ authenticationProvider.name }}
+                            {% endif %}
+                        </th>
+
+                        <td class="light">
+                            {{ authenticationProvider.handle }}
+                        </td>
+
+                        <td class="nowrap light">
+
+                            {% if oauthProvider.isConfigured %}
+                                {% if authentication and authentication.token %}
+                                    <span class="status on"></span> {{ "Connected"|t }}
+                                {% else %}
+                                    <span class="status"></span> {{ "Not connected"|t }}
+                                {% endif %}
+                            {% else %}
+                                <span class="status"></span> {{ "OAuth provider not configured"|t }}
+                            {% endif %}
+                        </td>
+
+                        <td class="light">
+                            {{ '{total} permissions'|t({ total: authenticationProvider.scope|length }) }}
+                        </td>
+
+                        <td class="light">
+                            {{ '{total} options'|t({ total: authenticationProvider.authorizationOptions|length }) }}
+                        </td>
+
+                        <td class="thin light">
+                            <a href="{{ url('oauth/providers/'~oauthProvider.handle) }}" title="{{ 'OAuth Settings'|t }}" data-icon="settings"></a>
+                        </td>
+                    </tr>
+
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>{{ "REST authentications require the OAuth plugin for Craft CMS."|t }}</p>
+        <div class="buttons">
+            <a class="btn submit" href="{{ url('rest/install') }}">{{ "Configure"|t }}</a>
+        </div>
+    {% endif %}
 
 
 {% endset %}

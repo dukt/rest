@@ -131,7 +131,15 @@ class RestService extends BaseApplicationComponent
         {
             // perform request
 
-            $guzzleRequest = $client->{$method}($criteria->url, array(), $options);
+
+            if($method == 'delete')
+            {
+                $guzzleRequest = $client->{$method}($criteria->url, null, null, $options);
+            }
+            else
+            {
+                $guzzleRequest = $client->{$method}($criteria->url, array(), $options);
+            }
 
             $response = $guzzleRequest->send();
             $contentType = $response->getContentType();

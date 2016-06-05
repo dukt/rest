@@ -97,7 +97,13 @@ class Rest_AuthenticationsService extends BaseApplicationComponent
 
         // save token
 
-        $token->id = $authentication->tokenId;
+        $tokenExists = craft()->oauth->getTokenById($authentication->tokenId);
+
+        if($tokenExists)
+        {
+            $token->id = $authentication->tokenId;
+        }
+
         $token->providerHandle = $providerHandle;
         $token->pluginHandle = 'rest';
 

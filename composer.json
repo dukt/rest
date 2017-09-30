@@ -1,0 +1,11 @@
+{
+  "name": "dukt/rest",
+  "description": "REST plugin for Craft CMS",
+  "type": "craft-plugin",
+  "authors": [
+    {
+      "name": "Dukt",
+      "email": "support@dukt.net"
+    }
+  ]
+}

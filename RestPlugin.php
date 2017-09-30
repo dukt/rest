@@ -12,7 +12,7 @@ class RestPlugin extends BasePlugin
     /**
      * Get Name
      */
-    function getName()
+    public function getName()
     {
         return Craft::t('REST');
     }
@@ -20,7 +20,7 @@ class RestPlugin extends BasePlugin
     /**
      * Get Version
      */
-    function getVersion()
+    public function getVersion()
     {
         return '1.0.9';
     }
@@ -38,7 +38,7 @@ class RestPlugin extends BasePlugin
     /**
      * Get Required Dependencies
      */
-    function getRequiredPlugins()
+    public function getRequiredPlugins()
     {
         return array(
             array(
@@ -53,7 +53,7 @@ class RestPlugin extends BasePlugin
     /**
      * Get Developer
      */
-    function getDeveloper()
+    public function getDeveloper()
     {
         return 'Dukt';
     }
@@ -61,7 +61,7 @@ class RestPlugin extends BasePlugin
     /**
      * Get Developer URL
      */
-    function getDeveloperUrl()
+    public function getDeveloperUrl()
     {
         return 'http://dukt.net/';
     }

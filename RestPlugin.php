@@ -181,4 +181,12 @@ class RestPlugin extends BasePlugin
 
         return $dependency;
     }
+
+    /**
+     * Get release feed URL
+     */
+    public function getReleaseFeedUrl()
+    {
+        return 'https://raw.githubusercontent.com/dukt/rest/v1/releases.json';
+    }
 }

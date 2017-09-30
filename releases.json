@@ -1,0 +1,50 @@
+[
+  {
+    "version": "1.0.9",
+    "downloadUrl": "https://github.com/dukt/rest/archive/1.0.9.zip",
+    "date": "2016-06-05T11:00:00-02:00",
+    "notes": [
+      "[Improved] Rest_AuthenticationsService::saveAuthenticationToken() is now checking if the tokenId from the authentication exists before using it",
+      "[Improved] Improved the installation process with PHP traits",
+      "[Fixed] Fixed a bug where options were not properly passed when using the DELETE method"
+    ]
+  },
+  {
+    "version": "1.0.8",
+    "downloadUrl": "https://github.com/dukt/rest/archive/1.0.8.zip",
+    "date": "2016-01-13T11:00:00-02:00",
+    "notes": [
+      "[Added] Added `method` attribute to `Rest_RequestCriteriaModel`",
+      "[Added] Added support for custom methods when sending requests. Default is `get`",
+      "[Added] Added `RestPlugin::getDocumentationUrl()`"
+    ]
+  },
+  {
+    "version": "1.0.7",
+    "downloadUrl": "https://github.com/dukt/rest/archive/1.0.7.zip",
+    "date": "2015-12-09T11:00:00-02:00",
+    "notes": [
+      "[Added] Added `Authorization Options` to `templates/authentications/_edit.html`",
+      "[Added] Added `Rest_AuthenticationProviderModel`",
+      "[Added] Added OAuth scope, authorization options and settings to authentications index",
+      "[Added] Added Schema 1.0.0",
+      "[Improved] Authentications index is now showing all OAuth providers even if they are not configured",
+      "[Improved] Changed default route to `rest/request/index` action in `RestPlugin::registerCpRoutes()`",
+      "[Improved] Improved `RestService::_sendRequest()` to check if OAuth provider exists before using it",
+      "[Improved] Improved `RestService::_sendRequest()` to check if token exists before using it",
+      "[Improved] Improved scope in `authentications/_edit.html`",
+      "[Improved] Moved OAuth logic to `Rest_OAuthController`",
+      "[Improved] Removed `Rest_AuthenticationRecord::customScopes`",
+      "[Improved] Removed `Rest_AuthenticationRecord::scopes`",
+      "[Improved] Simplified scope and OAuth connect"
+    ]
+  },
+  {
+    "version": "1.0.6",
+    "downloadUrl": "https://github.com/dukt/rest/archive/1.0.6.zip",
+    "date": "2015-11-06T11:00:00-02:00",
+    "notes": [
+      "[Added] Initial release."
+    ]
+  }
+]

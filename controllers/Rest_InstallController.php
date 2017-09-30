@@ -1,8 +1,8 @@
 <?php
 /**
- * @link      https://dukt.net/craft/rest/
+ * @link      https://github.com/dukt/rest
  * @copyright Copyright (c) 2017, Dukt
- * @license   https://dukt.net/craft/rest/docs/license
+ * @license   https://github.com/dukt/restdocs/license
  */
 
 namespace Craft;

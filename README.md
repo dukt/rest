@@ -1,4 +1,4 @@
-# Craft REST
+# REST for Craft CMS
 
 Perform authenticated REST requests
 
@@ -83,16 +83,15 @@ Perform authenticated REST requests
 
 ### Supported Providers
 
-You can set up authentication with any Craft OAuth provider:
+You can set up authentication with any OAuth provider provided by the OAuth plugin:
 
-- Facebook _(Built-in)_
-- Google _(Built-in)_
-- Twitter _(Built-in)_
-- Vimeo _(Built-in)_
-- [GitHub](https://github.com/dukt/craft-github) by [Dukt](https://dukt.net/)
-- [Slack](https://github.com/dukt/craft-slack) by [Dukt](https://dukt.net/)
-- ...
+- Facebook
+- GitHub
+- Google
+- Slack
+- Twitter
+- Vimeo
 
-[Seel all Craft OAuth providers](https://dukt.net/craft/oauth/docs/providers)
+The plugin also supports any third party OAuth providers supported by the OAuth plugin.
 
-[Dukt.net](https://dukt.net/) © 2016 - All rights reserved
+[Dukt.net](https://dukt.net/) © 2017 - All rights reserved

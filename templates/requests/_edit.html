@@ -10,6 +10,8 @@
 
     <form method="post" accept-charset="UTF-8" data-saveshortcut>
 
+		{{ getCsrfInput() }}
+        
         <input type="hidden" name="action" value="rest/requests/save">
         <input type="hidden" name="redirect" value="rest/requests">
 
